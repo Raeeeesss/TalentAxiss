@@ -1,0 +1,503 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  SUPER_ADMIN
+  AGENCY_OWNER
+  AGENCY_STAFF
+}
+
+enum SubscriptionPlan {
+  FREE
+  PRO
+  MAX
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  SUSPENDED
+  CANCELLED
+}
+
+enum CandidateStatus {
+  ACTIVE
+  INACTIVE
+  BLACKLISTED
+  PLACED
+}
+
+enum JobStatus {
+  OPEN
+  INTERVIEWING
+  CLOSED
+  HOLD
+  FILLED
+}
+
+enum PipelineStage {
+  APPLIED
+  SHORTLISTED
+  CALLED
+  INTERVIEW
+  OFFER
+  JOINED
+  REJECTED
+}
+
+enum RiskLevel {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum NotificationType {
+  INTERVIEW_REMINDER
+  OFFER_PENDING
+  JOINING_DATE
+  CANDIDATE_UNRESPONSIVE
+  BACKOUT_RISK
+  SUBSCRIPTION_EXPIRY
+  GENERAL
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  password      String?
+  role          Role      @default(AGENCY_STAFF)
+  phone         String?
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  agency        Agency?   @relation("AgencyOwner", fields: [agencyId], references: [id])
+  agencyId      String?
+
+  accounts      Account[]
+  sessions      Session[]
+  staffProfile  StaffMember?
+  notifications Notification[]
+  auditLogs     AuditLog[]
+  assignedCandidates Candidate[] @relation("AssignedRecruiter")
+  assignedJobs  Job[]     @relation("AssignedRecruiter")
+
+  @@index([email])
+  @@index([agencyId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model Agency {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String?
+  logo            String?
+  website         String?
+  phone           String?
+  email           String?
+  address         String?
+  city            String?
+  district        String?
+  state           String   @default("Kerala")
+  pincode         String?
+  gstin           String?
+  isActive        Boolean  @default(true)
+  isVerified      Boolean  @default(false)
+  isSuspended     Boolean  @default(false)
+  suspendReason   String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  ownerId         String   @unique
+  owner           User[]   @relation("AgencyOwner")
+  subscription    Subscription?
+  candidates      Candidate[]
+  jobs            Job[]
+  staff           StaffMember[]
+  payments        Payment[]
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+
+  @@index([slug])
+  @@index([ownerId])
+}
+
+model Subscription {
+  id              String             @id @default(cuid())
+  agencyId        String             @unique
+  plan            SubscriptionPlan   @default(FREE)
+  status          SubscriptionStatus @default(ACTIVE)
+  startDate       DateTime           @default(now())
+  endDate         DateTime?
+  trialEnd        DateTime?
+  candidateLimit  Int                @default(100)
+  userLimit       Int                @default(1)
+  razorpaySubId   String?
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  agency          Agency             @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  payments        Payment[]
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  agencyId        String
+  subscriptionId  String?
+  amount          Float
+  currency        String        @default("INR")
+  status          PaymentStatus @default(PENDING)
+  razorpayOrderId String?
+  razorpayPaymentId String?
+  razorpaySignature String?
+  plan            SubscriptionPlan?
+  description     String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  agency          Agency        @relation(fields: [agencyId], references: [id])
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id])
+
+  @@index([agencyId])
+  @@index([razorpayOrderId])
+}
+
+model StaffMember {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  agencyId    String
+  designation String?
+  permissions Json     @default("{}")
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agency      Agency   @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@index([agencyId])
+}
+
+model Candidate {
+  id                String          @id @default(cuid())
+  agencyId          String
+  recruiterId       String?
+
+  // Personal Info
+  name              String
+  phone             String?
+  altPhone          String?
+  email             String?
+  dateOfBirth       DateTime?
+  gender            String?
+  maritalStatus     String?
+  nationality       String          @default("Indian")
+  religion          String?
+
+  // Location
+  address           String?
+  city              String?
+  district          String?
+  state             String?
+  pincode           String?
+  preferredLocation String?
+
+  // Professional
+  currentRole       String?
+  currentCompany    String?
+  totalExperience   Float?          // in years
+  currentSalary     Float?
+  expectedSalary    Float?
+  noticePeriod      Int?            // in days
+  skills            String[]
+  languages         String[]
+  education         Json?           // Array of education objects
+  workHistory       Json?           // Array of work history objects
+  certifications    String[]
+
+  // Documents
+  resumeUrl         String?
+  resumeText        String?         @db.Text
+  photoUrl          String?
+  passportNumber    String?
+  passportExpiry    DateTime?
+  hasPassport       Boolean         @default(false)
+  hasDrivingLicense Boolean         @default(false)
+  drivingLicenseNo  String?
+
+  // Gulf specific
+  gulfExperience    Boolean         @default(false)
+  gulfCountries     String[]
+  visaStatus        String?
+
+  // Scoring & Status
+  status            CandidateStatus @default(ACTIVE)
+  aiScore           Float?
+  fakeProfileScore  Float?          @default(0)
+  duplicateOf       String?
+  isDuplicate       Boolean         @default(false)
+  tags              String[]
+  notes             String?         @db.Text
+  source            String?         // WhatsApp, Email, Walk-in, etc.
+
+  // Risk
+  riskLevel         RiskLevel       @default(LOW)
+  riskFactors       Json?
+
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  agency            Agency          @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  recruiter         User?           @relation("AssignedRecruiter", fields: [recruiterId], references: [id])
+  applications      Application[]
+  interviews        Interview[]
+  placements        Placement[]
+  followUps         FollowUp[]
+  activityHistory   CandidateActivity[]
+
+  @@index([agencyId])
+  @@index([status])
+  @@index([skills])
+  @@index([district])
+}
+
+model Job {
+  id              String     @id @default(cuid())
+  agencyId        String
+  recruiterId     String?
+
+  title           String
+  company         String
+  description     String?   @db.Text
+  requirements    String?   @db.Text
+  location        String?
+  district        String?
+  state           String?
+  jobType         String?   // Full-time, Part-time, Contract, Gulf
+  category        String?
+  skills          String[]
+  minExperience   Float?
+  maxExperience   Float?
+  minSalary       Float?
+  maxSalary       Float?
+  vacancies       Int       @default(1)
+  genderPreference String?
+  urgency         String?   // Urgent, Normal, Low
+  status          JobStatus @default(OPEN)
+  closingDate     DateTime?
+  isGulf          Boolean   @default(false)
+  gulfCountry     String?
+  notes           String?   @db.Text
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  agency          Agency    @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+  recruiter       User?     @relation("AssignedRecruiter", fields: [recruiterId], references: [id])
+  applications    Application[]
+  interviews      Interview[]
+  placements      Placement[]
+  followUps       FollowUp[]
+
+  @@index([agencyId])
+  @@index([status])
+  @@index([skills])
+}
+
+model Application {
+  id            String        @id @default(cuid())
+  candidateId   String
+  jobId         String
+  agencyId      String
+  stage         PipelineStage @default(APPLIED)
+  aiMatchScore  Float?
+  matchDetails  Json?
+  notes         String?       @db.Text
+  appliedAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  candidate     Candidate     @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job           Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  interviews    Interview[]
+
+  @@unique([candidateId, jobId])
+  @@index([agencyId])
+  @@index([stage])
+  @@index([jobId])
+}
+
+model Interview {
+  id            String   @id @default(cuid())
+  candidateId   String
+  jobId         String
+  applicationId String?
+  agencyId      String
+  scheduledAt   DateTime
+  interviewType String?  // Phone, Video, In-person, Technical
+  location      String?
+  interviewerName String?
+  status        String   @default("SCHEDULED") // SCHEDULED, COMPLETED, CANCELLED, NO_SHOW
+  feedback      String?  @db.Text
+  result        String?  // PASS, FAIL, ON_HOLD
+  notes         String?  @db.Text
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  candidate     Candidate   @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job           Job         @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  application   Application? @relation(fields: [applicationId], references: [id])
+
+  @@index([agencyId])
+  @@index([scheduledAt])
+  @@index([candidateId])
+}
+
+model Placement {
+  id              String   @id @default(cuid())
+  candidateId     String
+  jobId           String
+  agencyId        String
+  joiningDate     DateTime?
+  offeredSalary   Float?
+  placementFee    Float?
+  invoiceNumber   String?
+  status          String   @default("CONFIRMED") // CONFIRMED, JOINED, BACKED_OUT, TERMINATED
+  backoutReason   String?
+  notes           String?  @db.Text
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  candidate       Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job             Job       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([agencyId])
+  @@index([status])
+}
+
+model FollowUp {
+  id          String   @id @default(cuid())
+  candidateId String?
+  jobId       String?
+  agencyId    String
+  type        NotificationType
+  title       String
+  description String?
+  dueDate     DateTime
+  isDone      Boolean  @default(false)
+  doneAt      DateTime?
+  priority    String   @default("NORMAL")
+  createdAt   DateTime @default(now())
+
+  candidate   Candidate? @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+  job         Job?       @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@index([agencyId])
+  @@index([dueDate])
+  @@index([isDone])
+}
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String?
+  agencyId  String?
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  data      Json?
+  createdAt DateTime         @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  agency    Agency?  @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([agencyId])
+  @@index([isRead])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  agencyId  String?
+  action    String
+  resource  String
+  resourceId String?
+  details   Json?
+  ipAddress String?
+  userAgent String?
+  createdAt DateTime @default(now())
+
+  user      User?    @relation(fields: [userId], references: [id])
+  agency    Agency?  @relation(fields: [agencyId], references: [id])
+
+  @@index([userId])
+  @@index([agencyId])
+  @@index([createdAt])
+}
+
+model CandidateActivity {
+  id          String    @id @default(cuid())
+  candidateId String
+  action      String
+  description String?
+  metadata    Json?
+  performedBy String?
+  createdAt   DateTime  @default(now())
+
+  candidate   Candidate @relation(fields: [candidateId], references: [id], onDelete: Cascade)
+
+  @@index([candidateId])
+  @@index([createdAt])
+}
