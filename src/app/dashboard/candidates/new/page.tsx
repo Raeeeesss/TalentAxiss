@@ -90,11 +90,11 @@ export default function NewCandidatePage() {
     if (!file) return;
     setCvParsing(true);
     try {
-      const text = await file.text();
+      const formData = new FormData();
+      formData.append("file", file);
       const res = await fetch("/api/candidates/parse-cv", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: formData,
       });
       if (!res.ok) throw new Error("Parse failed");
       const { parsed } = await res.json();
