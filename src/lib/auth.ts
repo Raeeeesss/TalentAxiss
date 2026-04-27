@@ -50,16 +50,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.agencyId = (user as any).agencyId;
       }
 
-      // Always re-fetch agencyId from DB in case it was set after the initial login
-      // This fixes the case where agency was created after user was first registered
+      // Re-fetch agencyId if missing (e.g. agency created after first login)
       if (token.sub && !token.agencyId) {
-        const dbUser = await prisma.user.findUnique({
-          where: { id: token.sub },
-          select: { agencyId: true, role: true, isActive: true },
-        });
-        if (dbUser?.agencyId) {
-          token.agencyId = dbUser.agencyId;
-          token.role = dbUser.role;
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.sub },
+            select: { agencyId: true, role: true, isActive: true },
+          });
+          if (dbUser?.agencyId) {
+            token.agencyId = dbUser.agencyId;
+            token.role = dbUser.role;
+          }
+        } catch {
+          // DB unavailable — keep existing token as-is
         }
       }
 

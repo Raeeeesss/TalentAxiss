@@ -62,25 +62,25 @@ export function AIMatchingClient() {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-1">
           <div className="w-8 h-8 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-            <Brain className="h-4 w-4 text-white" />
+            <Brain className="h-4 w-4 text-foreground" />
           </div>
-          <h1 className="text-2xl font-bold text-white">AI Matching Engine</h1>
+          <h1 className="text-2xl font-bold text-foreground">AI Matching Engine</h1>
         </div>
-        <p className="text-white/40 text-sm ml-11">Rank your entire candidate database for any job in seconds</p>
+        <p className="text-foreground/40 text-sm ml-11">Rank your entire candidate database for any job in seconds</p>
       </motion.div>
 
       <div className="grid lg:grid-cols-5 gap-5">
         {/* Job selector */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.05 }} className="lg:col-span-2 space-y-4">
           <div className="rounded-2xl border border-white/8 bg-white/2 p-5">
-            <h3 className="font-semibold text-white mb-4">Select Job Opening</h3>
+            <h3 className="font-semibold text-foreground mb-4">Select Job Opening</h3>
             <div className="space-y-2">
               {mockJobs.map((j) => (
                 <button key={j.id} type="button" onClick={() => { setSelectedJob(j.id); setDone(false); }}
                   className={`w-full text-left p-3 rounded-xl border transition-all ${selectedJob === j.id ? "border-indigo-500/40 bg-indigo-500/10" : "border-white/6 hover:border-white/12 hover:bg-white/3"}`}>
-                  <div className="font-medium text-sm text-white">{j.title}</div>
-                  <div className="text-xs text-white/40 mt-0.5">{j.company}</div>
-                  <div className="flex flex-wrap gap-1 mt-2">{j.skills.map((s) => <span key={s} className="text-xs bg-white/5 text-white/30 px-2 py-0.5 rounded-full">{s}</span>)}</div>
+                  <div className="font-medium text-sm text-foreground">{j.title}</div>
+                  <div className="text-xs text-foreground/40 mt-0.5">{j.company}</div>
+                  <div className="flex flex-wrap gap-1 mt-2">{j.skills.map((s) => <span key={s} className="text-xs bg-white/5 text-foreground/30 px-2 py-0.5 rounded-full">{s}</span>)}</div>
                 </button>
               ))}
             </div>
@@ -88,12 +88,12 @@ export function AIMatchingClient() {
 
           {job && (
             <div className="rounded-2xl border border-indigo-500/20 bg-indigo-500/5 p-5">
-              <h3 className="font-semibold text-white mb-3">Match Criteria</h3>
+              <h3 className="font-semibold text-foreground mb-3">Match Criteria</h3>
               <div className="space-y-2.5 mb-4">
-                <div className="flex justify-between text-sm"><span className="text-white/50">Position</span><span className="text-white font-medium">{job.title}</span></div>
-                <div className="flex justify-between text-sm"><span className="text-white/50">Min Experience</span><span className="text-white">{job.minExperience}+ years</span></div>
-                <div className="flex justify-between text-sm"><span className="text-white/50">Max Salary</span><span className="text-white">{formatCurrency(job.maxSalary)}</span></div>
-                <div><span className="text-white/50 text-sm">Skills</span><div className="flex flex-wrap gap-1.5 mt-1.5">{job.skills.map((s) => <span key={s} className="text-xs bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">{s}</span>)}</div></div>
+                <div className="flex justify-between text-sm"><span className="text-foreground/50">Position</span><span className="text-foreground font-medium">{job.title}</span></div>
+                <div className="flex justify-between text-sm"><span className="text-foreground/50">Min Experience</span><span className="text-foreground">{job.minExperience}+ years</span></div>
+                <div className="flex justify-between text-sm"><span className="text-foreground/50">Max Salary</span><span className="text-foreground">{formatCurrency(job.maxSalary)}</span></div>
+                <div><span className="text-foreground/50 text-sm">Skills</span><div className="flex flex-wrap gap-1.5 mt-1.5">{job.skills.map((s) => <span key={s} className="text-xs bg-indigo-500/15 text-indigo-400 border border-indigo-500/30 px-2 py-0.5 rounded-full">{s}</span>)}</div></div>
               </div>
               <Button variant="gradient" className="w-full" onClick={runMatching} loading={running} size="lg">
                 {running ? "Scanning 1,247 candidates..." : done ? "Re-run Matching" : "Run AI Matching"}
@@ -101,7 +101,7 @@ export function AIMatchingClient() {
               </Button>
               {running && (
                 <div className="mt-3">
-                  <div className="flex justify-between text-xs text-white/40 mb-1"><span>Analyzing profiles...</span><span>{progress}%</span></div>
+                  <div className="flex justify-between text-xs text-foreground/40 mb-1"><span>Analyzing profiles...</span><span>{progress}%</span></div>
                   <div className="h-1.5 bg-white/10 rounded-full overflow-hidden">
                     <motion.div className="h-full bg-linear-to-r from-indigo-500 to-purple-500 rounded-full" style={{ width: `${progress}%` }} />
                   </div>
@@ -113,18 +113,18 @@ export function AIMatchingClient() {
           <AnimatePresence>
             {done && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl border border-white/8 bg-white/2 p-5">
-                <div className="text-xs text-white/40 mb-3">Match Summary</div>
+                <div className="text-xs text-foreground/40 mb-3">Match Summary</div>
                 <div className="space-y-2">
                   {Object.entries(tierCounts).map(([tier, count]) => {
                     const cfg = tierConfig[tier as keyof typeof tierConfig];
                     return (
                       <div key={tier} className="flex items-center justify-between">
-                        <div className="flex items-center gap-2"><cfg.icon className={`h-3.5 w-3.5 ${cfg.color}`} /><span className="text-sm text-white/60">{cfg.label}</span></div>
+                        <div className="flex items-center gap-2"><cfg.icon className={`h-3.5 w-3.5 ${cfg.color}`} /><span className="text-sm text-foreground/60">{cfg.label}</span></div>
                         <span className={`text-sm font-bold ${cfg.color}`}>{count}</span>
                       </div>
                     );
                   })}
-                  <div className="border-t border-white/6 pt-2 flex justify-between text-sm"><span className="text-white/40">Total scanned</span><span className="text-white font-medium">1,247</span></div>
+                  <div className="border-t border-white/6 pt-2 flex justify-between text-sm"><span className="text-foreground/40">Total scanned</span><span className="text-foreground font-medium">1,247</span></div>
                 </div>
               </motion.div>
             )}
@@ -135,16 +135,16 @@ export function AIMatchingClient() {
         <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.08 }} className="lg:col-span-3">
           {!done && !running && (
             <div className="rounded-2xl border border-white/8 bg-white/2 h-96 flex flex-col items-center justify-center text-center p-8">
-              <Brain className="h-14 w-14 text-white/10 mb-4" />
-              <h3 className="text-lg font-semibold text-white/30 mb-2">AI Matching Ready</h3>
-              <p className="text-sm text-white/20 max-w-xs">Select a job and click Run AI Matching to rank all candidates instantly.</p>
+              <Brain className="h-14 w-14 text-foreground/10 mb-4" />
+              <h3 className="text-lg font-semibold text-foreground/30 mb-2">AI Matching Ready</h3>
+              <p className="text-sm text-foreground/20 max-w-xs">Select a job and click Run AI Matching to rank all candidates instantly.</p>
             </div>
           )}
           {running && (
             <div className="rounded-2xl border border-white/8 bg-white/2 h-96 flex flex-col items-center justify-center">
               <motion.div animate={{ rotate: 360 }} transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }} className="w-14 h-14 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 mb-5" />
-              <div className="text-white/60 font-medium mb-1">AI is analyzing...</div>
-              <div className="text-white/30 text-sm">Checking skills, experience, location, salary fit</div>
+              <div className="text-foreground/60 font-medium mb-1">AI is analyzing...</div>
+              <div className="text-foreground/30 text-sm">Checking skills, experience, location, salary fit</div>
             </div>
           )}
           <AnimatePresence>
@@ -152,7 +152,7 @@ export function AIMatchingClient() {
               <div className="space-y-4">
                 <div className="flex gap-2 flex-wrap">
                   {[{ key: "ALL", label: "All", count: mockMatches.length }, { key: "BEST_FIT", label: "Best Fit", count: tierCounts.BEST_FIT }, { key: "GOOD_FIT", label: "Good Fit", count: tierCounts.GOOD_FIT }, { key: "TRAINABLE_FIT", label: "Trainable", count: tierCounts.TRAINABLE_FIT }].map((t) => (
-                    <button key={t.key} onClick={() => setTierFilter(t.key)} className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${tierFilter === t.key ? "bg-indigo-600 text-white" : "bg-white/5 text-white/50 hover:bg-white/10"}`}>
+                    <button key={t.key} onClick={() => setTierFilter(t.key)} className={`px-3 py-1.5 rounded-xl text-sm font-medium transition-all ${tierFilter === t.key ? "bg-indigo-600 text-foreground" : "bg-white/5 text-foreground/50 hover:bg-white/10"}`}>
                       {t.label} ({t.count})
                     </button>
                   ))}
@@ -167,26 +167,26 @@ export function AIMatchingClient() {
                           <div className={`w-10 h-10 rounded-xl flex items-center justify-center border ${tier.bg} shrink-0`}><tier.icon className={`h-5 w-5 ${tier.color}`} /></div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 flex-wrap mb-1">
-                              <span className="font-semibold text-white">{match.name}</span>
+                              <span className="font-semibold text-foreground">{match.name}</span>
                               <Badge variant={tier.badge}>{tier.label}</Badge>
                             </div>
-                            <div className="text-sm text-white/50">{match.role} · {match.experience}y exp</div>
-                            <div className="flex flex-wrap gap-3 text-xs text-white/40 mt-1.5">
+                            <div className="text-sm text-foreground/50">{match.role} · {match.experience}y exp</div>
+                            <div className="flex flex-wrap gap-3 text-xs text-foreground/40 mt-1.5">
                               <span className="flex items-center gap-1"><MapPin className="h-3 w-3" />{match.district}</span>
                               <span className="flex items-center gap-1"><DollarSign className="h-3 w-3" />{formatCurrency(match.expectedSalary)}/mo</span>
                             </div>
-                            <div className="flex flex-wrap gap-1.5 mt-2">{match.skills.map((s) => <span key={s} className="text-xs bg-white/5 text-white/40 px-2 py-0.5 rounded-full">{s}</span>)}</div>
+                            <div className="flex flex-wrap gap-1.5 mt-2">{match.skills.map((s) => <span key={s} className="text-xs bg-white/5 text-foreground/40 px-2 py-0.5 rounded-full">{s}</span>)}</div>
                           </div>
                         </div>
                         <div className="text-right shrink-0">
                           <div className={`text-3xl font-bold ${tier.color}`}>{match.score}%</div>
-                          <div className="text-xs text-white/30">match score</div>
+                          <div className="text-xs text-foreground/30">match score</div>
                           <div className="w-16 h-1.5 bg-white/10 rounded-full overflow-hidden mt-1.5 ml-auto">
                             <motion.div initial={{ width: 0 }} animate={{ width: `${match.score}%` }} transition={{ delay: i * 0.07 + 0.3, duration: 0.8 }} className={`h-full rounded-full ${match.tier === "BEST_FIT" ? "bg-emerald-500" : match.tier === "GOOD_FIT" ? "bg-blue-500" : "bg-amber-500"}`} />
                           </div>
                         </div>
                       </div>
-                      <button className="w-full flex items-center justify-center gap-1.5 mt-3 text-xs text-white/30 hover:text-white/50 transition-colors" onClick={() => setExpandedCard(isExpanded ? null : match.id)}>
+                      <button className="w-full flex items-center justify-center gap-1.5 mt-3 text-xs text-foreground/30 hover:text-foreground/50 transition-colors" onClick={() => setExpandedCard(isExpanded ? null : match.id)}>
                         {isExpanded ? "Hide details" : "Show AI analysis"}
                         <ChevronDown className={`h-3.5 w-3.5 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                       </button>
@@ -196,12 +196,12 @@ export function AIMatchingClient() {
                             <div className="pt-4 grid sm:grid-cols-2 gap-4 border-t border-white/8 mt-3">
                               <div>
                                 <div className="text-xs font-semibold text-emerald-400 mb-2 flex items-center gap-1"><CheckCircle2 className="h-3.5 w-3.5" />Why they match</div>
-                                <ul className="space-y-1">{match.reasons.map((r) => <li key={r} className="text-xs text-white/50 flex items-start gap-1.5"><span className="text-emerald-500 mt-0.5">✓</span> {r}</li>)}</ul>
+                                <ul className="space-y-1">{match.reasons.map((r) => <li key={r} className="text-xs text-foreground/50 flex items-start gap-1.5"><span className="text-emerald-500 mt-0.5">✓</span> {r}</li>)}</ul>
                               </div>
                               {match.gaps.length > 0 && (
                                 <div>
                                   <div className="text-xs font-semibold text-amber-400 mb-2 flex items-center gap-1"><AlertTriangle className="h-3.5 w-3.5" />Gaps</div>
-                                  <ul className="space-y-1">{match.gaps.map((g) => <li key={g} className="text-xs text-white/50 flex items-start gap-1.5"><span className="text-amber-500 mt-0.5">!</span> {g}</li>)}</ul>
+                                  <ul className="space-y-1">{match.gaps.map((g) => <li key={g} className="text-xs text-foreground/50 flex items-start gap-1.5"><span className="text-amber-500 mt-0.5">!</span> {g}</li>)}</ul>
                                 </div>
                               )}
                             </div>

@@ -33,22 +33,22 @@ export default function AdminNotificationsPage() {
   return (
     <div className="space-y-6 max-w-4xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-2xl font-bold text-white flex items-center gap-2">
+        <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
           <Bell className="h-6 w-6 text-amber-400" />
           Broadcast Notifications
         </h1>
-        <p className="text-white/30 text-sm mt-0.5">Send announcements to all or selected agencies</p>
+        <p className="text-foreground/30 text-sm mt-0.5">Send announcements to all or selected agencies</p>
       </motion.div>
 
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Compose */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="rounded-2xl border border-amber-500/15 bg-white/2 p-5">
-          <h3 className="font-semibold text-white mb-4">New Broadcast</h3>
+          <h3 className="font-semibold text-foreground mb-4">New Broadcast</h3>
           <div className="space-y-4">
             <div>
-              <label className="text-sm text-white/50 mb-1.5 block">Target Audience</label>
+              <label className="text-sm text-foreground/50 mb-1.5 block">Target Audience</label>
               <select
-                className="flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                className="flex h-10 w-full rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/50"
                 value={form.target}
                 onChange={(e) => setForm({ ...form, target: e.target.value })}
               >
@@ -60,9 +60,9 @@ export default function AdminNotificationsPage() {
               </select>
             </div>
             <div>
-              <label className="text-sm text-white/50 mb-1.5 block">Notification Type</label>
+              <label className="text-sm text-foreground/50 mb-1.5 block">Notification Type</label>
               <select
-                className="flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-amber-500/50"
+                className="flex h-10 w-full rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-amber-500/50"
                 value={form.type}
                 onChange={(e) => setForm({ ...form, type: e.target.value })}
               >
@@ -74,7 +74,7 @@ export default function AdminNotificationsPage() {
               </select>
             </div>
             <div>
-              <label className="text-sm text-white/50 mb-1.5 block">Title</label>
+              <label className="text-sm text-foreground/50 mb-1.5 block">Title</label>
               <Input
                 placeholder="e.g. New Feature: AI Matching 2.0"
                 value={form.title}
@@ -82,9 +82,9 @@ export default function AdminNotificationsPage() {
               />
             </div>
             <div>
-              <label className="text-sm text-white/50 mb-1.5 block">Message</label>
+              <label className="text-sm text-foreground/50 mb-1.5 block">Message</label>
               <textarea
-                className="flex w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-h-[100px] resize-none"
+                className="flex w-full rounded-xl border border-border bg-white/5 px-3 py-2.5 text-sm text-foreground placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-amber-500/50 min-h-[100px] resize-none"
                 placeholder="Write your broadcast message here..."
                 value={form.message}
                 onChange={(e) => setForm({ ...form, message: e.target.value })}
@@ -94,14 +94,14 @@ export default function AdminNotificationsPage() {
             {/* Preview */}
             {form.title && (
               <div className="rounded-xl border border-white/8 bg-white/3 p-3">
-                <div className="text-xs text-white/30 mb-2">Preview</div>
+                <div className="text-xs text-foreground/30 mb-2">Preview</div>
                 <div className="flex items-start gap-2">
                   <div className="w-8 h-8 rounded-lg bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center shrink-0">
-                    <Zap className="h-4 w-4 text-white" />
+                    <Zap className="h-4 w-4 text-foreground" />
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-white">{form.title}</div>
-                    <div className="text-xs text-white/40 mt-0.5">{form.message || "Your message here..."}</div>
+                    <div className="text-sm font-medium text-foreground">{form.title}</div>
+                    <div className="text-xs text-foreground/40 mt-0.5">{form.message || "Your message here..."}</div>
                   </div>
                 </div>
               </div>
@@ -121,12 +121,12 @@ export default function AdminNotificationsPage() {
 
         {/* History */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="rounded-2xl border border-amber-500/15 bg-white/2 p-5">
-          <h3 className="font-semibold text-white mb-4">Sent History</h3>
+          <h3 className="font-semibold text-foreground mb-4">Sent History</h3>
           <div className="space-y-3">
             {sentHistory.map((n) => (
               <div key={n.id} className="p-3 rounded-xl border border-white/6 hover:border-white/12 transition-colors">
-                <div className="text-sm font-medium text-white mb-1">{n.title}</div>
-                <div className="flex items-center gap-3 text-xs text-white/30">
+                <div className="text-sm font-medium text-foreground mb-1">{n.title}</div>
+                <div className="flex items-center gap-3 text-xs text-foreground/30">
                   <span className="flex items-center gap-1"><Users className="h-3 w-3" />{n.target}</span>
                   <span>{n.sent}</span>
                   <span className="ml-auto text-emerald-400">{n.reach} reached</span>

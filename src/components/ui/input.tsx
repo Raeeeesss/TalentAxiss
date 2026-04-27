@@ -12,14 +12,14 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       return (
         <div className="relative">
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-white/40 pointer-events-none">
+            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-foreground/40 pointer-events-none">
               {leftIcon}
             </div>
           )}
           <input
             type={type}
             className={cn(
-              "flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/30 transition-all",
+              "flex h-10 w-full rounded-xl border border-border bg-white/5 px-3 py-2 text-sm text-foreground placeholder:text-foreground/30 transition-all",
               "focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50",
               "disabled:cursor-not-allowed disabled:opacity-50",
               leftIcon && "pl-9",
@@ -30,7 +30,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-white/40">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40">
               {rightIcon}
             </div>
           )}
@@ -42,7 +42,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white placeholder:text-white/30 transition-all",
+          "flex h-10 w-full rounded-xl border border-border bg-white/5 px-3 py-2 text-sm text-foreground placeholder:text-foreground/30 transition-all",
           "focus:outline-none focus:ring-2 focus:ring-indigo-500/50 focus:border-indigo-500/50",
           "disabled:cursor-not-allowed disabled:opacity-50",
           className

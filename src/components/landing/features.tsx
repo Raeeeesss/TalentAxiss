@@ -44,12 +44,12 @@ export function FeaturesGrid() {
           <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-1.5 mb-6">
             <span className="text-xs text-indigo-400 font-medium">Full Feature Suite</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             16 Powerful Tools in
             <br />
             <span className="gradient-text">One Platform</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-xl mx-auto">
+          <p className="text-foreground/50 text-lg max-w-xl mx-auto">
             Everything a modern recruitment agency needs — no more juggling 10 different apps.
           </p>
         </motion.div>
@@ -67,8 +67,8 @@ export function FeaturesGrid() {
               <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-3 ${f.color} group-hover:scale-110 transition-transform`}>
                 <f.icon className="h-5 w-5" />
               </div>
-              <h3 className="font-semibold text-white text-sm mb-1">{f.title}</h3>
-              <p className="text-xs text-white/40 leading-relaxed">{f.desc}</p>
+              <h3 className="font-semibold text-foreground text-sm mb-1">{f.title}</h3>
+              <p className="text-xs text-foreground/40 leading-relaxed">{f.desc}</p>
             </motion.div>
           ))}
         </div>

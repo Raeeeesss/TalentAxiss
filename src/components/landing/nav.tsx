@@ -40,7 +40,7 @@ export function LandingNav() {
             {/* Logo */}
             <Link href="/" className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-                <Zap className="h-4 w-4 text-white" />
+                <Zap className="h-4 w-4 text-foreground" />
               </div>
               <span className="text-xl font-bold gradient-text">TalentAxiss</span>
             </Link>
@@ -51,7 +51,7 @@ export function LandingNav() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="text-sm text-white/60 hover:text-white transition-colors"
+                  className="text-sm text-foreground/60 hover:text-foreground transition-colors"
                 >
                   {link.label}
                 </a>
@@ -70,7 +70,7 @@ export function LandingNav() {
 
             {/* Mobile menu */}
             <button
-              className="md:hidden text-white/70 hover:text-white"
+              className="md:hidden text-foreground/70 hover:text-foreground"
               onClick={() => setMobileOpen(!mobileOpen)}
             >
               {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -92,7 +92,7 @@ export function LandingNav() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className="text-white/70 hover:text-white py-2"
+                  className="text-foreground/70 hover:text-foreground py-2"
                   onClick={() => setMobileOpen(false)}
                 >
                   {link.label}

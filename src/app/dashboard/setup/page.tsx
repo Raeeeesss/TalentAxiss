@@ -62,12 +62,12 @@ export default function SetupPage() {
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-2 mb-4">
             <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <Zap className="h-5 w-5 text-white" />
+              <Zap className="h-5 w-5 text-foreground" />
             </div>
             <span className="text-2xl font-bold gradient-text">TalentAxiss</span>
           </div>
-          <h1 className="text-2xl font-bold text-white">Set up your agency</h1>
-          <p className="text-white/40 text-sm mt-2">
+          <h1 className="text-2xl font-bold text-foreground">Set up your agency</h1>
+          <p className="text-foreground/40 text-sm mt-2">
             Your account was created but the agency profile is missing.<br />
             Complete setup to access your dashboard.
           </p>
@@ -76,7 +76,7 @@ export default function SetupPage() {
         <div className="bg-white/3 border border-white/8 rounded-2xl p-8 backdrop-blur-sm">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm text-white/60 mb-1.5 block">
+              <label className="text-sm text-foreground/60 mb-1.5 block">
                 Agency Name <span className="text-red-400">*</span>
               </label>
               <Input
@@ -89,7 +89,7 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label className="text-sm text-white/60 mb-1.5 block">Phone Number</label>
+              <label className="text-sm text-foreground/60 mb-1.5 block">Phone Number</label>
               <Input
                 type="tel"
                 placeholder="+91 98765 43210"
@@ -100,9 +100,9 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label className="text-sm text-white/60 mb-1.5 block">District</label>
+              <label className="text-sm text-foreground/60 mb-1.5 block">District</label>
               <select
-                className="flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                className="flex h-10 w-full rounded-xl border border-border bg-white/5 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
                 value={form.district}
                 onChange={(e) => setForm({ ...form, district: e.target.value })}
               >
@@ -114,7 +114,7 @@ export default function SetupPage() {
             </div>
 
             <div>
-              <label className="text-sm text-white/60 mb-1.5 block">Office Address</label>
+              <label className="text-sm text-foreground/60 mb-1.5 block">Office Address</label>
               <Input
                 placeholder="Street, Area"
                 value={form.address}

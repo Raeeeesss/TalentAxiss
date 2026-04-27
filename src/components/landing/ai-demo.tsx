@@ -84,12 +84,12 @@ export function AIDemo() {
             <Brain className="h-3.5 w-3.5 text-purple-400" />
             <span className="text-xs text-purple-400 font-medium">Live AI Demo</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             Watch AI Match Candidates
             <br />
             <span className="gradient-text">in Real Time</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-xl mx-auto">
+          <p className="text-foreground/50 text-lg max-w-xl mx-auto">
             Post a job, hit match — AI scans your entire database and ranks the best candidates instantly.
           </p>
         </motion.div>
@@ -104,25 +104,25 @@ export function AIDemo() {
           <div className="rounded-2xl border border-white/8 bg-white/2 p-6">
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2 h-2 rounded-full bg-indigo-400" />
-              <span className="text-sm font-semibold text-white">Job Opening</span>
+              <span className="text-sm font-semibold text-foreground">Job Opening</span>
             </div>
             <div className="space-y-3">
               <div className="bg-white/4 border border-white/8 rounded-xl p-4">
-                <div className="text-xs text-white/40 mb-1">Position</div>
-                <div className="text-white font-semibold">{mockJob.title}</div>
+                <div className="text-xs text-foreground/40 mb-1">Position</div>
+                <div className="text-foreground font-semibold">{mockJob.title}</div>
               </div>
               <div className="grid grid-cols-2 gap-3">
                 <div className="bg-white/4 border border-white/8 rounded-xl p-3">
-                  <div className="text-xs text-white/40 mb-1">Experience</div>
-                  <div className="text-white text-sm">{mockJob.experience}</div>
+                  <div className="text-xs text-foreground/40 mb-1">Experience</div>
+                  <div className="text-foreground text-sm">{mockJob.experience}</div>
                 </div>
                 <div className="bg-white/4 border border-white/8 rounded-xl p-3">
-                  <div className="text-xs text-white/40 mb-1">Location</div>
-                  <div className="text-white text-sm">{mockJob.location}</div>
+                  <div className="text-xs text-foreground/40 mb-1">Location</div>
+                  <div className="text-foreground text-sm">{mockJob.location}</div>
                 </div>
               </div>
               <div className="bg-white/4 border border-white/8 rounded-xl p-3">
-                <div className="text-xs text-white/40 mb-2">Required Skills</div>
+                <div className="text-xs text-foreground/40 mb-2">Required Skills</div>
                 <div className="flex flex-wrap gap-1.5">
                   {mockJob.skills.map((s) => (
                     <span key={s} className="text-xs bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full">{s}</span>
@@ -130,8 +130,8 @@ export function AIDemo() {
                 </div>
               </div>
               <div className="bg-white/4 border border-white/8 rounded-xl p-3">
-                <div className="text-xs text-white/40 mb-1">Salary Range</div>
-                <div className="text-white text-sm">{mockJob.salary}</div>
+                <div className="text-xs text-foreground/40 mb-1">Salary Range</div>
+                <div className="text-foreground text-sm">{mockJob.salary}</div>
               </div>
             </div>
             <Button
@@ -149,7 +149,7 @@ export function AIDemo() {
           <div className="rounded-2xl border border-white/8 bg-white/2 p-6">
             <div className="flex items-center gap-2 mb-5">
               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-              <span className="text-sm font-semibold text-white">AI Match Results</span>
+              <span className="text-sm font-semibold text-foreground">AI Match Results</span>
               {done && (
                 <span className="ml-auto text-xs text-emerald-400 bg-emerald-500/10 border border-emerald-500/20 px-2 py-0.5 rounded-full">
                   Scanned 1,247 candidates
@@ -158,7 +158,7 @@ export function AIDemo() {
             </div>
 
             {!done && !running && (
-              <div className="flex flex-col items-center justify-center h-64 text-white/20">
+              <div className="flex flex-col items-center justify-center h-64 text-foreground/20">
                 <Brain className="h-12 w-12 mb-3" />
                 <p className="text-sm">Click "Run AI Matching Engine" to see results</p>
               </div>
@@ -171,7 +171,7 @@ export function AIDemo() {
                   transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                   className="w-12 h-12 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 mb-4"
                 />
-                <div className="text-white/60 text-sm mb-2">Analyzing candidates...</div>
+                <div className="text-foreground/60 text-sm mb-2">Analyzing candidates...</div>
                 <div className="w-48 h-1 bg-white/10 rounded-full overflow-hidden">
                   <motion.div
                     className="h-full bg-linear-to-r from-indigo-500 to-purple-500 rounded-full"
@@ -198,11 +198,11 @@ export function AIDemo() {
                       >
                         <div className="flex items-center justify-between mb-2">
                           <div>
-                            <div className="font-semibold text-white text-sm">{c.name}</div>
-                            <div className="text-xs text-white/40">{c.role} · {c.exp}</div>
+                            <div className="font-semibold text-foreground text-sm">{c.name}</div>
+                            <div className="text-xs text-foreground/40">{c.role} · {c.exp}</div>
                           </div>
                           <div className="text-right">
-                            <div className="text-xl font-bold text-white">{c.score}%</div>
+                            <div className="text-xl font-bold text-foreground">{c.score}%</div>
                             <span className={`text-xs px-2 py-0.5 rounded-full border ${tier.bg} ${tier.color}`}>
                               {tier.label}
                             </span>
@@ -218,13 +218,13 @@ export function AIDemo() {
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {c.reasons.map((r) => (
-                            <span key={r} className="text-xs text-white/40 bg-white/4 px-2 py-0.5 rounded-full">{r}</span>
+                            <span key={r} className="text-xs text-foreground/40 bg-white/4 px-2 py-0.5 rounded-full">{r}</span>
                           ))}
                         </div>
                       </motion.div>
                     );
                   })}
-                  <div className="text-center text-xs text-white/30 mt-2">
+                  <div className="text-center text-xs text-foreground/30 mt-2">
                     + 23 more candidates matched
                   </div>
                 </div>

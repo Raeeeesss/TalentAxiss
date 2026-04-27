@@ -41,9 +41,9 @@ export function StatCard({ title, value, change, icon, gradient, delay = 0, subt
           )}
         </div>
         <div>
-          <div className="text-2xl font-bold text-white">{value}</div>
-          <div className="text-sm text-white/50 mt-1">{title}</div>
-          {subtitle && <div className="text-xs text-white/30 mt-0.5">{subtitle}</div>}
+          <div className="text-2xl font-bold text-foreground">{value}</div>
+          <div className="text-sm text-foreground/50 mt-1">{title}</div>
+          {subtitle && <div className="text-xs text-foreground/30 mt-0.5">{subtitle}</div>}
         </div>
       </div>
     </motion.div>

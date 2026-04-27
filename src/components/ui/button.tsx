@@ -11,21 +11,21 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-indigo-600 text-white shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 hover:shadow-indigo-500/40",
+          "bg-indigo-600 text-foreground shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 hover:shadow-indigo-500/40",
         destructive:
-          "bg-red-600 text-white shadow-lg shadow-red-500/25 hover:bg-red-500",
+          "bg-red-600 text-foreground shadow-lg shadow-red-500/25 hover:bg-red-500",
         outline:
-          "border border-white/10 bg-white/5 text-white hover:bg-white/10 hover:border-white/20",
+          "border border-border bg-white/5 text-foreground hover:bg-white/10 hover:border-white/20",
         secondary:
-          "bg-white/10 text-white hover:bg-white/15",
+          "bg-white/10 text-foreground hover:bg-white/15",
         ghost:
-          "hover:bg-white/10 text-white/80 hover:text-white",
+          "hover:bg-white/10 text-foreground/80 hover:text-foreground",
         link:
           "text-indigo-400 underline-offset-4 hover:underline hover:text-indigo-300",
         gradient:
-          "bg-linear-to-r from-indigo-600 via-purple-600 to-cyan-600 text-white shadow-lg hover:opacity-90 hover:shadow-indigo-500/40",
+          "bg-linear-to-r from-indigo-600 via-purple-600 to-cyan-600 text-foreground shadow-lg hover:opacity-90 hover:shadow-indigo-500/40",
         "gradient-gold":
-          "bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-lg hover:opacity-90",
+          "bg-linear-to-r from-amber-500 to-orange-500 text-foreground shadow-lg hover:opacity-90",
       },
       size: {
         default: "h-10 px-5 py-2",

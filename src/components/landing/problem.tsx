@@ -84,12 +84,12 @@ export function ProblemSection() {
           <div className="inline-flex items-center gap-2 bg-red-500/10 border border-red-500/20 rounded-full px-4 py-1.5 mb-6">
             <span className="text-xs text-red-400 font-medium">The Real Problem</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             Why Most Kerala Consultancies
             <br />
             <span className="gradient-text-gold">Struggle to Scale</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-2xl mx-auto">
+          <p className="text-foreground/50 text-lg max-w-2xl mx-auto">
             Running a consultancy in 2025 with 2005 tools is a silent killer.
             Here's what's holding your agency back.
           </p>
@@ -107,8 +107,8 @@ export function ProblemSection() {
               <div className={`w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center mb-4 ${p.color}`}>
                 <p.icon className="h-5 w-5" />
               </div>
-              <h3 className="font-semibold text-white mb-2">{p.title}</h3>
-              <p className="text-sm text-white/50 leading-relaxed">{p.desc}</p>
+              <h3 className="font-semibold text-foreground mb-2">{p.title}</h3>
+              <p className="text-sm text-foreground/50 leading-relaxed">{p.desc}</p>
             </motion.div>
           ))}
         </div>

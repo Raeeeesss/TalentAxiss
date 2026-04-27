@@ -1,287 +1,234 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  BarChart3, TrendingUp, Users, Briefcase, DollarSign,
-  Award, Calendar, Download, Filter, ArrowUp, ArrowDown
-} from "lucide-react";
+import { BarChart3, TrendingUp, Users, Briefcase, DollarSign, Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { StatCard } from "@/components/ui/stat-card";
-import { formatCurrency } from "@/lib/utils";
 import {
-  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,
-  ResponsiveContainer, Legend
+  AreaChart, Area, BarChart, Bar, XAxis, YAxis,
+  CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell
 } from "recharts";
 
-const monthlyData = [
-  { month: "Nov", placements: 18, candidates: 45, revenue: 270000 },
-  { month: "Dec", placements: 22, candidates: 58, revenue: 330000 },
-  { month: "Jan", placements: 19, candidates: 42, revenue: 285000 },
-  { month: "Feb", placements: 26, candidates: 65, revenue: 390000 },
-  { month: "Mar", placements: 24, candidates: 60, revenue: 360000 },
-  { month: "Apr", placements: 28, candidates: 72, revenue: 420000 },
-];
+const COLORS = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981", "#f59e0b", "#ef4444"];
 
-const categoryData = [
-  { name: "Accounting", value: 32, color: "#6366f1" },
-  { name: "Engineering", value: 22, color: "#8b5cf6" },
-  { name: "Healthcare", value: 18, color: "#06b6d4" },
-  { name: "Gulf", value: 15, color: "#f59e0b" },
-  { name: "Sales", value: 8, color: "#10b981" },
-  { name: "Other", value: 5, color: "#6b7280" },
-];
+const Tooltip_ = ({ active, payload, label }: any) =>
+  active && payload?.length ? (
+    <div className="bg-[#0f0f1a] border border-white/10 rounded-xl px-3 py-2 text-xs">
+      <div className="text-foreground/50 mb-1">{label}</div>
+      {payload.map((p: any) => (
+        <div key={p.name} className="font-bold" style={{ color: p.color }}>
+          {p.name}: {p.value}
+        </div>
+      ))}
+    </div>
+  ) : null;
 
-const staffData = [
-  { name: "Rajan (You)", placements: 12, candidates: 28, calls: 145 },
-  { name: "Priya", placements: 8, candidates: 22, calls: 98 },
-  { name: "Anoop", placements: 5, candidates: 15, calls: 67 },
-  { name: "Sneha", placements: 3, candidates: 7, calls: 34 },
-];
+const PERIODS = ["7d", "30d", "90d", "1y"] as const;
 
-const dropoutData = [
-  { stage: "Applied→Short", rate: 55 },
-  { stage: "Short→Called", rate: 72 },
-  { stage: "Called→Interview", rate: 68 },
-  { stage: "Interview→Offer", rate: 82 },
-  { stage: "Offer→Joined", rate: 91 },
-];
+export default function ReportsPage() {
+  const [stats, setStats]   = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState<typeof PERIODS[number]>("30d");
 
-const CustomTooltip = ({ active, payload, label }: any) => {
-  if (active && payload?.length) {
+  const fetchStats = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res  = await fetch(`/api/stats?period=${period}`);
+      const data = await res.json();
+      setStats(data);
+    } finally {
+      setLoading(false);
+    }
+  }, [period]);
+
+  useEffect(() => { fetchStats(); }, [fetchStats]);
+
+  if (loading) {
     return (
-      <div className="bg-[#0f0f1a] border border-white/10 rounded-xl px-3 py-2.5 text-xs shadow-xl">
-        <div className="text-white/50 mb-2 font-medium">{label}</div>
-        {payload.map((p: any) => (
-          <div key={p.dataKey} className="flex justify-between gap-4 mb-1">
-            <span style={{ color: p.color }}>{p.name}</span>
-            <span className="font-bold text-white">
-              {p.dataKey === "revenue" ? formatCurrency(p.value) : p.value}
-            </span>
-          </div>
-        ))}
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="h-8 w-8 text-indigo-400 animate-spin" />
       </div>
     );
   }
-  return null;
-};
 
-export default function ReportsPage() {
-  const [period, setPeriod] = useState<"7d" | "30d" | "90d" | "1y">("30d");
+  const s = stats || {};
+  const months     = s.months     || [];
+  const categoryData = s.categoryData || [];
+  const funnel     = s.funnel     || [];
+  const staffData  = s.staffData  || [];
 
   return (
-    <div className="space-y-6 max-w-7xl">
+    <div className="space-y-5 max-w-7xl">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <BarChart3 className="h-6 w-6 text-purple-400" />
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <BarChart3 className="h-6 w-6 text-indigo-400" />
             Analytics & Reports
           </h1>
-          <p className="text-white/40 text-sm mt-0.5">Full visibility into your agency's performance</p>
+          <p className="text-foreground/40 text-sm mt-0.5">Real-time performance insights for your agency</p>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex bg-white/5 border border-white/8 rounded-xl p-1">
-            {(["7d", "30d", "90d", "1y"] as const).map((p) => (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${period === p ? "bg-indigo-600 text-white" : "text-white/40 hover:text-white"}`}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4" />
-            Export
-          </Button>
+          {PERIODS.map((p) => (
+            <button
+              key={p}
+              onClick={() => setPeriod(p)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${period === p ? "bg-indigo-600 text-white" : "bg-white/5 text-foreground/50 hover:bg-white/10"}`}
+            >
+              {p}
+            </button>
+          ))}
+          <Button variant="outline" size="sm" onClick={fetchStats}><RefreshCw className="h-4 w-4" /></Button>
         </div>
       </motion.div>
 
       {/* KPI cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { title: "Total Placements", value: "137", change: 15, icon: <Award className="h-5 w-5 text-white" />, gradient: "bg-linear-to-br from-indigo-600 to-purple-600", subtitle: "this year" },
-          { title: "Total Revenue", value: "₹20.55L", change: 22, icon: <DollarSign className="h-5 w-5 text-white" />, gradient: "bg-linear-to-br from-emerald-600 to-teal-600", subtitle: "placement fees" },
-          { title: "Avg Placement Time", value: "8.3 days", change: -12, icon: <Calendar className="h-5 w-5 text-white" />, gradient: "bg-linear-to-br from-amber-500 to-orange-600", subtitle: "per placement" },
-          { title: "Success Rate", value: "94%", change: 3, icon: <TrendingUp className="h-5 w-5 text-white" />, gradient: "bg-linear-to-br from-cyan-600 to-blue-600", subtitle: "offer-to-joining" },
-        ].map((s, i) => (
-          <StatCard key={s.title} {...s} delay={i * 0.05} />
+          { label: "Total Placements",  value: s.totalPlacements ?? 0,                                    icon: TrendingUp,  color: "text-emerald-400", sub: `${s.periodPlacements ?? 0} this period` },
+          { label: "Total Candidates",  value: (s.totalCandidates ?? 0).toLocaleString(),                 icon: Users,       color: "text-indigo-400",  sub: `${s.periodCandidates ?? 0} added this period` },
+          { label: "Total Revenue",     value: s.totalRevenue ? `₹${(s.totalRevenue/100000).toFixed(1)}L` : "₹0", icon: DollarSign, color: "text-amber-400",   sub: `₹${((s.periodRevenue ?? 0)/100000).toFixed(1)}L this period` },
+          { label: "Success Rate",      value: `${s.successRate ?? 0}%`,                                  icon: Briefcase,   color: "text-purple-400",  sub: "Applications → Joined" },
+        ].map((card, i) => (
+          <div key={card.label} className="rounded-2xl border border-white/8 bg-white/2 p-5">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs text-foreground/40">{card.label}</span>
+              <card.icon className={`h-4 w-4 ${card.color}`} />
+            </div>
+            <div className={`text-2xl font-bold ${card.color}`}>{card.value}</div>
+            <div className="text-xs text-foreground/30 mt-1">{card.sub}</div>
+          </div>
         ))}
-      </div>
+      </motion.div>
 
-      {/* Main charts */}
+      {/* Charts row */}
       <div className="grid lg:grid-cols-3 gap-4">
         {/* Placement trend */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-2 rounded-2xl border border-white/8 bg-white/2 p-5"
-        >
-          <div className="flex items-center justify-between mb-5">
-            <div>
-              <h3 className="font-semibold text-white">Placements & Revenue</h3>
-              <p className="text-xs text-white/30 mt-0.5">Last 6 months</p>
-            </div>
-          </div>
-          <ResponsiveContainer width="100%" height={220}>
-            <AreaChart data={monthlyData}>
-              <defs>
-                <linearGradient id="placGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#6366f1" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
-                </linearGradient>
-                <linearGradient id="revGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-              <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis yAxisId="left" tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <YAxis yAxisId="right" orientation="right" tickFormatter={(v) => `₹${(v / 1000).toFixed(0)}k`} tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
-              <Tooltip content={<CustomTooltip />} />
-              <Area yAxisId="left" type="monotone" dataKey="placements" stroke="#6366f1" strokeWidth={2} fill="url(#placGrad)" name="Placements" />
-              <Area yAxisId="right" type="monotone" dataKey="revenue" stroke="#10b981" strokeWidth={2} fill="url(#revGrad)" name="Revenue" />
-            </AreaChart>
-          </ResponsiveContainer>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="lg:col-span-2 rounded-2xl border border-white/8 bg-white/2 p-5">
+          <h3 className="font-semibold text-foreground mb-1">Placement Trend</h3>
+          <p className="text-xs text-foreground/30 mb-4">Last 6 months</p>
+          {months.length > 0 ? (
+            <ResponsiveContainer width="100%" height={180}>
+              <AreaChart data={months}>
+                <defs>
+                  <linearGradient id="pg" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%"  stopColor="#6366f1" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="#6366f1" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+                <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <Tooltip content={<Tooltip_ />} />
+                <Area type="monotone" dataKey="placements" name="Placements" stroke="#6366f1" strokeWidth={2} fill="url(#pg)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-44 text-foreground/30 text-sm">No placement data yet</div>
+          )}
         </motion.div>
 
         {/* Category breakdown */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          className="rounded-2xl border border-white/8 bg-white/2 p-5"
-        >
-          <h3 className="font-semibold text-white mb-4">Placements by Category</h3>
-          <ResponsiveContainer width="100%" height={160}>
-            <PieChart>
-              <Pie data={categoryData} dataKey="value" innerRadius={45} outerRadius={70} strokeWidth={0}>
-                {categoryData.map((entry, index) => (
-                  <Cell key={index} fill={entry.color} />
-                ))}
-              </Pie>
-              <Tooltip contentStyle={{ background: "#0f0f1a", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 12, color: "#fff", fontSize: 12 }} />
-            </PieChart>
-          </ResponsiveContainer>
-          <div className="space-y-1.5 mt-2">
-            {categoryData.map((c) => (
-              <div key={c.name} className="flex items-center justify-between text-xs">
-                <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full" style={{ background: c.color }} />
-                  <span className="text-white/50">{c.name}</span>
-                </div>
-                <span className="text-white font-medium">{c.value}%</span>
-              </div>
-            ))}
-          </div>
-        </motion.div>
-      </div>
-
-      {/* Staff performance + Dropout funnel */}
-      <div className="grid lg:grid-cols-2 gap-4">
-        {/* Staff leaderboard */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="rounded-2xl border border-white/8 bg-white/2 p-5"
-        >
-          <div className="flex items-center justify-between mb-5">
-            <h3 className="font-semibold text-white">Team Performance</h3>
-            <span className="text-xs text-white/30">This month</span>
-          </div>
-          <div className="space-y-4">
-            {staffData.map((s, i) => (
-              <div key={s.name}>
-                <div className="flex items-center justify-between mb-1.5">
-                  <div className="flex items-center gap-2">
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${i === 0 ? "bg-amber-500" : "bg-white/10"}`}>
-                      {i + 1}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="rounded-2xl border border-white/8 bg-white/2 p-5">
+          <h3 className="font-semibold text-foreground mb-4">By Category</h3>
+          {categoryData.length > 0 ? (
+            <>
+              <ResponsiveContainer width="100%" height={120}>
+                <PieChart>
+                  <Pie data={categoryData} dataKey="value" nameKey="name" cx="50%" cy="50%" outerRadius={50} strokeWidth={0}>
+                    {categoryData.map((_: any, i: number) => (
+                      <Cell key={i} fill={COLORS[i % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip content={<Tooltip_ />} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="space-y-1.5 mt-3">
+                {categoryData.slice(0, 5).map((d: any, i: number) => (
+                  <div key={d.name} className="flex items-center justify-between text-xs">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
+                      <span className="text-foreground/60 truncate max-w-24">{d.name}</span>
                     </div>
-                    <span className="text-sm text-white">{s.name}</span>
+                    <span className="text-foreground font-medium">{d.value}</span>
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-white/40">
-                    <span>{s.candidates} candidates</span>
-                    <span className="text-indigo-400 font-bold">{s.placements} placed</span>
-                  </div>
-                </div>
-                <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(s.placements / 12) * 100}%` }}
-                    transition={{ delay: 0.4 + i * 0.1, duration: 0.8 }}
-                    className={`h-full rounded-full ${i === 0 ? "bg-linear-to-r from-amber-500 to-orange-500" : "bg-linear-to-r from-indigo-500 to-purple-500"}`}
-                  />
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Pipeline conversion funnel */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35 }}
-          className="rounded-2xl border border-white/8 bg-white/2 p-5"
-        >
-          <div className="flex items-center justify-between mb-5">
-            <h3 className="font-semibold text-white">Pipeline Conversion</h3>
-            <span className="text-xs text-white/30">Stage → Stage success rate</span>
-          </div>
-          <div className="space-y-3">
-            {dropoutData.map((d, i) => (
-              <div key={d.stage}>
-                <div className="flex justify-between text-xs mb-1.5">
-                  <span className="text-white/50">{d.stage}</span>
-                  <span className={`font-semibold ${d.rate >= 80 ? "text-emerald-400" : d.rate >= 60 ? "text-blue-400" : "text-amber-400"}`}>
-                    {d.rate}%
-                  </span>
-                </div>
-                <div className="h-2 bg-white/8 rounded-full overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${d.rate}%` }}
-                    transition={{ delay: 0.5 + i * 0.1, duration: 0.8 }}
-                    className={`h-full rounded-full ${d.rate >= 80 ? "bg-emerald-500" : d.rate >= 60 ? "bg-blue-500" : "bg-amber-500"}`}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 p-3 rounded-xl bg-amber-500/8 border border-amber-500/20">
-            <div className="text-xs text-amber-400 font-medium mb-1">⚡ AI Insight</div>
-            <p className="text-xs text-white/50">Your Called→Interview conversion (68%) is below industry average (75%). Consider stronger pre-screening calls to improve this stage.</p>
-          </div>
+            </>
+          ) : (
+            <div className="flex items-center justify-center h-44 text-foreground/30 text-sm">No data yet</div>
+          )}
         </motion.div>
       </div>
 
-      {/* Candidates added per month */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4 }}
-        className="rounded-2xl border border-white/8 bg-white/2 p-5"
-      >
-        <div className="flex items-center justify-between mb-5">
-          <h3 className="font-semibold text-white">New Candidates Added</h3>
-          <span className="text-xs text-white/30">Monthly database growth</span>
-        </div>
-        <ResponsiveContainer width="100%" height={150}>
-          <BarChart data={monthlyData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
-            <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <YAxis tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="candidates" fill="#6366f1" radius={[6, 6, 0, 0]} name="New Candidates" />
-          </BarChart>
-        </ResponsiveContainer>
-      </motion.div>
+      {/* Bottom row */}
+      <div className="grid lg:grid-cols-2 gap-4">
+        {/* Pipeline funnel */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="rounded-2xl border border-white/8 bg-white/2 p-5">
+          <h3 className="font-semibold text-foreground mb-4">Pipeline Funnel</h3>
+          {funnel.some((f: any) => f.count > 0) ? (
+            <div className="space-y-3">
+              {funnel.map((f: any, i: number) => {
+                const max = Math.max(...funnel.map((x: any) => x.count), 1);
+                return (
+                  <div key={f.stage}>
+                    <div className="flex justify-between text-xs mb-1">
+                      <span className="text-foreground/50">{f.stage.charAt(0) + f.stage.slice(1).toLowerCase()}</span>
+                      <span className="text-foreground font-medium">{f.count}</span>
+                    </div>
+                    <div className="h-1.5 bg-white/8 rounded-full overflow-hidden">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(f.count / max) * 100}%` }}
+                        transition={{ delay: 0.5 + i * 0.1, duration: 0.6 }}
+                        className="h-full rounded-full"
+                        style={{ background: COLORS[i % COLORS.length] }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex items-center justify-center h-36 text-foreground/30 text-sm">No applications yet</div>
+          )}
+        </motion.div>
+
+        {/* Staff performance */}
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="rounded-2xl border border-white/8 bg-white/2 p-5">
+          <h3 className="font-semibold text-foreground mb-4">Recruiter Performance</h3>
+          {staffData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={180}>
+              <BarChart data={staffData} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" horizontal={false} />
+                <XAxis type="number" tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
+                <YAxis dataKey="name" type="category" tick={{ fill: "rgba(255,255,255,0.5)", fontSize: 11 }} axisLine={false} tickLine={false} width={80} />
+                <Tooltip content={<Tooltip_ />} />
+                <Bar dataKey="placements" name="Placements" fill="#6366f1" radius={[0, 4, 4, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-36 text-foreground/30 text-sm">No placement data yet</div>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Candidates added trend */}
+      {months.length > 0 && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }} className="rounded-2xl border border-white/8 bg-white/2 p-5">
+          <h3 className="font-semibold text-foreground mb-1">New Candidates Added</h3>
+          <p className="text-xs text-foreground/30 mb-4">Last 6 months</p>
+          <ResponsiveContainer width="100%" height={150}>
+            <BarChart data={months}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.04)" />
+              <XAxis dataKey="month" tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <YAxis tick={{ fill: "rgba(255,255,255,0.3)", fontSize: 11 }} axisLine={false} tickLine={false} />
+              <Tooltip content={<Tooltip_ />} />
+              <Bar dataKey="candidates" name="Candidates" fill="#06b6d4" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </motion.div>
+      )}
     </div>
   );
 }

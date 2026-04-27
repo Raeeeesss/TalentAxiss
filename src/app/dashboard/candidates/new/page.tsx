@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Brain, Plus, X, Upload } from "lucide-react";
+import { ArrowLeft, Save, Brain, Plus, X, Upload, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -12,26 +12,27 @@ import { KERALA_DISTRICTS, GULF_COUNTRIES, JOB_CATEGORIES } from "@/lib/utils";
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <div className="rounded-2xl border border-white/8 bg-white/2 p-6">
-    <h3 className="text-sm font-semibold text-white/60 uppercase tracking-wider mb-5">{title}</h3>
+    <h3 className="text-sm font-semibold text-foreground/60 uppercase tracking-wider mb-5">{title}</h3>
     {children}
   </div>
 );
 
 const Field = ({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) => (
   <div>
-    <label className="text-sm text-white/60 mb-1.5 block">
+    <label className="text-sm text-foreground/60 mb-1.5 block">
       {label}{required && <span className="text-red-400 ml-1">*</span>}
     </label>
     {children}
   </div>
 );
 
-const selectClass = "flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
-const textareaClass = "flex w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2.5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 min-h-[80px] resize-none";
+const selectClass = "flex h-10 w-full rounded-xl border border-border bg-white/5 px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50";
+const textareaClass = "flex w-full rounded-xl border border-border bg-white/5 px-3 py-2.5 text-sm text-foreground placeholder:text-foreground/30 focus:outline-none focus:ring-2 focus:ring-indigo-500/50 min-h-[80px] resize-none";
 
 export default function NewCandidatePage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [cvParsing, setCvParsing] = useState(false);
   const [skillInput, setSkillInput] = useState("");
   const [langInput, setLangInput] = useState("");
   const [form, setForm] = useState({
@@ -84,25 +85,73 @@ export default function NewCandidatePage() {
 
   const up = (key: string, val: any) => setForm((f) => ({ ...f, [key]: val }));
 
+  const handleCVUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setCvParsing(true);
+    try {
+      const text = await file.text();
+      const res = await fetch("/api/candidates/parse-cv", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      });
+      if (!res.ok) throw new Error("Parse failed");
+      const { parsed } = await res.json();
+      setForm((f) => ({
+        ...f,
+        name: parsed.name || f.name,
+        phone: parsed.phone || f.phone,
+        email: parsed.email || f.email,
+        gender: parsed.gender || f.gender,
+        dateOfBirth: parsed.dateOfBirth?.slice(0, 10) || f.dateOfBirth,
+        address: parsed.address || f.address,
+        city: parsed.city || f.city,
+        district: parsed.district || f.district,
+        currentRole: parsed.currentRole || f.currentRole,
+        currentCompany: parsed.currentCompany || f.currentCompany,
+        totalExperience: parsed.totalExperience?.toString() || f.totalExperience,
+        currentSalary: parsed.currentSalary?.toString() || f.currentSalary,
+        expectedSalary: parsed.expectedSalary?.toString() || f.expectedSalary,
+        noticePeriod: parsed.noticePeriod?.toString() || f.noticePeriod,
+        skills: parsed.skills?.length ? parsed.skills : f.skills,
+        languages: parsed.languages?.length ? parsed.languages : f.languages,
+        hasPassport: parsed.hasPassport ?? f.hasPassport,
+        passportNumber: parsed.passportNumber || f.passportNumber,
+        hasDrivingLicense: parsed.hasDrivingLicense ?? f.hasDrivingLicense,
+        gulfExperience: parsed.gulfExperience ?? f.gulfExperience,
+        gulfCountries: parsed.gulfCountries?.length ? parsed.gulfCountries : f.gulfCountries,
+        notes: parsed.summary || f.notes,
+      }));
+      toast.success("CV parsed! Fields auto-filled. Review and save.");
+    } catch {
+      toast.error("Could not parse CV. Please fill in manually.");
+    } finally {
+      setCvParsing(false);
+      e.target.value = "";
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-5 max-w-4xl">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Link href="/dashboard/candidates">
-            <button type="button" className="w-9 h-9 rounded-xl border border-white/8 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/8 transition-all">
+            <button type="button" className="w-9 h-9 rounded-xl border border-white/8 flex items-center justify-center text-foreground/40 hover:text-foreground hover:bg-white/8 transition-all">
               <ArrowLeft className="h-4 w-4" />
             </button>
           </Link>
           <div>
-            <h1 className="text-xl font-bold text-white">Add New Candidate</h1>
-            <p className="text-white/40 text-sm">Fill in details or upload CV for AI extraction</p>
+            <h1 className="text-xl font-bold text-foreground">Add New Candidate</h1>
+            <p className="text-foreground/40 text-sm">Fill in details or upload CV for AI extraction</p>
           </div>
         </div>
         <div className="flex gap-2">
-          <Button type="button" variant="outline" size="sm">
-            <Upload className="h-4 w-4" />
-            Upload CV
-          </Button>
+          <label className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm font-medium cursor-pointer transition-all ${cvParsing ? "opacity-50 cursor-not-allowed border-border bg-white/5 text-foreground/50" : "border-border bg-white/5 text-foreground/70 hover:bg-white/10 hover:text-foreground"}`}>
+            {cvParsing ? <Loader2 className="h-4 w-4 animate-spin" /> : <Upload className="h-4 w-4" />}
+            {cvParsing ? "Parsing..." : "Upload CV"}
+            <input type="file" accept=".txt,.pdf,.doc,.docx" className="hidden" onChange={handleCVUpload} disabled={cvParsing} />
+          </label>
           <Button type="submit" variant="gradient" size="sm" loading={loading}>
             <Save className="h-4 w-4" />
             Save Candidate
@@ -217,7 +266,7 @@ export default function NewCandidatePage() {
 
           {/* Skills */}
           <div className="mt-4">
-            <label className="text-sm text-white/60 mb-1.5 block">Skills</label>
+            <label className="text-sm text-foreground/60 mb-1.5 block">Skills</label>
             <div className="flex gap-2 mb-2">
               <Input
                 placeholder="Type a skill and press Enter"
@@ -234,7 +283,7 @@ export default function NewCandidatePage() {
                 <span key={s} className="inline-flex items-center gap-1.5 text-sm bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-3 py-1 rounded-full">
                   {s}
                   <button type="button" onClick={() => setForm({ ...form, skills: form.skills.filter((x) => x !== s) })}>
-                    <X className="h-3 w-3 hover:text-white" />
+                    <X className="h-3 w-3 hover:text-foreground" />
                   </button>
                 </span>
               ))}
@@ -243,7 +292,7 @@ export default function NewCandidatePage() {
 
           {/* Languages */}
           <div className="mt-4">
-            <label className="text-sm text-white/60 mb-1.5 block">Languages Known</label>
+            <label className="text-sm text-foreground/60 mb-1.5 block">Languages Known</label>
             <div className="flex gap-2 mb-2">
               <Input
                 placeholder="e.g. Malayalam, English, Hindi"
@@ -257,10 +306,10 @@ export default function NewCandidatePage() {
             </div>
             <div className="flex flex-wrap gap-2">
               {form.languages.map((l) => (
-                <span key={l} className="inline-flex items-center gap-1.5 text-xs bg-white/5 text-white/50 border border-white/8 px-2.5 py-1 rounded-full">
+                <span key={l} className="inline-flex items-center gap-1.5 text-xs bg-white/5 text-foreground/50 border border-white/8 px-2.5 py-1 rounded-full">
                   {l}
                   <button type="button" onClick={() => setForm({ ...form, languages: form.languages.filter((x) => x !== l) })}>
-                    <X className="h-3 w-3 hover:text-white" />
+                    <X className="h-3 w-3 hover:text-foreground" />
                   </button>
                 </span>
               ))}
@@ -275,15 +324,15 @@ export default function NewCandidatePage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex items-center gap-3 p-3 rounded-xl border border-white/8 bg-white/2">
               <input type="checkbox" id="passport" checked={form.hasPassport} onChange={(e) => up("hasPassport", e.target.checked)} className="w-4 h-4 rounded" />
-              <label htmlFor="passport" className="text-sm text-white/70 cursor-pointer">Has Valid Passport</label>
+              <label htmlFor="passport" className="text-sm text-foreground/70 cursor-pointer">Has Valid Passport</label>
             </div>
             <div className="flex items-center gap-3 p-3 rounded-xl border border-white/8 bg-white/2">
               <input type="checkbox" id="license" checked={form.hasDrivingLicense} onChange={(e) => up("hasDrivingLicense", e.target.checked)} className="w-4 h-4 rounded" />
-              <label htmlFor="license" className="text-sm text-white/70 cursor-pointer">Has Driving License</label>
+              <label htmlFor="license" className="text-sm text-foreground/70 cursor-pointer">Has Driving License</label>
             </div>
             <div className="flex items-center gap-3 p-3 rounded-xl border border-white/8 bg-white/2">
               <input type="checkbox" id="gulf" checked={form.gulfExperience} onChange={(e) => up("gulfExperience", e.target.checked)} className="w-4 h-4 rounded" />
-              <label htmlFor="gulf" className="text-sm text-white/70 cursor-pointer">Gulf Work Experience</label>
+              <label htmlFor="gulf" className="text-sm text-foreground/70 cursor-pointer">Gulf Work Experience</label>
             </div>
           </div>
 
@@ -300,7 +349,7 @@ export default function NewCandidatePage() {
 
           {form.gulfExperience && (
             <div className="mt-4">
-              <label className="text-sm text-white/60 mb-2 block">Gulf Countries Worked In</label>
+              <label className="text-sm text-foreground/60 mb-2 block">Gulf Countries Worked In</label>
               <div className="flex flex-wrap gap-2">
                 {GULF_COUNTRIES.map((c) => (
                   <button
@@ -310,7 +359,7 @@ export default function NewCandidatePage() {
                       const has = form.gulfCountries.includes(c);
                       up("gulfCountries", has ? form.gulfCountries.filter((x) => x !== c) : [...form.gulfCountries, c]);
                     }}
-                    className={`text-sm px-3 py-1.5 rounded-full border transition-all ${form.gulfCountries.includes(c) ? "bg-amber-500/20 text-amber-400 border-amber-500/40" : "bg-white/3 text-white/40 border-white/10 hover:border-white/20"}`}
+                    className={`text-sm px-3 py-1.5 rounded-full border transition-all ${form.gulfCountries.includes(c) ? "bg-amber-500/20 text-amber-400 border-amber-500/40" : "bg-white/3 text-foreground/40 border-border hover:border-white/20"}`}
                   >
                     {c}
                   </button>

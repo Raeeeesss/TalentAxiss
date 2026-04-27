@@ -3,7 +3,7 @@ import { AIMatchingClient } from "@/components/dashboard/matching/ai-matching-cl
 
 export default function AIMatchingPage() {
   return (
-    <Suspense fallback={<div className="min-h-96 flex items-center justify-center text-white/20">Loading...</div>}>
+    <Suspense fallback={<div className="min-h-96 flex items-center justify-center text-foreground/20">Loading...</div>}>
       <AIMatchingClient />
     </Suspense>
   );

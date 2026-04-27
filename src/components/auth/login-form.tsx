@@ -40,7 +40,7 @@ export function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-[#050508] flex items-center justify-center px-4 relative overflow-hidden">
+    <div className="min-h-screen h-screen bg-[#050508] flex items-center justify-center px-4 relative overflow-hidden">
       <div className="absolute inset-0">
         <div className="absolute top-1/3 left-1/4 w-80 h-80 bg-indigo-600/15 blur-[100px] rounded-full" />
         <div className="absolute bottom-1/3 right-1/4 w-64 h-64 bg-purple-600/10 blur-[80px] rounded-full" />
@@ -56,12 +56,12 @@ export function LoginForm() {
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
             <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <Zap className="h-5 w-5 text-white" />
+              <Zap className="h-5 w-5 text-foreground" />
             </div>
             <span className="text-2xl font-bold gradient-text">TalentAxiss</span>
           </Link>
-          <h1 className="text-2xl font-bold text-white">Welcome back</h1>
-          <p className="text-white/40 text-sm mt-2">Sign in to your agency dashboard</p>
+          <h1 className="text-2xl font-bold text-foreground">Welcome back</h1>
+          <p className="text-foreground/40 text-sm mt-2">Sign in to your agency dashboard</p>
         </div>
 
         <div className="bg-white/3 border border-white/8 rounded-2xl p-8 backdrop-blur-sm">
@@ -73,7 +73,7 @@ export function LoginForm() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="text-sm text-white/60 mb-1.5 block">Email address</label>
+              <label className="text-sm text-foreground/60 mb-1.5 block">Email address</label>
               <Input
                 type="email"
                 placeholder="you@agency.com"
@@ -85,7 +85,7 @@ export function LoginForm() {
             </div>
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="text-sm text-white/60">Password</label>
+                <label className="text-sm text-foreground/60">Password</label>
                 <Link href="/auth/forgot-password" className="text-xs text-indigo-400 hover:text-indigo-300">
                   Forgot password?
                 </Link>
@@ -114,7 +114,7 @@ export function LoginForm() {
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-white/8" />
             </div>
-            <div className="relative flex justify-center text-xs text-white/30">
+            <div className="relative flex justify-center text-xs text-foreground/30">
               <span className="bg-[#0a0a0f] px-3">or continue with</span>
             </div>
           </div>
@@ -133,7 +133,7 @@ export function LoginForm() {
             Continue with Google
           </Button>
 
-          <p className="text-center text-sm text-white/40 mt-6">
+          <p className="text-center text-sm text-foreground/40 mt-6">
             Don&apos;t have an account?{" "}
             <Link href="/auth/register" className="text-indigo-400 hover:text-indigo-300 font-medium">
               Start free trial

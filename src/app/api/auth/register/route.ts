@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { z } from "zod";
 import { slugify } from "@/lib/utils";
+import { sendWelcomeEmail } from "@/lib/email";
 
 const registerSchema = z.object({
   name: z.string().min(2),
@@ -72,6 +73,9 @@ export async function POST(req: NextRequest) {
         userLimit: 1,
       },
     });
+
+    // Send welcome email (non-blocking)
+    sendWelcomeEmail(data.email, data.name, data.agencyName).catch(() => {});
 
     return NextResponse.json({ success: true });
   } catch (error) {

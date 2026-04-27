@@ -11,7 +11,7 @@ import { LandingFooter } from "@/components/landing/footer";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#050508] text-white overflow-x-hidden">
+    <main className="min-h-screen bg-[#050508] text-foreground overflow-x-hidden">
       <LandingNav />
       <HeroSection />
       <ProblemSection />

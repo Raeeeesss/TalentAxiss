@@ -63,12 +63,12 @@ export function SolutionSection() {
             <CheckCircle2 className="h-3.5 w-3.5 text-emerald-400" />
             <span className="text-xs text-emerald-400 font-medium">The TalentAxiss Solution</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             Everything Your Agency Needs,
             <br />
             <span className="gradient-text">Built for Kerala</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-2xl mx-auto">
+          <p className="text-foreground/50 text-lg max-w-2xl mx-auto">
             We built TalentAxiss after talking to 50+ Kerala recruiters.
             Every feature solves a real pain you face daily.
           </p>
@@ -84,14 +84,14 @@ export function SolutionSection() {
               className="flex flex-col lg:flex-row items-center gap-6 rounded-2xl border border-white/8 bg-white/2 p-6 lg:p-8 card-hover"
             >
               <div className={`shrink-0 w-14 h-14 rounded-2xl bg-linear-to-br ${s.gradient} flex items-center justify-center shadow-lg`}>
-                <s.icon className="h-7 w-7 text-white" />
+                <s.icon className="h-7 w-7 text-foreground" />
               </div>
               <div className="flex-1">
-                <h3 className="text-xl font-bold text-white mb-2">{s.title}</h3>
-                <p className="text-white/50 mb-4 leading-relaxed">{s.desc}</p>
+                <h3 className="text-xl font-bold text-foreground mb-2">{s.title}</h3>
+                <p className="text-foreground/50 mb-4 leading-relaxed">{s.desc}</p>
                 <div className="flex flex-wrap gap-2">
                   {s.points.map((pt) => (
-                    <span key={pt} className="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-white/10 rounded-full px-3 py-1 text-white/60">
+                    <span key={pt} className="inline-flex items-center gap-1.5 text-xs bg-white/5 border border-border rounded-full px-3 py-1 text-foreground/60">
                       <CheckCircle2 className="h-3 w-3 text-emerald-400" />
                       {pt}
                     </span>

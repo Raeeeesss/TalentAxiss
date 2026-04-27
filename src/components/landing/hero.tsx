@@ -35,7 +35,7 @@ export function HeroSection() {
           <span className="text-xs text-indigo-300 font-medium">
             AI-Powered Recruitment Platform for Kerala Agencies
           </span>
-          <span className="text-xs bg-indigo-500 text-white px-2 py-0.5 rounded-full font-semibold">NEW</span>
+          <span className="text-xs bg-indigo-500 text-foreground px-2 py-0.5 rounded-full font-semibold">NEW</span>
         </motion.div>
 
         {/* Main headline */}
@@ -57,7 +57,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg sm:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed"
+          className="text-lg sm:text-xl text-foreground/50 max-w-2xl mx-auto mb-10 leading-relaxed"
         >
           Stop losing candidates in WhatsApp and Excel sheets.
           TalentAxiss gives Kerala recruitment agencies a modern AI-powered CRM
@@ -77,7 +77,7 @@ export function HeroSection() {
               <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Button>
           </Link>
-          <button className="flex items-center gap-3 text-white/60 hover:text-white transition-colors">
+          <button className="flex items-center gap-3 text-foreground/60 hover:text-foreground transition-colors">
             <div className="w-11 h-11 rounded-full border border-white/15 flex items-center justify-center hover:border-white/30 transition-colors bg-white/5">
               <Play className="h-4 w-4 fill-current ml-0.5" />
             </div>
@@ -101,11 +101,11 @@ export function HeroSection() {
               className="flex items-center gap-3 bg-white/5 border border-white/8 rounded-2xl px-5 py-3"
             >
               <div className={`w-9 h-9 rounded-xl bg-linear-to-br ${stat.color} flex items-center justify-center`}>
-                <stat.icon className="h-4 w-4 text-white" />
+                <stat.icon className="h-4 w-4 text-foreground" />
               </div>
               <div className="text-left">
-                <div className="text-lg font-bold text-white">{stat.value}</div>
-                <div className="text-xs text-white/40">{stat.label}</div>
+                <div className="text-lg font-bold text-foreground">{stat.value}</div>
+                <div className="text-xs text-foreground/40">{stat.label}</div>
               </div>
             </motion.div>
           ))}
@@ -118,7 +118,7 @@ export function HeroSection() {
           transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
           className="relative max-w-5xl mx-auto"
         >
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-black/50">
+          <div className="relative rounded-2xl overflow-hidden border border-border shadow-2xl shadow-black/50">
             <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-[#050508] z-10 pointer-events-none" />
             {/* Mock dashboard */}
             <div className="bg-[#0a0a12] p-4">
@@ -147,14 +147,14 @@ export function HeroSection() {
                     <div className={`text-lg font-bold bg-linear-to-r ${s.color} bg-clip-text text-transparent`}>
                       {s.value}
                     </div>
-                    <div className="text-xs text-white/40 mt-0.5">{s.label}</div>
+                    <div className="text-xs text-foreground/40 mt-0.5">{s.label}</div>
                   </motion.div>
                 ))}
               </div>
               {/* Chart area */}
               <div className="grid grid-cols-3 gap-3">
                 <div className="col-span-2 bg-white/3 border border-white/6 rounded-xl p-3 h-32">
-                  <div className="text-xs text-white/40 mb-2">Placements This Month</div>
+                  <div className="text-xs text-foreground/40 mb-2">Placements This Month</div>
                   <div className="flex items-end gap-1 h-20">
                     {[30, 50, 40, 70, 55, 80, 65, 90, 75, 85, 95, 88].map((h, i) => (
                       <motion.div
@@ -168,10 +168,10 @@ export function HeroSection() {
                   </div>
                 </div>
                 <div className="bg-white/3 border border-white/6 rounded-xl p-3 h-32">
-                  <div className="text-xs text-white/40 mb-2">Top Skills</div>
+                  <div className="text-xs text-foreground/40 mb-2">Top Skills</div>
                   {["React.js", "Sales", "Accounting", "Driving"].map((skill, i) => (
                     <div key={skill} className="flex items-center gap-2 mb-1.5">
-                      <div className="text-xs text-white/60 w-16 truncate">{skill}</div>
+                      <div className="text-xs text-foreground/60 w-16 truncate">{skill}</div>
                       <div className="flex-1 h-1.5 bg-white/10 rounded-full overflow-hidden">
                         <motion.div
                           initial={{ width: 0 }}

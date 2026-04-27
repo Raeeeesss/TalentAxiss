@@ -82,8 +82,8 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
         className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
       >
         <div>
-          <h1 className="text-2xl font-bold text-white">Candidates</h1>
-          <p className="text-white/40 text-sm mt-0.5">{displayTotal.toLocaleString()} total in database</p>
+          <h1 className="text-2xl font-bold text-foreground">Candidates</h1>
+          <p className="text-foreground/40 text-sm mt-0.5">{displayTotal.toLocaleString()} total in database</p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" size="sm" onClick={() => setShowUpload(true)}>
@@ -114,7 +114,7 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
         ].map((s) => (
           <div key={s.label} className="rounded-xl border border-white/8 bg-white/2 px-4 py-3">
             <div className={`text-lg font-bold ${s.color}`}>{s.value.toLocaleString()}</div>
-            <div className="text-xs text-white/40">{s.label}</div>
+            <div className="text-xs text-foreground/40">{s.label}</div>
           </div>
         ))}
       </motion.div>
@@ -152,7 +152,7 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
             className="flex flex-wrap gap-3 p-4 rounded-xl border border-white/8 bg-white/2"
           >
             <select
-              className="flex h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="flex h-9 rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
               value={district}
               onChange={(e) => setDistrict(e.target.value)}
             >
@@ -162,7 +162,7 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
               ))}
             </select>
             <select
-              className="flex h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+              className="flex h-9 rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
             >
@@ -172,25 +172,25 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
               <option value="INACTIVE" className="bg-[#0a0a12]">Inactive</option>
               <option value="BLACKLISTED" className="bg-[#0a0a12]">Blacklisted</option>
             </select>
-            <select className="flex h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
+            <select className="flex h-9 rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
               <option value="">Experience</option>
               <option className="bg-[#0a0a12]">0-2 years</option>
               <option className="bg-[#0a0a12]">2-5 years</option>
               <option className="bg-[#0a0a12]">5-10 years</option>
               <option className="bg-[#0a0a12]">10+ years</option>
             </select>
-            <select className="flex h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
+            <select className="flex h-9 rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
               <option value="">Gulf Experience</option>
               <option className="bg-[#0a0a12]">Gulf Ready</option>
               <option className="bg-[#0a0a12]">No Gulf Exp</option>
             </select>
-            <select className="flex h-9 rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
+            <select className="flex h-9 rounded-xl border border-border bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50">
               <option value="">Risk Level</option>
               <option className="bg-[#0a0a12]">Low Risk</option>
               <option className="bg-[#0a0a12]">Medium Risk</option>
               <option className="bg-[#0a0a12]">High Risk</option>
             </select>
-            <Button variant="ghost" size="sm" className="text-white/40" onClick={() => { setDistrict(""); setStatusFilter(""); }}>
+            <Button variant="ghost" size="sm" className="text-foreground/40" onClick={() => { setDistrict(""); setStatusFilter(""); }}>
               Clear Filters
             </Button>
           </motion.div>
@@ -211,14 +211,14 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
                 <th className="text-left px-4 py-3">
                   <input type="checkbox" className="rounded border-white/20 bg-transparent" />
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Candidate</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Skills</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Location</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Exp</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Salary</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">AI Score</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Risk</th>
-                <th className="text-left px-4 py-3 text-xs font-semibold text-white/40 uppercase tracking-wider">Status</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Candidate</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Skills</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Location</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Exp</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Salary</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">AI Score</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Risk</th>
+                <th className="text-left px-4 py-3 text-xs font-semibold text-foreground/40 uppercase tracking-wider">Status</th>
                 <th className="px-4 py-3" />
               </tr>
             </thead>
@@ -236,12 +236,12 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
                   </td>
                   <td className="px-4 py-3">
                     <Link href={`/dashboard/candidates/${c.id}`} className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xs font-bold shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-foreground text-xs font-bold shrink-0">
                         {c.name.charAt(0)}
                       </div>
                       <div>
-                        <div className="text-sm font-medium text-white group-hover:text-indigo-400 transition-colors">{c.name}</div>
-                        <div className="text-xs text-white/30">{c.phone}</div>
+                        <div className="text-sm font-medium text-foreground group-hover:text-indigo-400 transition-colors">{c.name}</div>
+                        <div className="text-xs text-foreground/30">{c.phone}</div>
                       </div>
                     </Link>
                   </td>
@@ -253,12 +253,12 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
                         </span>
                       ))}
                       {(c.skills || []).length > 2 && (
-                        <span className="text-xs text-white/30">+{(c.skills || []).length - 2}</span>
+                        <span className="text-xs text-foreground/30">+{(c.skills || []).length - 2}</span>
                       )}
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-1 text-sm text-white/60">
+                    <div className="flex items-center gap-1 text-sm text-foreground/60">
                       <MapPin className="h-3.5 w-3.5 shrink-0" />
                       {c.district || "—"}
                     </div>
@@ -269,10 +269,10 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
                       </div>
                     )}
                   </td>
-                  <td className="px-4 py-3 text-sm text-white/60">
+                  <td className="px-4 py-3 text-sm text-foreground/60">
                     {c.totalExperience ? `${c.totalExperience}y` : "—"}
                   </td>
-                  <td className="px-4 py-3 text-sm text-white/60">
+                  <td className="px-4 py-3 text-sm text-foreground/60">
                     {c.expectedSalary ? formatCurrency(c.expectedSalary) : "—"}
                   </td>
                   <td className="px-4 py-3">
@@ -284,10 +284,10 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
                             style={{ width: `${c.aiScore}%` }}
                           />
                         </div>
-                        <span className="text-xs text-white/60">{c.aiScore}%</span>
+                        <span className="text-xs text-foreground/60">{c.aiScore}%</span>
                       </div>
                     ) : (
-                      <span className="text-xs text-white/20">—</span>
+                      <span className="text-xs text-foreground/20">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -299,12 +299,12 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                       <Link href={`/dashboard/candidates/${c.id}`}>
-                        <button className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors">
+                        <button className="p-1.5 rounded-lg hover:bg-white/10 text-foreground/40 hover:text-foreground transition-colors">
                           <Eye className="h-3.5 w-3.5" />
                         </button>
                       </Link>
                       <Link href={`/dashboard/candidates/${c.id}/edit`}>
-                        <button className="p-1.5 rounded-lg hover:bg-white/10 text-white/40 hover:text-white transition-colors">
+                        <button className="p-1.5 rounded-lg hover:bg-white/10 text-foreground/40 hover:text-foreground transition-colors">
                           <Edit className="h-3.5 w-3.5" />
                         </button>
                       </Link>
@@ -318,14 +318,14 @@ export function CandidatesClient({ initialCandidates, total, page, pageSize }: C
 
         {/* Pagination */}
         <div className="flex items-center justify-between px-4 py-3 border-t border-white/6">
-          <p className="text-xs text-white/30">
+          <p className="text-xs text-foreground/30">
             Showing {((page - 1) * pageSize) + 1}–{Math.min(page * pageSize, displayTotal)} of {displayTotal}
           </p>
           <div className="flex items-center gap-2">
             <Button variant="outline" size="sm" disabled={page <= 1}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
-            <span className="text-xs text-white/40">Page {page}</span>
+            <span className="text-xs text-foreground/40">Page {page}</span>
             <Button variant="outline" size="sm" disabled={page * pageSize >= displayTotal}>
               <ChevronRight className="h-4 w-4" />
             </Button>

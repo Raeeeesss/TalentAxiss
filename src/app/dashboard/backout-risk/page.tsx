@@ -1,273 +1,197 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
-import {
-  AlertTriangle, ShieldAlert, TrendingDown, User,
-  Clock, Phone, MessageSquare, ChevronDown, ChevronUp,
-  Briefcase, Calendar, BarChart2
-} from "lucide-react";
+import Link from "next/link";
+import { AlertTriangle, Phone, Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { formatCurrency } from "@/lib/utils";
 
-interface RiskCandidate {
-  id: string;
-  name: string;
-  role: string;
-  company: string;
-  offeredSalary: number;
-  expectedSalary: number;
-  joiningDate: string;
-  riskScore: number;
-  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
-  factors: string[];
-  daysToJoining: number;
-  responseDelay: number;
-  multipleOffers: boolean;
-  previousBackouts: number;
-  lastContact: string;
-}
-
-const mockRiskCandidates: RiskCandidate[] = [
-  {
-    id: "1", name: "Mohammed Rashid", role: "Civil Engineer", company: "Buildex Construction",
-    offeredSalary: 55000, expectedSalary: 60000, joiningDate: "2025-05-10",
-    riskScore: 82, riskLevel: "CRITICAL",
-    factors: ["Salary gap ₹5k below expectation", "2 other offers in hand", "5-day response delay", "Hasn't confirmed verbally"],
-    daysToJoining: 14, responseDelay: 5, multipleOffers: true, previousBackouts: 1,
-    lastContact: "2025-04-21",
-  },
-  {
-    id: "2", name: "Suresh Pillai", role: "Truck Driver UAE", company: "Gulf Transport LLC",
-    offeredSalary: 95000, expectedSalary: 110000, joiningDate: "2025-05-20",
-    riskScore: 68, riskLevel: "HIGH",
-    factors: ["Salary gap ₹15k below expectation", "Long notice period (45 days)", "Family opposition suspected"],
-    daysToJoining: 24, responseDelay: 3, multipleOffers: false, previousBackouts: 0,
-    lastContact: "2025-04-23",
-  },
-  {
-    id: "3", name: "Deepa Varma", role: "Sales Manager", company: "FMCG Corp",
-    offeredSalary: 50000, expectedSalary: 52000, joiningDate: "2025-05-05",
-    riskScore: 45, riskLevel: "MEDIUM",
-    factors: ["Slight salary gap", "Hasn't confirmed joining formally"],
-    daysToJoining: 9, responseDelay: 1, multipleOffers: false, previousBackouts: 0,
-    lastContact: "2025-04-25",
-  },
-  {
-    id: "4", name: "Anjali Nair", role: "Sales Executive", company: "Reliance Retail",
-    offeredSalary: 28000, expectedSalary: 28000, joiningDate: "2025-05-01",
-    riskScore: 12, riskLevel: "LOW",
-    factors: [],
-    daysToJoining: 5, responseDelay: 0, multipleOffers: false, previousBackouts: 0,
-    lastContact: "2025-04-25",
-  },
-];
-
-const riskColors = {
-  CRITICAL: { text: "text-red-400", bg: "bg-red-500/10 border-red-500/30", meter: "bg-red-500", badge: "destructive" as const },
-  HIGH: { text: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/30", meter: "bg-orange-500", badge: "orange" as const },
-  MEDIUM: { text: "text-yellow-400", bg: "bg-yellow-500/10 border-yellow-500/30", meter: "bg-yellow-500", badge: "warning" as const },
-  LOW: { text: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-500/20", meter: "bg-emerald-500", badge: "success" as const },
-};
-
-function RiskMeter({ score }: { score: number }) {
-  const segments = [
-    { max: 25, color: "bg-emerald-500", label: "Safe" },
-    { max: 50, color: "bg-yellow-500", label: "Watch" },
-    { max: 75, color: "bg-orange-500", label: "At Risk" },
-    { max: 100, color: "bg-red-500", label: "Critical" },
-  ];
-  const activeColor = score >= 75 ? "bg-red-500" : score >= 50 ? "bg-orange-500" : score >= 25 ? "bg-yellow-500" : "bg-emerald-500";
-  return (
-    <div className="relative h-3 bg-white/10 rounded-full overflow-hidden">
-      <motion.div
-        initial={{ width: 0 }}
-        animate={{ width: `${score}%` }}
-        transition={{ duration: 1, ease: "easeOut" }}
-        className={`h-full ${activeColor} rounded-full`}
-      />
-    </div>
-  );
-}
+const RISK_CONFIG = {
+  CRITICAL: { color: "text-red-500",    bg: "bg-red-500/10 border-red-500/30",    bar: "bg-red-500" },
+  HIGH:     { color: "text-red-400",    bg: "bg-red-500/8 border-red-500/20",     bar: "bg-red-400" },
+  MEDIUM:   { color: "text-amber-400",  bg: "bg-amber-500/8 border-amber-500/20", bar: "bg-amber-400" },
+  LOW:      { color: "text-emerald-400",bg: "bg-emerald-500/5 border-white/8",    bar: "bg-emerald-500" },
+} as const;
 
 export default function BackoutRiskPage() {
-  const [expanded, setExpanded] = useState<string | null>("1");
+  const [candidates, setCandidates] = useState<any[]>([]);
+  const [loading, setLoading]       = useState(true);
+  const [filter, setFilter]         = useState<"ALL" | "CRITICAL" | "HIGH" | "MEDIUM">("ALL");
 
-  const critical = mockRiskCandidates.filter((c) => c.riskLevel === "CRITICAL" || c.riskLevel === "HIGH");
-  const medium = mockRiskCandidates.filter((c) => c.riskLevel === "MEDIUM");
-  const low = mockRiskCandidates.filter((c) => c.riskLevel === "LOW");
+  const fetchRisk = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res  = await fetch("/api/candidates?riskLevel=HIGH,CRITICAL,MEDIUM&status=ACTIVE&limit=50");
+      const data = await res.json();
+      setCandidates(data.candidates || []);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => { fetchRisk(); }, [fetchRisk]);
+
+  const filtered = candidates.filter((c) =>
+    filter === "ALL" || c.riskLevel === filter
+  );
+
+  const counts = {
+    CRITICAL: candidates.filter((c) => c.riskLevel === "CRITICAL").length,
+    HIGH:     candidates.filter((c) => c.riskLevel === "HIGH").length,
+    MEDIUM:   candidates.filter((c) => c.riskLevel === "MEDIUM").length,
+  };
 
   return (
-    <div className="space-y-6 max-w-4xl">
-      {/* Header */}
-      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <div className="flex items-center gap-3 mb-1">
-          <div className="w-8 h-8 rounded-xl bg-linear-to-br from-red-500 to-orange-600 flex items-center justify-center">
-            <ShieldAlert className="h-4 w-4 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-white">Backout Risk Monitor</h1>
+    <div className="space-y-5 max-w-4xl">
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-foreground flex items-center gap-2">
+            <AlertTriangle className="h-6 w-6 text-red-400" />
+            Backout Risk Monitor
+          </h1>
+          <p className="text-foreground/40 text-sm mt-0.5">
+            Candidates at risk of not joining after accepting an offer
+          </p>
         </div>
-        <p className="text-white/40 text-sm ml-11">AI identifies candidates likely to back out before joining</p>
+        <Button variant="outline" size="sm" onClick={fetchRisk}>
+          <RefreshCw className="h-4 w-4" />
+        </Button>
       </motion.div>
 
-      {/* Summary cards */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.05 }}
-        className="grid grid-cols-2 sm:grid-cols-4 gap-3"
-      >
+      {/* Summary pills */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="grid grid-cols-4 gap-3">
         {[
-          { label: "Critical Risk", value: mockRiskCandidates.filter((c) => c.riskLevel === "CRITICAL").length, color: "text-red-400", bg: "border-red-500/20 bg-red-500/5" },
-          { label: "High Risk", value: mockRiskCandidates.filter((c) => c.riskLevel === "HIGH").length, color: "text-orange-400", bg: "border-orange-500/20 bg-orange-500/5" },
-          { label: "Medium Risk", value: medium.length, color: "text-yellow-400", bg: "border-yellow-500/20 bg-yellow-500/5" },
-          { label: "Safe", value: low.length, color: "text-emerald-400", bg: "border-emerald-500/20 bg-emerald-500/5" },
+          { label: "All At-Risk", value: candidates.length, color: "text-foreground",  action: () => setFilter("ALL") },
+          { label: "Critical",    value: counts.CRITICAL,   color: "text-red-500",     action: () => setFilter("CRITICAL") },
+          { label: "High",        value: counts.HIGH,        color: "text-red-400",     action: () => setFilter("HIGH") },
+          { label: "Medium",      value: counts.MEDIUM,      color: "text-amber-400",   action: () => setFilter("MEDIUM") },
         ].map((s) => (
-          <div key={s.label} className={`rounded-xl border ${s.bg} px-4 py-3`}>
+          <button
+            key={s.label}
+            onClick={s.action}
+            className="rounded-xl border border-white/8 bg-white/2 px-4 py-3 text-left hover:bg-white/4 transition-colors"
+          >
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-xs text-white/40">{s.label}</div>
-          </div>
+            <div className="text-xs text-foreground/40">{s.label}</div>
+          </button>
         ))}
       </motion.div>
 
-      {/* Risk cards */}
-      <div className="space-y-4">
-        {mockRiskCandidates
-          .sort((a, b) => b.riskScore - a.riskScore)
-          .map((candidate, i) => {
-            const risk = riskColors[candidate.riskLevel];
-            const isExpanded = expanded === candidate.id;
+      {/* Filter tabs */}
+      <div className="flex gap-2">
+        {(["ALL", "CRITICAL", "HIGH", "MEDIUM"] as const).map((f) => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${filter === f ? "bg-indigo-600 text-white" : "bg-white/5 text-foreground/40 hover:bg-white/10"}`}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
+
+      {loading ? (
+        <div className="flex items-center justify-center h-40">
+          <Loader2 className="h-8 w-8 text-indigo-400 animate-spin" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-20 text-foreground/30">
+          <AlertTriangle className="h-12 w-12 mx-auto mb-3 opacity-30" />
+          <p className="font-medium">
+            {filter === "ALL" ? "No at-risk candidates right now" : `No ${filter.toLowerCase()} risk candidates`}
+          </p>
+          <p className="text-xs mt-1 text-foreground/20">
+            Risk levels are set when editing a candidate profile
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((c, i) => {
+            const risk    = (c.riskLevel || "LOW") as keyof typeof RISK_CONFIG;
+            const cfg     = RISK_CONFIG[risk] || RISK_CONFIG.LOW;
+            const factors = Array.isArray(c.riskFactors)
+              ? c.riskFactors
+              : (c.riskFactors as any)?.factors || [];
 
             return (
               <motion.div
-                key={candidate.id}
-                initial={{ opacity: 0, y: 20 }}
+                key={c.id}
+                initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.07 }}
-                className={`rounded-2xl border ${risk.bg} overflow-hidden`}
+                transition={{ delay: i * 0.04 }}
+                className={`rounded-2xl border p-5 ${cfg.bg}`}
               >
-                <div className="p-5">
-                  <div className="flex items-start justify-between gap-4 mb-4">
-                    <div className="flex items-start gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center text-white font-bold text-lg shrink-0">
-                        {candidate.name.charAt(0)}
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-start gap-3 flex-1 min-w-0">
+                    <div className="w-10 h-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0 text-white font-bold">
+                      {c.name.charAt(0)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap mb-1">
+                        <Link href={`/dashboard/candidates/${c.id}`} className="font-semibold text-foreground hover:text-indigo-400 transition-colors">
+                          {c.name}
+                        </Link>
+                        <Badge variant={risk === "CRITICAL" || risk === "HIGH" ? "destructive" : "warning"}>
+                          {risk} RISK
+                        </Badge>
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <span className="font-semibold text-white">{candidate.name}</span>
-                          <Badge variant={risk.badge}>{candidate.riskLevel}</Badge>
-                          {candidate.multipleOffers && (
-                            <span className="text-xs bg-purple-500/10 text-purple-400 border border-purple-500/20 px-2 py-0.5 rounded-full">
-                              Multiple Offers
-                            </span>
-                          )}
-                          {candidate.previousBackouts > 0 && (
-                            <span className="text-xs bg-red-500/10 text-red-400 border border-red-500/20 px-2 py-0.5 rounded-full">
-                              {candidate.previousBackouts} prev. backout
-                            </span>
-                          )}
+                      <div className="text-xs text-foreground/50 mb-2">
+                        {c.currentRole || "Candidate"}
+                        {c.expectedSalary ? ` · Expected: ${formatCurrency(c.expectedSalary)}` : ""}
+                        {c.district ? ` · ${c.district}` : ""}
+                      </div>
+
+                      {/* Risk bar */}
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex-1 h-1.5 bg-white/8 rounded-full overflow-hidden">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            animate={{ width: risk === "CRITICAL" ? "90%" : risk === "HIGH" ? "70%" : "45%" }}
+                            transition={{ delay: 0.3, duration: 0.8 }}
+                            className={`h-full rounded-full ${cfg.bar}`}
+                          />
                         </div>
-                        <div className="text-sm text-white/50">{candidate.role} → {candidate.company}</div>
-                        <div className="flex items-center gap-3 text-xs text-white/30 mt-1">
-                          <span className="flex items-center gap-1"><Calendar className="h-3 w-3" />Joining: {new Date(candidate.joiningDate).toLocaleDateString("en-IN", { day: "numeric", month: "short" })}</span>
-                          <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{candidate.daysToJoining} days left</span>
+                        <span className={`text-xs font-bold shrink-0 ${cfg.color}`}>
+                          {risk === "CRITICAL" ? "~90%" : risk === "HIGH" ? "~70%" : "~45%"} risk
+                        </span>
+                      </div>
+
+                      {/* Risk factors */}
+                      {factors.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                          {factors.slice(0, 4).map((f: string, j: number) => (
+                            <span key={j} className="text-xs bg-white/5 text-foreground/50 border border-white/8 px-2 py-0.5 rounded-full">
+                              {f}
+                            </span>
+                          ))}
                         </div>
-                      </div>
-                    </div>
-
-                    {/* Risk score */}
-                    <div className="text-right shrink-0">
-                      <div className={`text-3xl font-bold ${risk.text}`}>{candidate.riskScore}%</div>
-                      <div className="text-xs text-white/30">risk score</div>
+                      )}
                     </div>
                   </div>
 
-                  {/* Risk meter */}
-                  <div className="mb-4">
-                    <div className="flex justify-between text-xs text-white/30 mb-1.5">
-                      <span>Backout Probability</span>
-                      <span className={risk.text}>{candidate.riskScore}% risk</span>
-                    </div>
-                    <RiskMeter score={candidate.riskScore} />
-                    <div className="flex justify-between text-xs text-white/20 mt-1">
-                      <span>Safe</span>
-                      <span>Critical</span>
-                    </div>
-                  </div>
-
-                  {/* Salary comparison */}
-                  <div className="grid grid-cols-2 gap-3 mb-4">
-                    <div className="bg-white/5 border border-white/8 rounded-xl p-3">
-                      <div className="text-xs text-white/30 mb-0.5">Offered Salary</div>
-                      <div className="font-semibold text-white">{formatCurrency(candidate.offeredSalary)}</div>
-                    </div>
-                    <div className={`rounded-xl p-3 border ${candidate.offeredSalary < candidate.expectedSalary ? "bg-red-500/8 border-red-500/20" : "bg-emerald-500/8 border-emerald-500/20"}`}>
-                      <div className="text-xs text-white/30 mb-0.5">Expected Salary</div>
-                      <div className={`font-semibold ${candidate.offeredSalary < candidate.expectedSalary ? "text-red-400" : "text-emerald-400"}`}>
-                        {formatCurrency(candidate.expectedSalary)}
-                        {candidate.offeredSalary < candidate.expectedSalary && (
-                          <span className="text-xs ml-1">(gap: {formatCurrency(candidate.expectedSalary - candidate.offeredSalary)})</span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action buttons */}
-                  <div className="flex flex-wrap gap-2">
-                    <Button variant="gradient" size="sm">
-                      <Phone className="h-3.5 w-3.5" />
-                      Call Now
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <MessageSquare className="h-3.5 w-3.5" />
-                      Send WhatsApp
-                    </Button>
-                    <Button variant="outline" size="sm">
-                      <Briefcase className="h-3.5 w-3.5" />
-                      Negotiate Offer
-                    </Button>
-                    <button
-                      onClick={() => setExpanded(isExpanded ? null : candidate.id)}
-                      className="ml-auto flex items-center gap-1 text-xs text-white/30 hover:text-white transition-colors"
-                    >
-                      {isExpanded ? "Hide" : "Risk factors"}
-                      {isExpanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
-                    </button>
+                  {/* Actions */}
+                  <div className="flex flex-col gap-2 shrink-0">
+                    {c.phone && (
+                      <a href={`tel:${c.phone}`}>
+                        <Button variant="outline" size="sm" className="w-full text-xs">
+                          <Phone className="h-3 w-3" /> Call
+                        </Button>
+                      </a>
+                    )}
+                    <Link href={`/dashboard/candidates/${c.id}`}>
+                      <Button variant="ghost" size="sm" className="w-full text-xs">
+                        View Profile
+                      </Button>
+                    </Link>
                   </div>
                 </div>
-
-                {/* Risk factors */}
-                {isExpanded && candidate.factors.length > 0 && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="border-t border-white/8 p-5"
-                  >
-                    <div className="text-xs font-semibold text-white/40 uppercase tracking-wider mb-3">
-                      AI Identified Risk Factors
-                    </div>
-                    <ul className="space-y-2">
-                      {candidate.factors.map((factor, fi) => (
-                        <motion.li
-                          key={fi}
-                          initial={{ opacity: 0, x: -10 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: fi * 0.05 }}
-                          className="flex items-start gap-2 text-sm text-white/60"
-                        >
-                          <AlertTriangle className={`h-3.5 w-3.5 ${risk.text} shrink-0 mt-0.5`} />
-                          {factor}
-                        </motion.li>
-                      ))}
-                    </ul>
-                  </motion.div>
-                )}
               </motion.div>
             );
           })}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

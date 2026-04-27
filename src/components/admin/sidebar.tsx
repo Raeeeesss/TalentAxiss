@@ -41,10 +41,10 @@ export function AdminSidebar() {
       <div className="h-16 flex items-center px-5 border-b border-amber-500/10 shrink-0">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-xl bg-linear-to-br from-amber-500 to-orange-600 flex items-center justify-center">
-            <Shield className="h-4 w-4 text-white" />
+            <Shield className="h-4 w-4 text-foreground" />
           </div>
           <div>
-            <div className="text-sm font-bold text-white">Super Admin</div>
+            <div className="text-sm font-bold text-foreground">Super Admin</div>
             <div className="text-xs text-amber-500/60">TalentAxiss Control</div>
           </div>
         </div>
@@ -55,7 +55,7 @@ export function AdminSidebar() {
         {navItems.map((group) => (
           <div key={group.group}>
             <div className="px-3 mb-1.5">
-              <span className="text-[10px] font-semibold text-white/20 uppercase tracking-widest">{group.group}</span>
+              <span className="text-[10px] font-semibold text-foreground/20 uppercase tracking-widest">{group.group}</span>
             </div>
             <ul className="space-y-0.5">
               {group.items.map((item) => {
@@ -68,7 +68,7 @@ export function AdminSidebar() {
                         "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all",
                         active
                           ? "bg-amber-500/15 text-amber-400 border-r-2 border-amber-500"
-                          : "text-white/40 hover:text-white hover:bg-white/4"
+                          : "text-foreground/40 hover:text-foreground hover:bg-white/4"
                       )}
                     >
                       <item.icon className={cn("h-4 w-4 shrink-0", active ? "text-amber-400" : "")} />
@@ -84,13 +84,13 @@ export function AdminSidebar() {
 
       {/* Bottom */}
       <div className="p-2 border-t border-amber-500/10 shrink-0">
-        <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-white/30 hover:text-white hover:bg-white/4 transition-all mb-1">
+        <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-foreground/30 hover:text-foreground hover:bg-white/4 transition-all mb-1">
           <Zap className="h-4 w-4 shrink-0" />
           Agency Dashboard
         </Link>
         <button
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-white/30 hover:text-red-400 hover:bg-red-500/5 transition-all"
+          className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-foreground/30 hover:text-red-400 hover:bg-red-500/5 transition-all"
         >
           <LogOut className="h-4 w-4 shrink-0" />
           Sign Out

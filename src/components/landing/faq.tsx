@@ -54,12 +54,12 @@ export function FAQSection() {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             Frequently Asked
             <br />
             <span className="gradient-text">Questions</span>
           </h2>
-          <p className="text-white/50">Everything you need to know before signing up.</p>
+          <p className="text-foreground/50">Everything you need to know before signing up.</p>
         </motion.div>
 
         <div className="space-y-3">
@@ -75,9 +75,9 @@ export function FAQSection() {
                 className="w-full flex items-center justify-between p-5 text-left"
                 onClick={() => setOpen(open === i ? null : i)}
               >
-                <span className="font-medium text-white pr-4">{faq.q}</span>
+                <span className="font-medium text-foreground pr-4">{faq.q}</span>
                 <ChevronDown
-                  className={`h-5 w-5 text-white/40 shrink-0 transition-transform duration-200 ${open === i ? "rotate-180" : ""}`}
+                  className={`h-5 w-5 text-foreground/40 shrink-0 transition-transform duration-200 ${open === i ? "rotate-180" : ""}`}
                 />
               </button>
               <AnimatePresence>
@@ -89,7 +89,7 @@ export function FAQSection() {
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="px-5 pb-5 text-sm text-white/50 leading-relaxed border-t border-white/5 pt-4">
+                    <div className="px-5 pb-5 text-sm text-foreground/50 leading-relaxed border-t border-white/5 pt-4">
                       {faq.a}
                     </div>
                   </motion.div>

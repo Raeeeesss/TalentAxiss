@@ -18,7 +18,7 @@ const plans = [
     badge: null,
     description: "Try TalentAxiss risk-free. No credit card needed.",
     gradient: "from-white/10 to-white/5",
-    border: "border-white/10",
+    border: "border-border",
     features: [
       "Up to 100 candidates",
       "AI CV parsing (10/day)",
@@ -107,29 +107,29 @@ export function PricingSection() {
           <div className="inline-flex items-center gap-2 bg-indigo-500/10 border border-indigo-500/20 rounded-full px-4 py-1.5 mb-6">
             <span className="text-xs text-indigo-400 font-medium">Simple Pricing</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             Invest in Growth,
             <br />
             <span className="gradient-text">Not Overhead</span>
           </h2>
-          <p className="text-white/50 text-lg max-w-xl mx-auto mb-8">
+          <p className="text-foreground/50 text-lg max-w-xl mx-auto mb-8">
             One placement fee covers months of TalentAxiss Pro. The ROI is instant.
           </p>
 
           {/* Toggle */}
-          <div className="inline-flex items-center gap-3 bg-white/5 border border-white/10 rounded-full p-1">
+          <div className="inline-flex items-center gap-3 bg-white/5 border border-border rounded-full p-1">
             <button
               onClick={() => setAnnual(false)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${!annual ? "bg-indigo-600 text-white" : "text-white/40"}`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${!annual ? "bg-indigo-600 text-foreground" : "text-foreground/40"}`}
             >
               Monthly
             </button>
             <button
               onClick={() => setAnnual(true)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${annual ? "bg-indigo-600 text-white" : "text-white/40"}`}
+              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${annual ? "bg-indigo-600 text-foreground" : "text-foreground/40"}`}
             >
               Annual
-              <span className="text-xs bg-emerald-500 text-white px-1.5 py-0.5 rounded-full">-20%</span>
+              <span className="text-xs bg-emerald-500 text-foreground px-1.5 py-0.5 rounded-full">-20%</span>
             </button>
           </div>
         </motion.div>
@@ -145,30 +145,30 @@ export function PricingSection() {
             >
               {plan.badge && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className="bg-linear-to-r from-indigo-600 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
+                  <span className="bg-linear-to-r from-indigo-600 to-purple-600 text-foreground text-xs font-bold px-3 py-1 rounded-full">
                     {plan.badge}
                   </span>
                 </div>
               )}
               <div className="flex items-center gap-3 mb-4">
                 <div className={`w-10 h-10 rounded-xl bg-linear-to-br ${i === 0 ? "from-slate-500 to-slate-700" : i === 1 ? "from-indigo-500 to-purple-600" : "from-amber-500 to-orange-600"} flex items-center justify-center`}>
-                  <plan.icon className="h-5 w-5 text-white" />
+                  <plan.icon className="h-5 w-5 text-foreground" />
                 </div>
                 <div>
-                  <div className="font-bold text-white">{plan.name}</div>
-                  <div className="text-xs text-white/40">{plan.description}</div>
+                  <div className="font-bold text-foreground">{plan.name}</div>
+                  <div className="text-xs text-foreground/40">{plan.description}</div>
                 </div>
               </div>
 
               <div className="mb-6">
                 {plan.price === 0 ? (
-                  <div className="text-4xl font-bold text-white">Free</div>
+                  <div className="text-4xl font-bold text-foreground">Free</div>
                 ) : (
                   <div className="flex items-baseline gap-1">
-                    <span className="text-4xl font-bold text-white">
+                    <span className="text-4xl font-bold text-foreground">
                       {formatCurrency(annual ? Math.round(plan.price * 0.8) : plan.price)}
                     </span>
-                    <span className="text-white/40 text-sm">/{plan.period}</span>
+                    <span className="text-foreground/40 text-sm">/{plan.period}</span>
                   </div>
                 )}
                 {annual && plan.price > 0 && (
@@ -180,7 +180,7 @@ export function PricingSection() {
 
               <ul className="space-y-2.5 flex-1 mb-6">
                 {plan.features.map((f) => (
-                  <li key={f} className="flex items-center gap-2.5 text-sm text-white/70">
+                  <li key={f} className="flex items-center gap-2.5 text-sm text-foreground/70">
                     <Check className="h-4 w-4 text-emerald-400 shrink-0" />
                     {f}
                   </li>
@@ -200,7 +200,7 @@ export function PricingSection() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
-          className="text-center text-sm text-white/30 mt-8"
+          className="text-center text-sm text-foreground/30 mt-8"
         >
           All prices include GST. Cancel anytime. 7-day money back guarantee.
         </motion.p>

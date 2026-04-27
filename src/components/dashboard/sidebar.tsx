@@ -38,6 +38,7 @@ const navItems = [
       { href: "/dashboard/team", icon: UserCog, label: "Team" },
       { href: "/dashboard/billing", icon: CreditCard, label: "Billing" },
       { href: "/dashboard/settings", icon: Settings, label: "Settings" },
+      { href: "/dashboard/profile", icon: UserCog, label: "My Profile" },
     ],
   },
 ];
@@ -56,7 +57,7 @@ export function DashboardSidebar() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-30 bg-black/60 lg:hidden"
+            className="fixed inset-0 z-30 bg-background/60 lg:hidden"
             onClick={() => setMobileOpen(false)}
           />
         )}
@@ -64,7 +65,7 @@ export function DashboardSidebar() {
 
       {/* Mobile toggle */}
       <button
-        className="fixed top-4 left-4 z-50 lg:hidden w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white"
+        className="fixed top-4 left-4 z-50 lg:hidden w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-foreground"
         onClick={() => setMobileOpen(!mobileOpen)}
       >
         <ChevronRight className="h-4 w-4" />
@@ -84,7 +85,7 @@ export function DashboardSidebar() {
         <div className="h-16 flex items-center px-4 border-b border-white/6 shrink-0">
           <Link href="/dashboard" className="flex items-center gap-2 min-w-0">
             <div className="w-8 h-8 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shrink-0">
-              <Zap className="h-4 w-4 text-white" />
+              <Zap className="h-4 w-4 text-foreground" />
             </div>
             <AnimatePresence>
               {!collapsed && (
@@ -100,7 +101,7 @@ export function DashboardSidebar() {
             </AnimatePresence>
           </Link>
           <button
-            className="ml-auto hidden lg:flex items-center justify-center w-7 h-7 rounded-lg hover:bg-white/8 text-white/40 hover:text-white transition-colors shrink-0"
+            className="ml-auto hidden lg:flex items-center justify-center w-7 h-7 rounded-lg hover:bg-white/8 text-foreground/40 hover:text-foreground transition-colors shrink-0"
             onClick={() => setCollapsed(!collapsed)}
           >
             {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
@@ -113,7 +114,7 @@ export function DashboardSidebar() {
             <div key={group.group}>
               {!collapsed && (
                 <div className="px-3 mb-2">
-                  <span className="text-[10px] font-semibold text-white/20 uppercase tracking-widest">
+                  <span className="text-[10px] font-semibold text-foreground/20 uppercase tracking-widest">
                     {group.group}
                   </span>
                 </div>
@@ -128,8 +129,8 @@ export function DashboardSidebar() {
                         className={cn(
                           "flex items-center gap-3 px-3 py-2 rounded-xl text-sm transition-all duration-150 group relative",
                           active
-                            ? "bg-indigo-500/15 text-white border-r-2 border-indigo-500"
-                            : "text-white/50 hover:text-white hover:bg-white/5"
+                            ? "bg-indigo-500/15 text-foreground border-r-2 border-indigo-500"
+                            : "text-foreground/50 hover:text-foreground hover:bg-white/5"
                         )}
                         onClick={() => setMobileOpen(false)}
                       >
@@ -147,12 +148,12 @@ export function DashboardSidebar() {
                           )}
                         </AnimatePresence>
                         {!collapsed && (item as any).badge && (
-                          <span className="text-[10px] font-bold bg-indigo-600 text-white px-1.5 py-0.5 rounded-full">
+                          <span className="text-[10px] font-bold bg-indigo-600 text-foreground px-1.5 py-0.5 rounded-full">
                             {(item as any).badge}
                           </span>
                         )}
                         {collapsed && (
-                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#0f0f1a] border border-white/10 rounded-lg text-xs text-white whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
+                          <div className="absolute left-full ml-2 px-2 py-1 bg-[#0f0f1a] border border-border rounded-lg text-xs text-foreground whitespace-nowrap opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50">
                             {item.label}
                           </div>
                         )}
@@ -167,13 +168,13 @@ export function DashboardSidebar() {
 
         {/* Bottom */}
         <div className="p-2 border-t border-white/6 shrink-0 space-y-0.5">
-          <Link href="/dashboard/support" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-white/40 hover:text-white hover:bg-white/5 transition-all">
+          <Link href="/dashboard/support" className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-foreground/40 hover:text-foreground hover:bg-white/5 transition-all">
             <HelpCircle className="h-4.5 w-4.5 shrink-0" />
             {!collapsed && <span>Support</span>}
           </Link>
           <button
             onClick={() => signOut({ callbackUrl: "/" })}
-            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-white/40 hover:text-red-400 hover:bg-red-500/5 transition-all"
+            className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-foreground/40 hover:text-red-400 hover:bg-red-500/5 transition-all"
           >
             <LogOut className="h-4.5 w-4.5 shrink-0" />
             {!collapsed && <span>Sign Out</span>}

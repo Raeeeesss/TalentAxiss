@@ -88,21 +88,21 @@ export function UploadCVModal({ onClose }: UploadCVModalProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+        className="absolute inset-0 bg-background/60 backdrop-blur-sm"
         onClick={onClose}
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95 }}
-        className="relative bg-[#0a0a12] border border-white/10 rounded-2xl p-6 w-full max-w-lg shadow-2xl z-10"
+        className="relative bg-[#0a0a12] border border-border rounded-2xl p-6 w-full max-w-lg shadow-2xl z-10"
       >
         <div className="flex items-center justify-between mb-5">
           <div>
-            <h2 className="text-lg font-bold text-white">Bulk CV Upload</h2>
-            <p className="text-sm text-white/40 mt-0.5">AI parses every CV automatically</p>
+            <h2 className="text-lg font-bold text-foreground">Bulk CV Upload</h2>
+            <p className="text-sm text-foreground/40 mt-0.5">AI parses every CV automatically</p>
           </div>
-          <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-white/40 hover:text-white transition-colors">
+          <button onClick={onClose} className="w-8 h-8 rounded-lg hover:bg-white/10 flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors">
             <X className="h-4 w-4" />
           </button>
         </div>
@@ -112,11 +112,11 @@ export function UploadCVModal({ onClose }: UploadCVModalProps) {
           onDrop={handleDrop}
           onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
           onDragLeave={() => setIsDragging(false)}
-          className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${isDragging ? "border-indigo-500 bg-indigo-500/5" : "border-white/10 hover:border-white/20"}`}
+          className={`relative border-2 border-dashed rounded-xl p-8 text-center transition-all ${isDragging ? "border-indigo-500 bg-indigo-500/5" : "border-border hover:border-white/20"}`}
         >
-          <Upload className="h-8 w-8 text-white/20 mx-auto mb-3" />
-          <p className="text-sm text-white/60 mb-1">Drag & drop CVs here</p>
-          <p className="text-xs text-white/30 mb-4">PDF, DOCX, Images supported</p>
+          <Upload className="h-8 w-8 text-foreground/20 mx-auto mb-3" />
+          <p className="text-sm text-foreground/60 mb-1">Drag & drop CVs here</p>
+          <p className="text-xs text-foreground/30 mb-4">PDF, DOCX, Images supported</p>
           <label>
             <Button variant="outline" size="sm" asChild>
               <span>Browse Files</span>
@@ -130,16 +130,16 @@ export function UploadCVModal({ onClose }: UploadCVModalProps) {
           <div className="mt-4 space-y-2 max-h-48 overflow-y-auto">
             {files.map((f, i) => (
               <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-white/3 border border-white/6">
-                <FileText className="h-4 w-4 text-white/40 shrink-0" />
+                <FileText className="h-4 w-4 text-foreground/40 shrink-0" />
                 <div className="flex-1 min-w-0">
-                  <div className="text-sm text-white/70 truncate">{f.file.name}</div>
-                  <div className="text-xs text-white/30">
+                  <div className="text-sm text-foreground/70 truncate">{f.file.name}</div>
+                  <div className="text-xs text-foreground/30">
                     {(f.file.size / 1024).toFixed(0)} KB
                   </div>
                 </div>
                 <div className="shrink-0">
                   {f.status === "pending" && (
-                    <button onClick={() => removeFile(i)} className="text-white/30 hover:text-red-400">
+                    <button onClick={() => removeFile(i)} className="text-foreground/30 hover:text-red-400">
                       <X className="h-4 w-4" />
                     </button>
                   )}

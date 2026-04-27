@@ -65,6 +65,12 @@ export async function GET(req: NextRequest) {
   if (district) where.district = district;
   if (status) where.status = status;
 
+  const riskLevelParam = searchParams.get("riskLevel") || "";
+  if (riskLevelParam) {
+    const levels = riskLevelParam.split(",").map((l) => l.trim()).filter(Boolean);
+    where.riskLevel = levels.length === 1 ? levels[0] : { in: levels };
+  }
+
   const [candidates, total] = await Promise.all([
     prisma.candidate.findMany({
       where,

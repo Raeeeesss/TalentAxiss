@@ -79,12 +79,12 @@ export function TestimonialsSection() {
             <Star className="h-3.5 w-3.5 text-amber-400 fill-current" />
             <span className="text-xs text-amber-400 font-medium">Loved by Kerala Recruiters</span>
           </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-4">
             Real Results from
             <br />
             <span className="gradient-text">Real Agencies</span>
           </h2>
-          <p className="text-white/50 text-lg">
+          <p className="text-foreground/50 text-lg">
             Join 156+ Kerala consultancies already using TalentAxiss.
           </p>
         </motion.div>
@@ -100,23 +100,23 @@ export function TestimonialsSection() {
             >
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <div className={`w-10 h-10 rounded-full bg-linear-to-br ${t.color} flex items-center justify-center text-white text-sm font-bold`}>
+                  <div className={`w-10 h-10 rounded-full bg-linear-to-br ${t.color} flex items-center justify-center text-foreground text-sm font-bold`}>
                     {t.avatar}
                   </div>
                   <div>
-                    <div className="font-semibold text-white text-sm">{t.name}</div>
-                    <div className="text-xs text-white/40">{t.role}</div>
-                    <div className="text-xs text-white/30">{t.location}</div>
+                    <div className="font-semibold text-foreground text-sm">{t.name}</div>
+                    <div className="text-xs text-foreground/40">{t.role}</div>
+                    <div className="text-xs text-foreground/30">{t.location}</div>
                   </div>
                 </div>
-                <Quote className="h-6 w-6 text-white/10" />
+                <Quote className="h-6 w-6 text-foreground/10" />
               </div>
               <div className="flex gap-0.5 mb-3">
                 {Array.from({ length: t.rating }).map((_, j) => (
                   <Star key={j} className="h-3.5 w-3.5 text-amber-400 fill-current" />
                 ))}
               </div>
-              <p className="text-sm text-white/60 leading-relaxed">{t.quote}</p>
+              <p className="text-sm text-foreground/60 leading-relaxed">{t.quote}</p>
             </motion.div>
           ))}
         </div>
@@ -136,7 +136,7 @@ export function TestimonialsSection() {
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className="text-2xl font-bold gradient-text">{stat.value}</div>
-              <div className="text-sm text-white/40">{stat.label}</div>
+              <div className="text-sm text-foreground/40">{stat.label}</div>
             </div>
           ))}
         </motion.div>

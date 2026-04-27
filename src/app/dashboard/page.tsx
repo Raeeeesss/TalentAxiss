@@ -81,29 +81,21 @@ export default async function DashboardPage() {
   const session = await auth();
   const agencyId = (session?.user as any)?.agencyId;
 
-  // During dev without DB, use mock data
-  const stats = agencyId
-    ? await getDashboardStats(agencyId).catch(() => null)
-    : null;
-
-  const mockStats = {
-    totalCandidates: 1247,
-    activeJobs: 34,
-    todayInterviews: 7,
-    monthPlacements: 28,
-    pendingFollowups: 12,
-    highRiskCandidates: 4,
+  const emptyStats = {
+    totalCandidates: 0,
+    activeJobs: 0,
+    todayInterviews: 0,
+    monthPlacements: 0,
+    pendingFollowups: 0,
+    highRiskCandidates: 0,
     recentCandidates: [],
     recentApplications: [],
-    monthlyChart: [
-      { month: "Nov", count: 18 },
-      { month: "Dec", count: 22 },
-      { month: "Jan", count: 19 },
-      { month: "Feb", count: 26 },
-      { month: "Mar", count: 24 },
-      { month: "Apr", count: 28 },
-    ],
+    monthlyChart: [],
   };
 
-  return <DashboardHome stats={stats || mockStats} userName={session?.user?.name || "there"} />;
+  const stats = agencyId
+    ? await getDashboardStats(agencyId).catch(() => emptyStats)
+    : emptyStats;
+
+  return <DashboardHome stats={stats} userName={session?.user?.name || "there"} />;
 }
