@@ -1,6 +1,10 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaNeon } from "@prisma/adapter-neon";
-import { Pool } from "@neondatabase/serverless";
+import { neonConfig, Pool } from "@neondatabase/serverless";
+import ws from "ws";
+
+// Required: tell Neon to use 'ws' for WebSocket in Node.js / Vercel
+neonConfig.webSocketConstructor = ws;
 
 const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined };
 
@@ -8,7 +12,7 @@ function createPrismaClient(): PrismaClient {
   const connectionString = process.env.DATABASE_URL;
   if (!connectionString) throw new Error("DATABASE_URL is not set.");
 
-  // Strip channel_binding — not supported by @neondatabase/serverless Pool
+  // Strip channel_binding — not supported by @neondatabase/serverless
   const url = connectionString
     .replace("&channel_binding=require", "")
     .replace("?channel_binding=require&", "?")
