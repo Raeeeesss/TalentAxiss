@@ -446,30 +446,26 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.75, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-8 text-center leading-none"
+          className="mb-8 text-center leading-[0.9]"
+          style={{
+            fontFamily: '"Heathergreen Regular", sans-serif',
+            letterSpacing: "-0.02em",
+          }}
         >
-          {/* Main Elegant Serif */}
-          <span className="block text-5xl sm:text-6xl lg:text-[7rem] font-light uppercase tracking-[-0.06em] text-gray-950 font-serif">
-            Manage
+          <span className="block text-4xl sm:text-5xl lg:text-[5.2rem] text-gray-950 tracking-[-0.03em]">
+            Manage Candidates,
           </span>
 
-          <span className="block -mt-2 text-5xl sm:text-6xl lg:text-[7rem] font-light uppercase tracking-[-0.06em] text-gray-950 font-serif">
-            Candidates
-          </span>
-
-          {/* Script Accent */}
-          <span className="block -mt-2 text-3xl sm:text-4xl lg:text-[4.2rem] italic font-normal text-gray-700 tracking-tight">
+          <span className="block -mt-2 text-4xl sm:text-5xl lg:text-[5.2rem] gradient-text tracking-[-0.03em]">
             AI Matching &
           </span>
 
-          {/* Main Elegant Serif */}
-          <span className="block -mt-1 text-5xl sm:text-6xl lg:text-[7rem] font-light uppercase tracking-[-0.06em] gradient-text font-serif">
+          <span className="block -mt-2 text-4xl sm:text-5xl lg:text-[5.2rem] text-gray-900 tracking-[-0.03em]">
             Placements
           </span>
 
-          {/* Script Accent */}
-          <span className="block -mt-2 text-3xl sm:text-4xl lg:text-[4rem] italic font-normal text-gray-700">
-            in One CRM
+          <span className="block -mt-2 text-3xl sm:text-4xl lg:text-[4rem] text-gray-700 tracking-[0.04em]">
+            In One CRM
           </span>
         </motion.h1>
         {/* Subtitle */}
