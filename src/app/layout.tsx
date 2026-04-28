@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { CustomCursor } from "@/components/ui/cursor";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -13,53 +14,51 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: {
-    default: "TalentAxiss – AI Recruitment Platform for Kerala Agencies",
+    default: "TalentAxiss – Kerala's #1 AI Recruitment CRM for Consultancies",
     template: "%s | TalentAxiss",
   },
   description:
-    "Transform your consultancy into an AI recruitment machine. TalentAxiss is the modern CRM built for Kerala recruitment agencies.",
-  keywords: ["recruitment", "consultancy", "Kerala", "jobs", "AI", "CRM", "candidates"],
+    "Transform your consultancy into an AI recruitment machine. Manage candidates, AI matching, pipeline, follow-ups and analytics — all in one powerful platform.",
+  keywords: ["recruitment", "consultancy", "Kerala", "jobs", "AI", "CRM", "candidates", "Gulf placement"],
   authors: [{ name: "TalentAxiss" }],
   openGraph: {
     type: "website",
     locale: "en_IN",
-    title: "TalentAxiss – AI Recruitment Platform",
-    description: "The future of recruitment for Kerala consultancies.",
+    title: "TalentAxiss – Kerala's #1 AI Recruitment CRM",
+    description: "Replace WhatsApp chaos and Excel sheets with one AI-powered recruitment platform.",
     siteName: "TalentAxiss",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TalentAxiss – AI Recruitment Platform",
-    description: "The future of recruitment for Kerala consultancies.",
+    title: "TalentAxiss – AI Recruitment Platform for Kerala Agencies",
+    description: "Replace WhatsApp chaos and Excel sheets with one AI-powered recruitment platform.",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.variable} font-sans antialiased`}>
         <AuthProvider>
           <ThemeProvider
             attribute="class"
-            defaultTheme="dark"
+            defaultTheme="light"
             enableSystem={false}
-            disableTransitionOnChange={false}
+            disableTransitionOnChange
+            forcedTheme="light"
           >
+            <CustomCursor />
             {children}
             <Toaster
               position="top-right"
-              expand={false}
               richColors
-              theme="dark"
+              theme="light"
               toastOptions={{
                 style: {
-                  background: "hsl(240 10% 8%)",
-                  border: "1px solid hsl(240 3.7% 20%)",
-                  color: "hsl(0 0% 98%)",
+                  background: "#ffffff",
+                  border: "1px solid #e2e8f0",
+                  color: "#0f172a",
+                  boxShadow: "0 8px 30px rgba(0,0,0,.08)",
                 },
               }}
             />

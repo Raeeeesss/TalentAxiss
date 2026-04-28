@@ -14,13 +14,11 @@ export default async function DashboardLayout({
   const role     = (session.user as any)?.role;
   const agencyId = (session.user as any)?.agencyId;
 
-  // Super admin goes directly to /admin
   if (role === "SUPER_ADMIN") redirect("/admin");
-
   if (!agencyId) redirect("/dashboard/setup");
 
   return (
-    <div className="min-h-screen bg-[#050508] flex">
+    <div className="min-h-screen bg-gray-50 flex">
       <DashboardSidebar />
       <div className="flex-1 flex flex-col min-w-0 ml-0 lg:ml-64" data-main>
         <DashboardHeader />

@@ -6,38 +6,38 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98]",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-xl text-sm font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50 active:scale-[0.97]",
   {
     variants: {
       variant: {
         default:
-          "bg-indigo-600 text-foreground shadow-lg shadow-indigo-500/25 hover:bg-indigo-500 hover:shadow-indigo-500/40",
+          "bg-gray-950 text-white shadow-md shadow-gray-900/15 hover:bg-gray-800 hover:shadow-gray-900/25",
         destructive:
-          "bg-red-600 text-foreground shadow-lg shadow-red-500/25 hover:bg-red-500",
+          "bg-red-600 text-white shadow-md shadow-red-500/20 hover:bg-red-500",
         outline:
-          "border border-border bg-white/5 text-foreground hover:bg-white/10 hover:border-white/20",
+          "border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-900",
         secondary:
-          "bg-white/10 text-foreground hover:bg-white/15",
+          "bg-gray-100 text-gray-800 hover:bg-gray-200",
         ghost:
-          "hover:bg-white/10 text-foreground/80 hover:text-foreground",
+          "hover:bg-gray-100 text-gray-600 hover:text-gray-900",
         link:
-          "text-indigo-400 underline-offset-4 hover:underline hover:text-indigo-300",
+          "text-indigo-600 underline-offset-4 hover:underline hover:text-indigo-700",
         gradient:
-          "bg-linear-to-r from-indigo-600 via-purple-600 to-cyan-600 text-foreground shadow-lg hover:opacity-90 hover:shadow-indigo-500/40",
+          "bg-linear-to-r from-indigo-600 via-purple-600 to-cyan-600 text-white shadow-lg shadow-indigo-500/25 hover:opacity-90 hover:shadow-indigo-500/35",
         "gradient-gold":
-          "bg-linear-to-r from-amber-500 to-orange-500 text-foreground shadow-lg hover:opacity-90",
+          "bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/20 hover:opacity-90",
       },
       size: {
         default: "h-10 px-5 py-2",
-        sm: "h-8 rounded-lg px-3 text-xs",
-        lg: "h-12 rounded-xl px-8 text-base",
-        xl: "h-14 rounded-xl px-10 text-lg",
-        icon: "h-10 w-10",
+        sm:      "h-8 rounded-lg px-3 text-xs",
+        lg:      "h-12 rounded-xl px-8 text-base",
+        xl:      "h-14 rounded-xl px-10 text-lg",
+        icon:    "h-10 w-10",
       },
     },
     defaultVariants: {
       variant: "default",
-      size: "default",
+      size:    "default",
     },
   }
 );
@@ -67,9 +67,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </svg>
             {children}
           </>
-        ) : (
-          children
-        )}
+        ) : children}
       </Comp>
     );
   }
