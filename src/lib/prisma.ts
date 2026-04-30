@@ -1,6 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { PrismaNeon } from "@prisma/adapter-neon";
-import { neon } from "@neondatabase/serverless";
+import { PrismaNeonHttp } from "@prisma/adapter-neon";
 
 declare global {
   // eslint-disable-next-line no-var
@@ -11,17 +10,15 @@ function createClient(): PrismaClient {
   const raw = process.env.DATABASE_URL;
   if (!raw) throw new Error("DATABASE_URL is not set");
 
-  // Remove channel_binding — not supported by the Neon HTTP driver
-  let url = raw;
-  try {
-    const u = new URL(raw);
-    u.searchParams.delete("channel_binding");
-    url = u.toString();
-  } catch {
-    // keep raw if URL fails to parse
-  }
+  // Strip channel_binding — HTTP connections don't use TLS channel binding
+  const url = raw
+    .replace("&channel_binding=require", "")
+    .replace("?channel_binding=require&", "?")
+    .replace("?channel_binding=require", "");
 
-  return new PrismaClient({ adapter: new PrismaNeon(neon(url)) });
+  // PrismaNeonHttp takes the connection string directly (no neon() call needed)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return new PrismaClient({ adapter: new PrismaNeonHttp(url, {} as any) });
 }
 
 export const prisma: PrismaClient =
