@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Briefcase, GitBranch, Bell,
   AlertTriangle, BarChart3, UserCog, Settings,
-  ChevronLeft, ChevronRight, LogOut, HelpCircle, CreditCard,
+  ChevronLeft, ChevronRight, LogOut, HelpCircle, CreditCard, Zap,
 } from "lucide-react";
 import { Logo, LogoIcon } from "@/components/ui/logo";
 import { signOut } from "next-auth/react";
