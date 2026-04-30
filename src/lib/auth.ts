@@ -44,28 +44,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   callbacks: {
     async jwt({ token, user }) {
-      // On first sign-in, user object is present — store basics
       if (user) {
-        token.role = (user as any).role;
+        token.role     = (user as any).role;
         token.agencyId = (user as any).agencyId;
       }
-
-      // Re-fetch agencyId if missing (e.g. agency created after first login)
-      if (token.sub && !token.agencyId) {
-        try {
-          const dbUser = await prisma.user.findUnique({
-            where: { id: token.sub },
-            select: { agencyId: true, role: true, isActive: true },
-          });
-          if (dbUser?.agencyId) {
-            token.agencyId = dbUser.agencyId;
-            token.role = dbUser.role;
-          }
-        } catch {
-          // DB unavailable — keep existing token as-is
-        }
-      }
-
       return token;
     },
     async session({ session, token }) {
