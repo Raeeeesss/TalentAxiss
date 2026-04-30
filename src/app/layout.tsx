@@ -1,14 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
 import { CustomCursor } from "@/components/ui/cursor";
 
-const inter = Inter({
+/* ── Space Grotesk — distinctive geometric sans
+   Feels premium, human, decidedly non-generic.
+   Weights 300–700 covers all UI needs.
+──────────────────────────────────────────────── */
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-sg",
   display: "swap",
 });
 
@@ -37,8 +42,8 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans antialiased`}>
+    <html lang="en" suppressHydrationWarning className={spaceGrotesk.variable}>
+      <body className="font-sg antialiased">
         <AuthProvider>
           <ThemeProvider
             attribute="class"
@@ -59,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   border: "1px solid #e2e8f0",
                   color: "#0f172a",
                   boxShadow: "0 8px 30px rgba(0,0,0,.08)",
+                  fontFamily: "var(--font-sg), system-ui, sans-serif",
                 },
               }}
             />

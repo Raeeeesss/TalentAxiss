@@ -8,13 +8,14 @@ import {
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import {
-  Zap, Eye, EyeOff, Mail, Lock, User, Building2, Phone,
+  Eye, EyeOff, Mail, Lock, User, Building2, Phone,
   ArrowRight, CheckCircle2, RefreshCw, Shield, AlertTriangle,
-  Brain, GitBranch, Bell, BarChart3, Globe, Star, Users,
+  Brain, BarChart3, Globe, Star, Users, Search,
   TrendingUp, Upload,
 } from "lucide-react";
 import { toast } from "sonner";
 import { KERALA_DISTRICTS } from "@/lib/utils";
+import { Logo } from "@/components/ui/logo";
 
 const STEPS = ["Your Info", "Verify OTPs", "Agency Info"] as const;
 
@@ -110,9 +111,7 @@ function AuthInput({ id, label, type = "text", value, onChange, icon, rightEleme
 ───────────────────────────────────────────────────────────── */
 const features = [
   { icon: Brain,    text: "AI CV Parsing — auto-fills 20+ fields"        },
-  { icon: Zap,      text: "Smart Matching — rank 1,000s in seconds"       },
-  { icon: GitBranch,text: "Kanban Pipeline — 7-stage drag-drop board"     },
-  { icon: Bell,     text: "Follow-up Automation — zero missed interviews" },
+  { icon: Search,   text: "Smart Matching — rank 1,000s in seconds"       },
   { icon: Globe,    text: "Gulf Recruitment Mode — passport tracking"     },
   { icon: BarChart3,text: "Real-time Analytics — revenue & placements"    },
 ];
@@ -120,7 +119,7 @@ const features = [
 function BrandPanel({ step }: { step: number }) {
   return (
     <div
-      className="hidden lg:flex lg:w-1/2 xl:w-[55%] relative flex-col items-center justify-center px-10 xl:px-14 py-12 overflow-hidden min-h-screen"
+      className="hidden lg:flex lg:w-[52%] h-full flex-col justify-center overflow-hidden relative"
       style={{ background: "linear-gradient(145deg, #060d1f 0%, #0d1535 45%, #1a1060 100%)" }}
     >
       {/* Animated blobs */}
@@ -136,57 +135,49 @@ function BrandPanel({ step }: { step: number }) {
         }}
       />
 
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-sm mx-auto px-8 xl:px-10 flex flex-col gap-4">
 
         {/* Logo */}
-        <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6 }}
-          className="flex items-center gap-3 mb-10"
-        >
-          <div className="w-10 h-10 rounded-xl bg-linear-to-br from-indigo-500 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-            <Zap className="h-5 w-5 text-white" />
-          </div>
-          <span className="text-2xl font-extrabold gradient-text">TalentAxiss</span>
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .55 }}>
+          <Logo size="md" onDark href="/" />
         </motion.div>
 
         {/* Headline */}
-        <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .65, delay: .15 }}
-          className="mb-8"
-        >
-          <h2 className="text-3xl xl:text-4xl font-extrabold text-white leading-tight mb-3">
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .6, delay: .1 }}>
+          <h2 className="text-2xl xl:text-3xl font-extrabold text-white leading-tight mb-2">
             Join Kerala&apos;s #1
             <br />
             <span className="gradient-text">AI Recruitment CRM</span>
           </h2>
-          <p className="text-white/50 text-sm leading-relaxed">
-            7-day free trial. No credit card required.
-            Cancel anytime. Start placing candidates faster in minutes.
+          <p className="text-white/45 text-sm leading-relaxed">
+            7-day free trial. No credit card needed. Start placing candidates faster.
           </p>
         </motion.div>
 
         {/* Step progress tracker */}
-        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .25 }}
-          className="bg-white/6 border border-white/10 rounded-2xl p-4 mb-7"
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .2 }}
+          className="bg-white/6 border border-white/10 rounded-2xl p-3"
         >
-          <div className="text-[10px] text-white/40 font-semibold uppercase tracking-widest mb-3">Setup progress</div>
-          <div className="space-y-2.5">
+          <div className="text-[10px] text-white/40 font-semibold uppercase tracking-widest mb-2">Setup progress</div>
+          <div className="space-y-2">
             {STEPS.map((label, i) => {
               const s = i + 1;
               const done = s < step;
               const current = s === step;
               return (
                 <div key={s} className="flex items-center gap-3">
-                  <div className={`w-6 h-6 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
+                  <div className={`w-5 h-5 rounded-full flex items-center justify-center shrink-0 transition-all duration-300 ${
                     done    ? "bg-emerald-500"
                     : current ? "bg-indigo-600 ring-4 ring-indigo-500/25"
                     : "bg-white/10"
                   }`}>
                     {done
-                      ? <CheckCircle2 className="h-3.5 w-3.5 text-white" />
-                      : <span className="text-[10px] font-bold text-white">{s}</span>
+                      ? <CheckCircle2 className="h-3 w-3 text-white" />
+                      : <span className="text-[9px] font-bold text-white">{s}</span>
                     }
                   </div>
                   <div className="flex-1">
-                    <div className={`text-sm font-medium transition-colors ${
+                    <div className={`text-xs font-medium transition-colors ${
                       current ? "text-white" : done ? "text-emerald-400" : "text-white/30"
                     }`}>
                       {label}
@@ -208,54 +199,53 @@ function BrandPanel({ step }: { step: number }) {
         </motion.div>
 
         {/* Feature list */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .35 }}
-          className="space-y-2.5 mb-8"
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .3 }}
+          className="space-y-2"
         >
           {features.map((f, i) => (
             <motion.div
               key={f.text}
-              initial={{ opacity: 0, x: -16 }}
+              initial={{ opacity: 0, x: -12 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: .4 + i * .07 }}
-              className="flex items-center gap-3"
+              transition={{ delay: .35 + i * .07 }}
+              className="flex items-center gap-2.5"
             >
-              <div className="w-7 h-7 rounded-xl bg-white/8 border border-white/10 flex items-center justify-center shrink-0">
-                <f.icon className="h-3.5 w-3.5 text-indigo-400" />
+              <div className="w-6 h-6 rounded-lg bg-white/8 border border-white/10 flex items-center justify-center shrink-0">
+                <f.icon className="h-3 w-3 text-indigo-400" />
               </div>
-              <span className="text-sm text-white/60">{f.text}</span>
+              <span className="text-xs text-white/60">{f.text}</span>
             </motion.div>
           ))}
         </motion.div>
 
         {/* Trust stats */}
-        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .55 }}
-          className="grid grid-cols-3 gap-2.5 mb-6"
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: .45 }}
+          className="grid grid-cols-3 gap-2"
         >
           {[
-            { icon: Users,      value: 156,   suffix: "+",   label: "Agencies"   },
-            { icon: Upload,     value: 12847, suffix: "+",   label: "CVs Parsed" },
-            { icon: TrendingUp, value: 94,    suffix: "%",   label: "Success Rate"},
+            { icon: Users,      value: 156,   suffix: "+",  label: "Agencies"   },
+            { icon: Upload,     value: 12847, suffix: "+",  label: "CVs Parsed" },
+            { icon: TrendingUp, value: 94,    suffix: "%",  label: "Success"    },
           ].map(({ icon: Icon, value, suffix, label }) => (
-            <div key={label} className="bg-white/6 border border-white/10 rounded-2xl p-3 text-center">
-              <Icon className="h-3.5 w-3.5 text-indigo-400 mx-auto mb-1.5" />
-              <div className="text-base font-extrabold text-white tabular-nums">
+            <div key={label} className="bg-white/6 border border-white/10 rounded-xl p-2 text-center">
+              <Icon className="h-3 w-3 text-indigo-400 mx-auto mb-1" />
+              <div className="text-sm font-extrabold text-white tabular-nums">
                 <Counter to={value} suffix={suffix} />
               </div>
-              <div className="text-[9px] text-white/40 mt-0.5">{label}</div>
+              <div className="text-[8px] text-white/40 mt-0.5">{label}</div>
             </div>
           ))}
         </motion.div>
 
         {/* Testimonial */}
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .65 }}
-          className="bg-white/6 border border-white/10 rounded-2xl p-4"
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: .55 }}
+          className="bg-white/6 border border-white/10 rounded-xl p-3"
         >
-          <div className="flex gap-0.5 mb-2">
-            {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-3 w-3 text-amber-400 fill-current" />)}
+          <div className="flex gap-0.5 mb-1.5">
+            {Array.from({ length: 5 }).map((_, i) => <Star key={i} className="h-2.5 w-2.5 text-amber-400 fill-current" />)}
           </div>
-          <p className="text-white/60 text-xs leading-relaxed italic mb-3">
-            &ldquo;TalentAxiss transformed our agency. We placed 40% more candidates in the first month
-            and AI matching saved us hours every day.&rdquo;
+          <p className="text-white/55 text-xs leading-relaxed italic mb-2">
+            &ldquo;TalentAxiss transformed our agency. Placed 40% more candidates in month one.&rdquo;
           </p>
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[10px] font-bold shadow">SK</div>
@@ -275,7 +265,7 @@ function BrandPanel({ step }: { step: number }) {
 ───────────────────────────────────────────────────────────── */
 function StepBar({ step }: { step: number }) {
   return (
-    <div className="flex items-center justify-between mb-8">
+    <div className="flex items-center justify-between mb-6">
       {STEPS.map((label, i) => {
         const s = i + 1;
         const done = s < step;
@@ -459,8 +449,8 @@ export default function RegisterPage() {
       toast.success("OTPs generated!", { description: "Both fields auto-filled below." });
       setStep(2);
       startTimer();
-    } catch (err: any) {
-      setRegError(err?.message || "Failed to send OTPs. Try again.");
+    } catch (err: unknown) {
+      setRegError(err instanceof Error ? err.message : "Failed to send OTPs. Try again.");
     } finally {
       setLoading(false);
     }
@@ -475,8 +465,8 @@ export default function RegisterPage() {
       await Promise.all([verifyOtp("email", emailOtp), verifyOtp("phone", phoneOtp)]);
       toast.success("Email & mobile verified!");
       setStep(3);
-    } catch (err: any) {
-      setRegError(err?.message || "Verification failed. Check your OTPs.");
+    } catch (err: unknown) {
+      setRegError(err instanceof Error ? err.message : "Verification failed. Check your OTPs.");
     } finally {
       setLoading(false);
     }
@@ -490,8 +480,8 @@ export default function RegisterPage() {
       setEmailOtp(eCode); setPhoneOtp(pCode);
       startTimer();
       toast.success("New OTPs generated and auto-filled!");
-    } catch (err: any) {
-      toast.error(err?.message || "Failed to resend");
+    } catch (err: unknown) {
+      toast.error(err instanceof Error ? err.message : "Failed to resend");
     } finally {
       setLoading(false);
     }
@@ -501,24 +491,28 @@ export default function RegisterPage() {
     if (!form.agencyName.trim()) { setErrors({ agencyName: "Agency name is required" }); return; }
     setLoading(true);
     setRegError(null);
+
     try {
       const res  = await fetch("/api/auth/register", {
-        method: "POST", headers: { "Content-Type": "application/json" },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       const data = await res.json();
+
       if (!res.ok) throw new Error(data.error || "Registration failed");
+
       toast.success("Account created! Please sign in.");
       router.push("/auth/login");
-    } catch (err: any) {
-      setRegError(err.message);
+    } catch (err: unknown) {
+      setRegError(err instanceof Error ? err.message : "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen h-screen overflow-hidden bg-white">
+    <div className="flex h-screen overflow-hidden bg-white">
 
       {/* ── Left brand panel ─────────────────────────────── */}
       <BrandPanel step={step} />
@@ -526,7 +520,7 @@ export default function RegisterPage() {
       {/* ── Right form panel ─────────────────────────────── */}
       <div
         ref={panelRef}
-        className="relative flex-1 flex flex-col items-center justify-center bg-[#fafbff] px-4 sm:px-8 py-10 overflow-auto"
+        className="relative flex-1 h-full flex flex-col items-center justify-center bg-[#fafbff] overflow-y-auto"
       >
         {/* Mouse glow */}
         <motion.div
@@ -551,15 +545,12 @@ export default function RegisterPage() {
           initial={{ opacity: 0, y: 32, scale: .97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: .7, ease: [.22, 1, .36, 1] }}
-          className="relative z-10 w-full max-w-md"
+          className="relative z-10 w-full max-w-md px-6 py-10"
         >
           {/* Mobile logo */}
-          <Link href="/" className="flex lg:hidden items-center gap-2 mb-7 justify-center">
-            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/25">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-extrabold gradient-text">TalentAxiss</span>
-          </Link>
+          <div className="flex lg:hidden justify-center mb-7">
+            <Logo size="md" onDark={false} href="/" />
+          </div>
 
           {/* Heading (changes per step) */}
           <AnimatePresence mode="wait">
@@ -569,7 +560,7 @@ export default function RegisterPage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: .25 }}
-              className="mb-7"
+              className="mb-6"
             >
               {step === 1 && <>
                 <h1 className="text-3xl font-extrabold text-gray-950 mb-1.5">Create your account</h1>

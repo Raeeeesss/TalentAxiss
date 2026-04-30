@@ -224,43 +224,43 @@ export default function FollowUpsPage() {
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setShowAdd(false)} />
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="w-full max-w-md bg-[#0d0d1a] border border-white/10 rounded-2xl shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
+              <div className="w-full max-w-md bg-white border border-gray-100 rounded-2xl shadow-2xl shadow-gray-900/10 p-6" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="font-semibold text-foreground">Add Reminder</h3>
-                  <button onClick={() => setShowAdd(false)} className="text-foreground/30 hover:text-foreground transition-colors"><X className="h-5 w-5" /></button>
+                  <h3 className="font-semibold text-gray-900">Add Reminder</h3>
+                  <button onClick={() => setShowAdd(false)} className="text-gray-400 hover:text-gray-700 transition-colors"><X className="h-5 w-5" /></button>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Title <span className="text-red-400">*</span></label>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Title <span className="text-red-500">*</span></label>
                     <Input placeholder="e.g. Call Rajan to confirm joining" value={newR.title} onChange={(e) => setNewR({ ...newR, title: e.target.value })} />
                   </div>
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Description</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Description</label>
                     <Input placeholder="Additional details..." value={newR.description} onChange={(e) => setNewR({ ...newR, description: e.target.value })} />
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     <div>
-                      <label className="text-sm text-foreground/60 mb-1.5 block">Due Date <span className="text-red-400">*</span></label>
+                      <label className="text-sm font-medium text-gray-600 mb-1.5 block">Due Date <span className="text-red-500">*</span></label>
                       <Input type="datetime-local" value={newR.dueDate} onChange={(e) => setNewR({ ...newR, dueDate: e.target.value })} />
                     </div>
                     <div>
-                      <label className="text-sm text-foreground/60 mb-1.5 block">Priority</label>
-                      <select className="flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-foreground focus:outline-none" value={newR.priority} onChange={(e) => setNewR({ ...newR, priority: e.target.value })}>
-                        <option value="HIGH"   className="bg-[#0a0a12]">High</option>
-                        <option value="MEDIUM" className="bg-[#0a0a12]">Medium</option>
-                        <option value="LOW"    className="bg-[#0a0a12]">Low</option>
+                      <label className="text-sm font-medium text-gray-600 mb-1.5 block">Priority</label>
+                      <select className="flex h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/40" value={newR.priority} onChange={(e) => setNewR({ ...newR, priority: e.target.value })}>
+                        <option value="HIGH">High</option>
+                        <option value="MEDIUM">Medium</option>
+                        <option value="LOW">Low</option>
                       </select>
                     </div>
                   </div>
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Type</label>
-                    <select className="flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-foreground focus:outline-none" value={newR.type} onChange={(e) => setNewR({ ...newR, type: e.target.value })}>
-                      <option value="GENERAL"               className="bg-[#0a0a12]">General</option>
-                      <option value="INTERVIEW_REMINDER"    className="bg-[#0a0a12]">Interview Reminder</option>
-                      <option value="OFFER_PENDING"         className="bg-[#0a0a12]">Offer Pending</option>
-                      <option value="JOINING_DATE"          className="bg-[#0a0a12]">Joining Date</option>
-                      <option value="CANDIDATE_UNRESPONSIVE"className="bg-[#0a0a12]">Candidate Unresponsive</option>
-                      <option value="BACKOUT_RISK"          className="bg-[#0a0a12]">Backout Risk</option>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Type</label>
+                    <select className="flex h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/40" value={newR.type} onChange={(e) => setNewR({ ...newR, type: e.target.value })}>
+                      <option value="GENERAL">General</option>
+                      <option value="INTERVIEW_REMINDER">Interview Reminder</option>
+                      <option value="OFFER_PENDING">Offer Pending</option>
+                      <option value="JOINING_DATE">Joining Date</option>
+                      <option value="CANDIDATE_UNRESPONSIVE">Candidate Unresponsive</option>
+                      <option value="BACKOUT_RISK">Backout Risk</option>
                     </select>
                   </div>
                 </div>

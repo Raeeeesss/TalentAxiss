@@ -9,10 +9,11 @@ import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import {
-  Zap, Eye, EyeOff, Mail, Lock, ArrowRight,
+  Eye, EyeOff, Mail, Lock, ArrowRight,
   CheckCircle2, Shield, Users, TrendingUp, Star,
   AlertTriangle, Brain,
 } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 import { toast } from "sonner";
 
 /* ── Animated counter ─────────────────────────────────────── */
@@ -130,12 +131,8 @@ function BrandPanel() {
         <motion.div
           initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}
           transition={{ duration: .55 }}
-          className="flex items-center gap-2.5"
         >
-          <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-500 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-            <Zap className="h-4.5 w-4.5 text-white" />
-          </div>
-          <span className="text-xl font-extrabold gradient-text">TalentAxiss</span>
+          <Logo size="md" onDark href="/" />
         </motion.div>
 
         {/* Headline */}
@@ -403,12 +400,9 @@ export function LoginForm() {
           className="relative z-10 w-full max-w-md px-6 py-10"
         >
           {/* Mobile logo */}
-          <Link href="/" className="flex lg:hidden items-center gap-2 mb-8 justify-center">
-            <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/25">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
-            <span className="text-xl font-extrabold gradient-text">TalentAxiss</span>
-          </Link>
+          <div className="flex lg:hidden justify-center mb-8">
+            <Logo size="md" onDark={false} href="/" />
+          </div>
 
           {/* Heading */}
           <div className="mb-7">

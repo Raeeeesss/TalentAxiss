@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import Link from "next/link";
-import { Menu, X, Zap, ArrowRight } from "lucide-react";
+import { Menu, X, ArrowRight } from "lucide-react";
+import { Logo } from "@/components/ui/logo";
 
 const navLinks = [
   { label: "Features",     href: "#features"     },
@@ -49,16 +50,7 @@ export function LandingNav() {
           <div className="flex items-center justify-between h-16">
 
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group shrink-0">
-              <motion.div
-                whileHover={{ rotate: 15, scale: 1.1 }}
-                transition={{ duration: .2 }}
-                className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-600 to-purple-700 flex items-center justify-center shadow-lg shadow-indigo-500/30"
-              >
-                <Zap className="h-4 w-4 text-white" />
-              </motion.div>
-              <span className="text-xl font-extrabold gradient-text">TalentAxiss</span>
-            </Link>
+            <Logo href="/" size="md" onDark={false} />
 
             {/* Desktop links */}
             <div className="hidden md:flex items-center gap-7">

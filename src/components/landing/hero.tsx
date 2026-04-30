@@ -22,16 +22,6 @@ import {
   Brain,
   Play,
 } from "lucide-react";
-import { Bebas_Neue, Inter } from "next/font/google";
-
-const bebas = Bebas_Neue({
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const inter = Inter({
-  subsets: ["latin"],
-});
 /* ── Particle Canvas ─────────────────────────────────────── */
 function ParticleCanvas() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -281,12 +271,12 @@ function DashboardMockup() {
                 { v: "34", l: "Active Jobs", c: "from-cyan-500 to-blue-600" },
                 { v: "7", l: "Placed", c: "from-emerald-500 to-teal-500" },
                 { v: "12", l: "Follow-ups", c: "from-amber-500 to-orange-500" },
-              ].map((s) => (
+              ].map((s, i) => (
                 <motion.div
                   key={s.l}
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.9 + Math.random() * 0.3 }}
+                  transition={{ delay: 0.9 + i * 0.08 }}
                   className="bg-white rounded-xl p-2 border border-gray-100 shadow-sm"
                 >
                   <div
@@ -403,7 +393,7 @@ export function HeroSection() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[100svh] flex flex-col items-center justify-start pt-24 pb-0 overflow-hidden hero-mesh"
+      className="relative min-h-svh flex flex-col items-center justify-start pt-24 pb-0 overflow-hidden hero-mesh"
     >
       {/* Particle canvas */}
       <ParticleCanvas />
@@ -596,7 +586,7 @@ export function HeroSection() {
         className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6"
       >
         {/* Glow under mockup */}
-        <div className="absolute -inset-x-10 -bottom-8 h-40 bg-gradient-to-t from-indigo-100/60 via-violet-50/30 to-transparent blur-3xl pointer-events-none" />
+        <div className="absolute -inset-x-10 -bottom-8 h-40 bg-linear-to-t from-indigo-100/60 via-violet-50/30 to-transparent blur-3xl pointer-events-none" />
 
         {/* Floating widget — AI match */}
         <motion.div

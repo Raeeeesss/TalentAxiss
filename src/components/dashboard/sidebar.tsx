@@ -7,9 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import {
   LayoutDashboard, Users, Briefcase, GitBranch, Bell,
-  AlertTriangle, BarChart3, UserCog, Settings, Zap,
+  AlertTriangle, BarChart3, UserCog, Settings,
   ChevronLeft, ChevronRight, LogOut, HelpCircle, CreditCard,
 } from "lucide-react";
+import { Logo, LogoIcon } from "@/components/ui/logo";
 import { signOut } from "next-auth/react";
 
 const navItems = [
@@ -82,20 +83,22 @@ export function DashboardSidebar() {
       >
         {/* Logo */}
         <div className="h-16 flex items-center px-4 border-b border-gray-100 shrink-0">
-          <Link href="/dashboard" className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-xl bg-linear-to-br from-indigo-600 to-purple-700 flex items-center justify-center shrink-0 shadow-md shadow-indigo-500/20">
-              <Zap className="h-4 w-4 text-white" />
-            </div>
+          <Link href="/dashboard" className="flex items-center gap-2 min-w-0 overflow-hidden">
+            {/* Mark — height 26 → width ≈34, fits collapsed sidebar */}
+            <LogoIcon size={26} />
             <AnimatePresence>
               {!collapsed && (
-                <motion.span
+                <motion.div
                   initial={{ opacity: 0, width: 0 }}
                   animate={{ opacity: 1, width: "auto" }}
                   exit={{ opacity: 0, width: 0 }}
-                  className="text-lg font-bold gradient-text overflow-hidden whitespace-nowrap"
+                  className="overflow-hidden whitespace-nowrap"
                 >
-                  TalentAxiss
-                </motion.span>
+                  <span className="font-bold tracking-tight leading-none" style={{ fontSize: "1.05rem", letterSpacing: "-0.03em" }}>
+                    <span style={{ color: "#0f2440" }}>Talent</span>
+                    <span style={{ color: "#c9a84c" }}>Axiss</span>
+                  </span>
+                </motion.div>
               )}
             </AnimatePresence>
           </Link>

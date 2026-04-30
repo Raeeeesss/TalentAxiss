@@ -120,7 +120,7 @@ export default function TeamPage() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}
-              className={`rounded-2xl border border-white/8 bg-white/2 p-4 flex items-center gap-4 ${!m.isActive ? "opacity-50" : ""}`}
+              className={`rounded-2xl border border-gray-100 bg-white p-4 flex items-center gap-4 shadow-sm ${!m.isActive ? "opacity-50" : ""}`}
             >
               {/* Avatar */}
               <div className="w-12 h-12 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shrink-0">
@@ -147,12 +147,12 @@ export default function TeamPage() {
               {/* Stats */}
               <div className="hidden sm:flex items-center gap-4 shrink-0 text-center">
                 <div>
-                  <div className="text-lg font-bold text-white">{m.placements ?? 0}</div>
-                  <div className="text-xs text-foreground/40">Placed</div>
+                  <div className="text-lg font-bold text-gray-900">{m.placements ?? 0}</div>
+                  <div className="text-xs text-gray-400">Placed</div>
                 </div>
                 <div>
-                  <div className="text-lg font-bold text-white">{m.candidateCount ?? 0}</div>
-                  <div className="text-xs text-foreground/40">Candidates</div>
+                  <div className="text-lg font-bold text-gray-900">{m.candidateCount ?? 0}</div>
+                  <div className="text-xs text-gray-400">Candidates</div>
                 </div>
               </div>
 
@@ -177,38 +177,38 @@ export default function TeamPage() {
           <>
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm" onClick={() => setShowInvite(false)} />
             <motion.div initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95, y: 20 }} className="fixed inset-0 z-50 flex items-center justify-center p-4">
-              <div className="w-full max-w-md bg-[#0d0d1a] border border-white/10 rounded-2xl shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
+              <div className="w-full max-w-md bg-white border border-gray-100 rounded-2xl shadow-2xl shadow-gray-900/10 p-6" onClick={(e) => e.stopPropagation()}>
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="font-semibold text-foreground">Invite Team Member</h3>
-                  <button onClick={() => setShowInvite(false)} className="text-foreground/30 hover:text-foreground transition-colors">
+                  <h3 className="font-semibold text-gray-900">Invite Team Member</h3>
+                  <button onClick={() => setShowInvite(false)} className="text-gray-400 hover:text-gray-700 transition-colors">
                     <X className="h-5 w-5" />
                   </button>
                 </div>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Full Name *</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Full Name *</label>
                     <Input placeholder="Recruiter name" value={invite.name} onChange={(e) => setInvite({ ...invite, name: e.target.value })} />
                   </div>
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Email Address *</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Email Address *</label>
                     <Input type="email" placeholder="recruiter@email.com" value={invite.email} onChange={(e) => setInvite({ ...invite, email: e.target.value })} />
                   </div>
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Designation</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Designation</label>
                     <Input placeholder="e.g. Senior Recruiter" value={invite.designation} onChange={(e) => setInvite({ ...invite, designation: e.target.value })} />
                   </div>
                   <div>
-                    <label className="text-sm text-foreground/60 mb-1.5 block">Role</label>
+                    <label className="text-sm font-medium text-gray-600 mb-1.5 block">Role</label>
                     <select
-                      className="flex h-10 w-full rounded-xl border border-white/10 bg-white/5 px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-indigo-500/50"
+                      className="flex h-10 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/40"
                       value={invite.role}
                       onChange={(e) => setInvite({ ...invite, role: e.target.value })}
                     >
-                      <option value="AGENCY_STAFF" className="bg-[#0a0a12]">Recruiter</option>
-                      <option value="AGENCY_OWNER" className="bg-[#0a0a12]">Owner / Admin</option>
+                      <option value="AGENCY_STAFF">Recruiter</option>
+                      <option value="AGENCY_OWNER">Owner / Admin</option>
                     </select>
                   </div>
-                  <p className="text-xs text-foreground/30">
+                  <p className="text-xs text-gray-400">
                     An invitation email with a temporary password will be sent. They can change it after first login.
                   </p>
                 </div>

@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendOtpEmail } from "@/lib/email";
+import { sendOtpSms } from "@/lib/sms";
 
-function generateOtp() {
-  return String(Math.floor(100000 + Math.random() * 900000));
+function generateOtp(): string {
+  return String(Math.floor(100_000 + Math.random() * 900_000));
 }
 
 export async function POST(req: NextRequest) {
   try {
-    const { identifier, type } = await req.json();
+    const { identifier, type } = await req.json() as { identifier: string; type: string };
 
     if (!identifier || !type) {
       return NextResponse.json({ error: "identifier and type required" }, { status: 400 });
@@ -20,12 +22,13 @@ export async function POST(req: NextRequest) {
     await prisma.verificationToken.deleteMany({ where: { identifier: key } });
     await prisma.verificationToken.create({ data: { identifier: key, token: otp, expires } });
 
-    console.log(`[OTP] ${type} → ${identifier} : ${otp}`);
+    if (type === "email") sendOtpEmail(identifier, otp).catch(() => {});
+    if (type === "phone") sendOtpSms(identifier, otp).catch(() => {});
 
-    // Return OTP directly — Supabase/real sending will be enabled after domain setup
     return NextResponse.json({ success: true, otp });
-  } catch (err: any) {
-    console.error("OTP error:", err?.message || err);
-    return NextResponse.json({ error: err?.message || "Failed to generate OTP" }, { status: 500 });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "Failed to send OTP";
+    console.error("OTP send error:", msg);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
