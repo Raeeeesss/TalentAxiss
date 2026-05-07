@@ -13,6 +13,7 @@ const loginSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  trustHost: true,           // lets NextAuth detect the correct URL on Vercel
   session: { strategy: "jwt" },
   pages: {
     signIn: "/auth/login",
