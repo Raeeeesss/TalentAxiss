@@ -1,26 +1,28 @@
 import { LandingNav }         from "@/components/landing/nav";
 import { HeroSection }         from "@/components/landing/hero";
-import { ProblemSection }      from "@/components/landing/problem";
-import { SolutionSection }     from "@/components/landing/solution";
+import { StatsSection }        from "@/components/landing/stats";
+import { SpineSection }        from "@/components/landing/spine";
 import { FeaturesGrid }        from "@/components/landing/features";
-import { AIDemo }              from "@/components/landing/ai-demo";
+import { TimelineSection }     from "@/components/landing/timeline";
 import { PricingSection }      from "@/components/landing/pricing";
 import { TestimonialsSection } from "@/components/landing/testimonials";
 import { FAQSection }          from "@/components/landing/faq";
+import { AIDemo }              from "@/components/landing/ai-demo";
 import { LandingFooter }       from "@/components/landing/footer";
 
 export default function HomePage() {
   return (
-    <main className="min-h-screen bg-white text-gray-900 overflow-x-hidden">
+    <main className="bg-[#050507] text-white overflow-x-hidden">
       <LandingNav />
       <HeroSection />
-      <ProblemSection />
-      <SolutionSection />
+      <StatsSection />
+      <SpineSection />
       <FeaturesGrid />
-      <AIDemo />
-      <PricingSection />
+      <TimelineSection />
       <TestimonialsSection />
+      <PricingSection />
       <FAQSection />
+      <AIDemo />
       <LandingFooter />
     </main>
   );

@@ -1,140 +1,166 @@
 "use client";
 
-import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { Check } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { Check, Zap } from "lucide-react";
 import Link from "next/link";
 
-const plans = [
-  {
-    name:  "Free",
-    price: "₹0",
-    desc:  "Get started. No card required.",
-    trial: "7-day trial of Pro included",
-    cta:   "Start for free",
-    href:  "/auth/register",
-    features: [
-      "Up to 100 candidates",
-      "1 team member",
-      "AI CV parsing",
-      "Basic pipeline",
-      "Follow-up reminders",
-    ],
-    highlight: false,
-  },
-  {
-    name:  "Pro",
-    price: "₹2,999",
-    per:   "/month",
-    desc:  "For growing consultancies.",
-    cta:   "Start free trial",
-    href:  "/auth/register",
-    features: [
-      "Unlimited candidates",
-      "Up to 5 team members",
-      "AI matching & scoring",
-      "Full pipeline & analytics",
-      "Gulf recruitment mode",
-      "Revenue tracking",
-      "Priority support",
-    ],
-    highlight: true,
-  },
-  {
-    name:  "Max",
-    price: "₹7,999",
-    per:   "/month",
-    desc:  "For large agencies & chains.",
-    cta:   "Contact us",
-    href:  "mailto:hello@talentaxiss.in",
-    features: [
-      "Everything in Pro",
-      "Unlimited team members",
-      "Custom branding",
-      "Backout risk AI",
-      "Dedicated onboarding",
-      "API access",
-      "SLA guarantee",
-    ],
-    highlight: false,
-  },
+const features = [
+  "Unlimited candidates & CVs",
+  "AI matching & scoring engine",
+  "Full pipeline tracking",
+  "Gulf recruitment mode",
+  "Follow-up reminders",
+  "Team management (5 users)",
+  "Revenue & analytics dashboard",
+  "Backout risk scoring",
+  "Priority email support",
 ];
 
 export function PricingSection() {
   const ref    = useRef(null);
-  const inView = useInView(ref, { once: true, margin: "-60px" });
+  const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section id="pricing" ref={ref} className="bg-white py-24 border-t border-gray-100">
+    <section id="pricing" ref={ref} className="bg-[#080809] py-24">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
         <motion.div
-          initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, ease: "easeOut" }}
-          className="mb-14"
+          initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.6 }}
+          className="text-center mb-16"
         >
-          <p className="text-[12px] font-semibold text-amber-500 uppercase tracking-widest mb-3">Pricing</p>
-          <h2 className="text-[38px] sm:text-[48px] font-extrabold text-gray-950 tracking-tight leading-[1.08]">
-            Simple, honest pricing.
+          <p className="text-[11px] font-semibold text-amber-400 uppercase tracking-[0.2em] mb-4">Pricing</p>
+          <h2 className="text-[40px] sm:text-[54px] font-black text-white leading-[1.0] tracking-[-0.03em]">
+            Simple. No surprises.
           </h2>
-          <p className="mt-3 text-[16px] text-gray-500 max-w-md">
-            Start free. Upgrade when you need more. Cancel any time.
+          <p className="mt-4 text-[16px] text-white/35">
+            Start free. Upgrade when you need it. Cancel any time.
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-3 gap-4">
-          {plans.map((plan, i) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 14 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.08 }}
-              className={`rounded-2xl p-7 flex flex-col ${
-                plan.highlight
-                  ? "bg-gray-950 border border-gray-800"
-                  : "bg-white border border-gray-150 hover:border-gray-200"
-              } transition-colors`}
-            >
-              <div className="mb-6">
-                <div className={`text-[12px] font-semibold uppercase tracking-widest mb-1 ${plan.highlight ? "text-amber-400" : "text-gray-400"}`}>
-                  {plan.name}
-                </div>
-                <div className="flex items-baseline gap-1">
-                  <span className={`text-[36px] font-extrabold tracking-tight ${plan.highlight ? "text-white" : "text-gray-950"}`}>
-                    {plan.price}
-                  </span>
-                  {plan.per && (
-                    <span className={`text-[14px] font-medium ${plan.highlight ? "text-white/40" : "text-gray-400"}`}>{plan.per}</span>
-                  )}
-                </div>
-                <p className={`text-[13px] mt-1 ${plan.highlight ? "text-white/40" : "text-gray-400"}`}>{plan.desc}</p>
-                {plan.trial && (
-                  <div className="mt-2 inline-block bg-amber-400/15 text-amber-600 text-[11px] font-semibold px-2.5 py-1 rounded-full">
-                    {plan.trial}
-                  </div>
-                )}
+        {/* Three tiers — highlight on Pro */}
+        <div className="grid sm:grid-cols-3 gap-4 items-start">
+
+          {/* Free */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.1 }}
+            className="rounded-2xl border border-white/[0.07] p-7"
+            style={{ background: "rgba(255,255,255,0.02)" }}
+          >
+            <div className="text-[11px] font-semibold text-white/30 uppercase tracking-widest mb-4">Free</div>
+            <div className="text-[38px] font-black text-white mb-1">₹0</div>
+            <div className="text-[13px] text-white/30 mb-6">Forever free, 100 candidates</div>
+            {["100 candidates","1 team member","Basic pipeline","AI CV parsing"].map(f => (
+              <div key={f} className="flex items-center gap-2.5 mb-3 text-[13px] text-white/40">
+                <Check className="h-3.5 w-3.5 text-white/20 shrink-0" />{f}
               </div>
+            ))}
+            <Link href="/auth/register">
+              <button className="w-full h-11 rounded-xl border border-white/10 text-[13px] font-semibold text-white/50 hover:border-white/20 hover:text-white/70 transition-all mt-4">
+                Get started
+              </button>
+            </Link>
+          </motion.div>
 
-              <ul className="space-y-3 flex-1 mb-8">
-                {plan.features.map(f => (
-                  <li key={f} className="flex items-center gap-2.5 text-[13px]">
-                    <Check className={`h-4 w-4 shrink-0 ${plan.highlight ? "text-emerald-400" : "text-emerald-500"}`} />
-                    <span className={plan.highlight ? "text-white/70" : "text-gray-600"}>{f}</span>
-                  </li>
+          {/* Pro — LIQUID GLASS CARD */}
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.97 }} animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
+            transition={{ delay: 0.18 }}
+            whileHover={{ y: -6 }}
+            className="relative rounded-2xl overflow-hidden"
+            style={{ zIndex: 1 }}
+          >
+            {/* Gradient glow behind */}
+            <div className="absolute -inset-px rounded-2xl"
+              style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6,#f59e0b)", zIndex: -1 }}
+            />
+
+            {/* Liquid glass surface */}
+            <div className="relative m-px rounded-2xl overflow-hidden"
+              style={{
+                background: "linear-gradient(135deg,rgba(30,27,60,0.97) 0%,rgba(20,18,45,0.97) 100%)",
+                backdropFilter: "blur(40px) saturate(200%)",
+              }}
+            >
+              {/* Noise shimmer overlay */}
+              <div className="absolute inset-0 pointer-events-none opacity-[0.03]"
+                style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+                }}
+              />
+
+              {/* Gradient blob top */}
+              <div className="absolute top-0 right-0 w-48 h-48 pointer-events-none"
+                style={{ background: "radial-gradient(circle,rgba(99,102,241,0.15) 0%,transparent 70%)" }}
+              />
+
+              <div className="relative p-7">
+                <div className="flex items-center justify-between mb-4">
+                  <div className="text-[11px] font-semibold text-amber-400 uppercase tracking-widest">Pro</div>
+                  <div className="flex items-center gap-1.5 bg-amber-400/10 border border-amber-400/20 rounded-full px-3 py-1">
+                    <Zap className="h-3 w-3 text-amber-400" />
+                    <span className="text-[10px] font-bold text-amber-400">Most Popular</span>
+                  </div>
+                </div>
+
+                <div className="flex items-baseline gap-1.5 mb-1">
+                  <span className="text-[42px] font-black text-white leading-none">₹2,999</span>
+                  <span className="text-[14px] text-white/35">/month</span>
+                </div>
+                <div className="text-[13px] text-white/35 mb-7">Includes 7-day free trial</div>
+
+                {features.map(f => (
+                  <div key={f} className="flex items-center gap-3 mb-3.5">
+                    <div className="w-4 h-4 rounded-full bg-emerald-400/20 flex items-center justify-center shrink-0">
+                      <Check className="h-2.5 w-2.5 text-emerald-400" />
+                    </div>
+                    <span className="text-[13px] text-white/60">{f}</span>
+                  </div>
                 ))}
-              </ul>
 
-              <Link href={plan.href}>
-                <button className={`w-full h-11 rounded-xl text-[14px] font-semibold transition-colors ${
-                  plan.highlight
-                    ? "bg-white text-gray-950 hover:bg-white/90"
-                    : "bg-gray-950 text-white hover:bg-gray-800"
-                }`}>
-                  {plan.cta}
-                </button>
-              </Link>
-            </motion.div>
-          ))}
+                <Link href="/auth/register">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                    className="relative w-full h-12 rounded-xl font-bold text-[14px] mt-4 overflow-hidden"
+                    style={{ background: "linear-gradient(135deg,#6366f1,#8b5cf6)", color: "#fff" }}
+                  >
+                    <motion.span
+                      className="absolute inset-0"
+                      style={{ background: "linear-gradient(135deg,#f59e0b,#fbbf24)" }}
+                      initial={{ x: "-100%" }}
+                      whileHover={{ x: "0%" }}
+                      transition={{ duration: 0.4 }}
+                    />
+                    <span className="relative">Start free trial</span>
+                  </motion.button>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Max */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ delay: 0.26 }}
+            className="rounded-2xl border border-white/[0.07] p-7"
+            style={{ background: "rgba(255,255,255,0.02)" }}
+          >
+            <div className="text-[11px] font-semibold text-white/30 uppercase tracking-widest mb-4">Max</div>
+            <div className="text-[38px] font-black text-white mb-1">₹7,999</div>
+            <div className="text-[13px] text-white/30 mb-6">For large agency chains</div>
+            {["Everything in Pro","Unlimited team","Custom branding","API access","SLA guarantee","Dedicated onboarding"].map(f => (
+              <div key={f} className="flex items-center gap-2.5 mb-3 text-[13px] text-white/40">
+                <Check className="h-3.5 w-3.5 text-white/20 shrink-0" />{f}
+              </div>
+            ))}
+            <a href="mailto:hello@talentaxiss.in">
+              <button className="w-full h-11 rounded-xl border border-white/10 text-[13px] font-semibold text-white/50 hover:border-white/20 hover:text-white/70 transition-all mt-4">
+                Contact us
+              </button>
+            </a>
+          </motion.div>
         </div>
       </div>
     </section>
