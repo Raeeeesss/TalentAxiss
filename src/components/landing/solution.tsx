@@ -2,113 +2,61 @@
 
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
-import { CheckCircle2, Zap, Brain, Shield, BarChart3, Users } from "lucide-react";
 
-const solutions = [
+const steps = [
   {
-    icon: Brain,
-    title: "AI Resume Parsing",
-    desc: "Upload hundreds of CVs at once. AI instantly extracts every detail — skills, experience, contacts, Gulf history — into structured profiles.",
-    gradient: "from-indigo-500 to-purple-600",
-    bg: "bg-indigo-50",
-    points: ["Bulk PDF/DOCX upload", "OCR for scanned CVs", "Auto-fills 20+ fields", "Gulf-specific extraction"],
+    n:     "01",
+    title: "Add your candidates",
+    body:  "Upload a CV and AI fills the profile automatically — name, skills, experience, Gulf history, preferred roles. Or add manually in 60 seconds.",
   },
   {
-    icon: Zap,
-    title: "Smart Candidate Matching",
-    desc: "Post a job opening and AI instantly ranks your entire candidate database — Best Fit, Good Fit, Trainable Fit — in seconds.",
-    gradient: "from-cyan-500 to-blue-600",
-    bg: "bg-cyan-50",
-    points: ["AI scoring 0-100%", "Skill gap analysis", "Salary match check", "Location filtering"],
+    n:     "02",
+    title: "Post a job, run AI matching",
+    body:  "Add a job requirement and hit Match. The engine ranks your entire candidate pool and shows you the best fits with a score and reasoning.",
   },
   {
-    icon: Shield,
-    title: "Fake Profile Detection",
-    desc: "AI flags suspicious profiles, inflated experience, and inconsistencies before you waste time on fraud candidates.",
-    gradient: "from-rose-500 to-pink-600",
-    bg: "bg-rose-50",
-    points: ["Risk score on every profile", "Experience verification", "Duplicate detection", "Blacklist system"],
+    n:     "03",
+    title: "Move them through your pipeline",
+    body:  "Drag candidates from Applied to Interview to Offer to Joined. Every stage is timestamped. Your whole team sees the same picture.",
   },
   {
-    icon: BarChart3,
-    title: "Real-Time Analytics",
-    desc: "See exactly which recruiters perform best, which job categories have highest placement rate, and your monthly revenue — all live.",
-    gradient: "from-amber-500 to-orange-600",
-    bg: "bg-amber-50",
-    points: ["Revenue dashboard", "Staff performance", "Placement ratio", "Dropout analysis"],
-  },
-  {
-    icon: Users,
-    title: "Pipeline CRM",
-    desc: "Drag-drop Kanban board tracks every candidate from Applied → Joined. Never lose track of where anyone stands.",
-    gradient: "from-emerald-500 to-teal-600",
-    bg: "bg-emerald-50",
-    points: ["7-stage kanban board", "Auto-reminders", "One-click shortlist", "PDF profile export"],
+    n:     "04",
+    title: "Track placements and revenue",
+    body:  "When a candidate joins, log the placement fee. Revenue, success rate, and team performance update in your analytics dashboard automatically.",
   },
 ];
 
 export function SolutionSection() {
-  const ref    = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section id="solution" ref={ref} className="py-28 px-4 relative bg-gray-50/60">
-      <div className="absolute top-0 inset-x-0 h-px mesh-divider" />
-      <div className="absolute bottom-0 inset-x-0 h-px mesh-divider" />
+    <section id="solution" ref={ref} className="bg-white py-24 border-t border-gray-100">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
-      {/* Ambient glow */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-175 h-87.5 bg-indigo-100/60 blur-[120px] rounded-full pointer-events-none" />
-
-      <div className="relative z-10 max-w-7xl mx-auto">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mb-14"
         >
-          <div className="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 rounded-full px-4 py-1.5 mb-6">
-            <CheckCircle2 className="h-3.5 w-3.5 text-emerald-600" />
-            <span className="text-xs text-emerald-600 font-semibold">The TalentAxiss Solution</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-950 mb-4">
-            Everything Your Agency Needs,
-            <br />
-            <span className="gradient-text">Built for Kerala</span>
+          <p className="text-[12px] font-semibold text-amber-500 uppercase tracking-widest mb-3">How it works</p>
+          <h2 className="text-[38px] sm:text-[48px] font-extrabold text-gray-950 tracking-tight leading-[1.08] max-w-lg">
+            Running your agency is simple now.
           </h2>
-          <p className="text-gray-500 text-lg max-w-2xl mx-auto">
-            We built TalentAxiss after talking to 50+ Kerala recruiters.
-            Every feature solves a real pain you face daily.
-          </p>
         </motion.div>
 
-        <div className="space-y-4">
-          {solutions.map((s, i) => (
+        <div className="grid sm:grid-cols-2 gap-4">
+          {steps.map((s, i) => (
             <motion.div
-              key={s.title}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -30 : 30 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.1, ease: [.22, 1, .36, 1] }}
-              whileHover={{ y: -2, transition: { duration: 0.2 } }}
-              className="flex flex-col lg:flex-row items-start lg:items-center gap-6 glass-card p-6 lg:p-8"
+              key={s.n}
+              initial={{ opacity: 0, y: 12 }}
+              animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.4, ease: "easeOut", delay: i * 0.08 }}
+              className="border border-gray-100 rounded-2xl p-7 hover:border-gray-200 hover:bg-gray-50/50 transition-all"
             >
-              <div className={`shrink-0 w-14 h-14 rounded-2xl bg-linear-to-br ${s.gradient} flex items-center justify-center shadow-lg`}>
-                <s.icon className="h-7 w-7 text-white" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{s.title}</h3>
-                <p className="text-gray-500 mb-4 leading-relaxed">{s.desc}</p>
-                <div className="flex flex-wrap gap-2">
-                  {s.points.map((pt) => (
-                    <span
-                      key={pt}
-                      className="inline-flex items-center gap-1.5 text-xs bg-white border border-gray-200 rounded-full px-3 py-1 text-gray-600 shadow-sm"
-                    >
-                      <CheckCircle2 className="h-3 w-3 text-emerald-500" />
-                      {pt}
-                    </span>
-                  ))}
-                </div>
-              </div>
+              <div className="text-[11px] font-black text-gray-300 tracking-widest mb-4">{s.n}</div>
+              <h3 className="text-[18px] font-bold text-gray-950 tracking-tight mb-2">{s.title}</h3>
+              <p className="text-[14px] text-gray-500 leading-relaxed">{s.body}</p>
             </motion.div>
           ))}
         </div>

@@ -2,78 +2,93 @@
 
 import { useState, useRef } from "react";
 import { motion, AnimatePresence, useInView } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const faqs = [
-  { q: "How does the 7-day free trial work?",       a: "Sign up, no credit card needed. You get full access to all Free plan features for 7 days. After the trial, you can upgrade to Pro or Max, or continue with the free tier (limited features)." },
-  { q: "Can I import my existing candidate database?", a: "Yes! TalentAxiss supports CSV import for Excel/Google Sheets databases. Our system automatically maps columns and detects duplicates. Most agencies import their entire database in under 30 minutes." },
-  { q: "How accurate is the AI CV parsing?",         a: "Our AI achieves 95%+ accuracy on standard CVs. It supports PDF, DOCX, and scanned images (via OCR). It can extract Gulf-specific fields like passport details, visa status, and Gulf experience." },
-  { q: "Is my data secure?",                         a: "Absolutely. All data is encrypted at rest and in transit. We use enterprise-grade security with role-based access control, audit logs, and regular security audits. Your data is hosted on isolated infrastructure." },
-  { q: "Can multiple staff members use TalentAxiss?", a: "Pro plan supports up to 5 team members. Max plan is unlimited. You can set granular permissions for each staff member — what they can view, edit, or delete." },
-  { q: "Does it work for Gulf recruitment?",         a: "Yes! TalentAxiss has a dedicated Gulf Recruitment Mode that tracks passport numbers, expiry dates, visa status, Gulf experience by country, and medical fitness. Perfect for Kerala-to-Gulf placement agencies." },
-  { q: "What payment methods are accepted?",         a: "We accept all major credit/debit cards, UPI (PhonePe, GPay, Paytm), net banking, and EMI options through Razorpay. GST invoice provided for all payments." },
-  { q: "Can I cancel anytime?",                      a: "Yes, cancel anytime with no questions asked. Your data remains accessible for 30 days after cancellation for export. We offer a 7-day money-back guarantee on all paid plans." },
+  {
+    q: "Is TalentAxiss only for Kerala agencies?",
+    a: "It's built specifically for Kerala's recruitment market — Gulf placements, Kerala districts, Malayalam naming conventions, and local job categories are all first-class. That said, any Indian placement consultancy can use it.",
+  },
+  {
+    q: "What happens after the 7-day free trial?",
+    a: "You can continue on the Free plan (up to 100 candidates, 1 user) with no time limit. If you want unlimited candidates or more team members, upgrade to Pro at ₹2,999/month.",
+  },
+  {
+    q: "Can I import my existing candidate data?",
+    a: "Yes. You can upload CVs and our AI parser extracts candidate details automatically. For bulk imports, our onboarding team can assist with CSV migration.",
+  },
+  {
+    q: "How does the AI matching work?",
+    a: "You provide a job description. The engine scores every active candidate in your database against it — evaluating skills, experience, Gulf history, location, and availability. You get a ranked shortlist in seconds.",
+  },
+  {
+    q: "Is my data safe?",
+    a: "All data is encrypted in transit and at rest. We use Neon PostgreSQL with automated backups. Your candidate data belongs to you and is never shared or used to train any model.",
+  },
+  {
+    q: "Can multiple staff members use it?",
+    a: "Pro allows up to 5 team members. Max removes the limit. You can assign candidates to specific recruiters and track team performance separately.",
+  },
+  {
+    q: "Do you offer onboarding help?",
+    a: "All Max plan users get dedicated onboarding. Pro users get access to our documentation and email support. We typically respond within 24 hours.",
+  },
 ];
 
+function FAQItem({ q, a }: { q: string; a: string }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-b border-gray-100 last:border-0">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between py-5 text-left gap-4 group"
+      >
+        <span className="text-[15px] font-semibold text-gray-900 group-hover:text-gray-700 transition-colors">{q}</span>
+        <div className={`w-6 h-6 rounded-full border border-gray-200 flex items-center justify-center shrink-0 transition-all ${open ? "bg-gray-950 border-gray-950" : "group-hover:border-gray-400"}`}>
+          <Plus className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-45 text-white" : "text-gray-500"}`} />
+        </div>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <p className="text-[14px] text-gray-500 leading-relaxed pb-5">{a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 export function FAQSection() {
-  const ref    = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [open, setOpen] = useState<number | null>(0);
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section id="faq" ref={ref} className="py-28 px-4 relative bg-gray-50/60">
-      <div className="absolute top-0 inset-x-0 h-px mesh-divider" />
-
-      <div className="relative z-10 max-w-3xl mx-auto">
+    <section id="faq" ref={ref} className="bg-white py-24 border-t border-gray-100">
+      <div className="max-w-3xl mx-auto px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          className="text-center mb-12"
+          initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mb-12"
         >
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-950 mb-4">
-            Frequently Asked
-            <br />
-            <span className="gradient-text">Questions</span>
+          <p className="text-[12px] font-semibold text-amber-500 uppercase tracking-widest mb-3">FAQ</p>
+          <h2 className="text-[38px] sm:text-[48px] font-extrabold text-gray-950 tracking-tight leading-[1.08]">
+            Common questions.
           </h2>
-          <p className="text-gray-500 text-lg">Everything you need to know before signing up.</p>
         </motion.div>
 
-        <div className="space-y-2">
-          {faqs.map((faq, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 16 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * 0.06, ease: [.22, 1, .36, 1] }}
-              className="rounded-2xl border border-gray-200 bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow"
-            >
-              <button
-                className="w-full flex items-center justify-between p-5 text-left"
-                onClick={() => setOpen(open === i ? null : i)}
-              >
-                <span className="font-medium text-gray-900 pr-4">{faq.q}</span>
-                <ChevronDown
-                  className={`h-5 w-5 text-gray-400 shrink-0 transition-transform duration-200 ${open === i ? "rotate-180 text-indigo-600" : ""}`}
-                />
-              </button>
-              <AnimatePresence>
-                {open === i && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-5 pb-5 text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-4">
-                      {faq.a}
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </div>
+        <motion.div
+          initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.4, ease: "easeOut", delay: 0.12 }}
+        >
+          {faqs.map(f => <FAQItem key={f.q} {...f} />)}
+        </motion.div>
       </div>
     </section>
   );

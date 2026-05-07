@@ -1,226 +1,141 @@
 "use client";
 
-import { useState, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Check, Zap, Crown, Star } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { useRef } from "react";
+import { Check } from "lucide-react";
 import Link from "next/link";
-import { formatCurrency } from "@/lib/utils";
 
 const plans = [
   {
-    name: "Free Trial",
-    icon: Star,
-    price: 0,
-    period: "7 days",
-    badge: null,
-    description: "Try TalentAxiss risk-free. No credit card needed.",
-    cardClass: "bg-white border-gray-200",
-    iconClass: "bg-gray-100 text-gray-600",
-    featured: false,
+    name:  "Free",
+    price: "₹0",
+    desc:  "Get started. No card required.",
+    trial: "7-day trial of Pro included",
+    cta:   "Start for free",
+    href:  "/auth/register",
     features: [
       "Up to 100 candidates",
-      "AI CV parsing (10/day)",
-      "Basic candidate search",
       "1 team member",
-      "Job openings (up to 5)",
-      "Pipeline tracking",
-      "Email support",
+      "AI CV parsing",
+      "Basic pipeline",
+      "Follow-up reminders",
     ],
-    excluded: ["AI matching engine", "Advanced analytics", "Bulk export", "Priority support"],
-    cta: "Start Free Trial",
-    ctaClass: "bg-gray-100 text-gray-800 hover:bg-gray-200 border border-gray-200",
+    highlight: false,
   },
   {
-    name: "Pro",
-    icon: Zap,
-    price: 2999,
-    period: "per month",
-    badge: "Most Popular",
-    description: "For growing agencies ready to scale with AI.",
-    cardClass: "bg-gray-950 border-gray-900 text-white",
-    iconClass: "bg-indigo-500 text-white",
-    featured: true,
+    name:  "Pro",
+    price: "₹2,999",
+    per:   "/month",
+    desc:  "For growing consultancies.",
+    cta:   "Start free trial",
+    href:  "/auth/register",
     features: [
       "Unlimited candidates",
-      "Unlimited AI CV parsing",
-      "AI matching engine",
       "Up to 5 team members",
-      "Unlimited job openings",
-      "Advanced analytics & reports",
-      "Backout risk detection",
-      "Follow-up automation",
-      "Bulk CV upload",
-      "PDF profile export",
-      "CSV import",
-      "Priority email support",
+      "AI matching & scoring",
+      "Full pipeline & analytics",
+      "Gulf recruitment mode",
+      "Revenue tracking",
+      "Priority support",
     ],
-    excluded: ["White-label branding", "API access", "Dedicated manager"],
-    cta: "Start Pro Plan",
-    ctaClass: "bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/30",
+    highlight: true,
   },
   {
-    name: "Max",
-    icon: Crown,
-    price: 7999,
-    period: "per month",
-    badge: "Full Power",
-    description: "Complete automation for serious agencies.",
-    cardClass: "bg-white border-amber-200",
-    iconClass: "bg-amber-100 text-amber-600",
-    featured: false,
+    name:  "Max",
+    price: "₹7,999",
+    per:   "/month",
+    desc:  "For large agencies & chains.",
+    cta:   "Contact us",
+    href:  "mailto:hello@talentaxiss.in",
     features: [
       "Everything in Pro",
       "Unlimited team members",
-      "White-label branding",
-      "API integrations",
-      "Advanced AI automation",
-      "Custom invoice templates",
-      "WhatsApp import",
-      "Dedicated account manager",
-      "SLA support (4hr response)",
-      "Data export (all formats)",
-      "Custom domain",
-      "Gulf recruitment suite",
+      "Custom branding",
+      "Backout risk AI",
+      "Dedicated onboarding",
+      "API access",
+      "SLA guarantee",
     ],
-    excluded: [],
-    cta: "Get Max Plan",
-    ctaClass: "bg-amber-500 hover:bg-amber-400 text-white shadow-lg shadow-amber-500/25",
+    highlight: false,
   },
 ];
 
 export function PricingSection() {
-  const ref    = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-  const [annual, setAnnual] = useState(false);
+  const ref    = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section id="pricing" ref={ref} className="py-28 px-4 relative bg-white">
-      <div className="absolute top-0 inset-x-0 h-px mesh-divider" />
+    <section id="pricing" ref={ref} className="bg-white py-24 border-t border-gray-100">
+      <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
-      <div className="max-w-6xl mx-auto">
-
-        {/* Header */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: .6 }}
-          className="text-center mb-12"
+          initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+          className="mb-14"
         >
-          <div className="inline-flex items-center gap-2 bg-indigo-50 border border-indigo-100 rounded-full px-4 py-1.5 mb-6">
-            <span className="text-xs text-indigo-600 font-semibold">Simple Pricing</span>
-          </div>
-          <h2 className="text-4xl sm:text-5xl font-bold text-gray-950 mb-4">
-            Invest in Growth,
-            <br />
-            <span className="gradient-text">Not Overhead</span>
+          <p className="text-[12px] font-semibold text-amber-500 uppercase tracking-widest mb-3">Pricing</p>
+          <h2 className="text-[38px] sm:text-[48px] font-extrabold text-gray-950 tracking-tight leading-[1.08]">
+            Simple, honest pricing.
           </h2>
-          <p className="text-gray-500 text-lg max-w-xl mx-auto mb-8">
-            One placement fee covers months of TalentAxiss Pro. The ROI is instant.
+          <p className="mt-3 text-[16px] text-gray-500 max-w-md">
+            Start free. Upgrade when you need more. Cancel any time.
           </p>
-
-          {/* Toggle */}
-          <div className="inline-flex items-center gap-1 bg-gray-100 border border-gray-200 rounded-full p-1">
-            <button
-              onClick={() => setAnnual(false)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all ${
-                !annual ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setAnnual(true)}
-              className={`px-4 py-1.5 rounded-full text-sm font-medium transition-all flex items-center gap-2 ${
-                annual ? "bg-white text-gray-900 shadow-sm" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Annual
-              <span className="text-[10px] bg-emerald-500 text-white px-1.5 py-0.5 rounded-full font-bold">-20%</span>
-            </button>
-          </div>
         </motion.div>
 
-        {/* Plans */}
-        <div className="grid lg:grid-cols-3 gap-6 items-start">
+        <div className="grid sm:grid-cols-3 gap-4">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 14 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: i * .12, duration: .6, ease: [.22, 1, .36, 1] }}
-              className={`relative rounded-2xl border p-6 flex flex-col ${plan.cardClass} ${
-                plan.featured ? "lg:-mt-4 lg:pb-10 shadow-2xl shadow-gray-900/20" : "shadow-sm"
-              } transition-shadow hover:shadow-xl`}
+              transition={{ duration: 0.45, ease: "easeOut", delay: i * 0.08 }}
+              className={`rounded-2xl p-7 flex flex-col ${
+                plan.highlight
+                  ? "bg-gray-950 border border-gray-800"
+                  : "bg-white border border-gray-150 hover:border-gray-200"
+              } transition-colors`}
             >
-              {plan.badge && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                    plan.featured ? "bg-indigo-600 text-white" : "bg-amber-500 text-white"
-                  }`}>
-                    {plan.badge}
-                  </span>
-                </div>
-              )}
-
-              {/* Plan header */}
-              <div className="flex items-center gap-3 mb-5">
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${plan.iconClass}`}>
-                  <plan.icon className="h-5 w-5" />
-                </div>
-                <div>
-                  <div className={`font-bold ${plan.featured ? "text-white" : "text-gray-900"}`}>{plan.name}</div>
-                  <div className={`text-xs ${plan.featured ? "text-gray-400" : "text-gray-400"}`}>{plan.description}</div>
-                </div>
-              </div>
-
-              {/* Price */}
               <div className="mb-6">
-                {plan.price === 0 ? (
-                  <div className={`text-4xl font-bold ${plan.featured ? "text-white" : "text-gray-900"}`}>Free</div>
-                ) : (
-                  <div className="flex items-baseline gap-1">
-                    <span className={`text-4xl font-bold ${plan.featured ? "text-white" : "text-gray-900"}`}>
-                      {formatCurrency(annual ? Math.round(plan.price * .8) : plan.price)}
-                    </span>
-                    <span className={`text-sm ${plan.featured ? "text-gray-400" : "text-gray-400"}`}>/{plan.period}</span>
-                  </div>
-                )}
-                {annual && plan.price > 0 && (
-                  <div className="text-xs text-emerald-500 mt-1 font-medium">
-                    Save {formatCurrency(plan.price * .2 * 12)} per year
+                <div className={`text-[12px] font-semibold uppercase tracking-widest mb-1 ${plan.highlight ? "text-amber-400" : "text-gray-400"}`}>
+                  {plan.name}
+                </div>
+                <div className="flex items-baseline gap-1">
+                  <span className={`text-[36px] font-extrabold tracking-tight ${plan.highlight ? "text-white" : "text-gray-950"}`}>
+                    {plan.price}
+                  </span>
+                  {plan.per && (
+                    <span className={`text-[14px] font-medium ${plan.highlight ? "text-white/40" : "text-gray-400"}`}>{plan.per}</span>
+                  )}
+                </div>
+                <p className={`text-[13px] mt-1 ${plan.highlight ? "text-white/40" : "text-gray-400"}`}>{plan.desc}</p>
+                {plan.trial && (
+                  <div className="mt-2 inline-block bg-amber-400/15 text-amber-600 text-[11px] font-semibold px-2.5 py-1 rounded-full">
+                    {plan.trial}
                   </div>
                 )}
               </div>
 
-              {/* Features */}
-              <ul className="space-y-2.5 flex-1 mb-6">
-                {plan.features.map((f) => (
-                  <li key={f} className={`flex items-center gap-2.5 text-sm ${plan.featured ? "text-gray-300" : "text-gray-600"}`}>
-                    <Check className="h-4 w-4 text-emerald-500 shrink-0" />
-                    {f}
+              <ul className="space-y-3 flex-1 mb-8">
+                {plan.features.map(f => (
+                  <li key={f} className="flex items-center gap-2.5 text-[13px]">
+                    <Check className={`h-4 w-4 shrink-0 ${plan.highlight ? "text-emerald-400" : "text-emerald-500"}`} />
+                    <span className={plan.highlight ? "text-white/70" : "text-gray-600"}>{f}</span>
                   </li>
                 ))}
               </ul>
 
-              {/* CTA */}
-              <Link href="/auth/register">
-                <button className={`w-full py-3 px-6 rounded-xl text-sm font-semibold transition-all ${plan.ctaClass}`}>
+              <Link href={plan.href}>
+                <button className={`w-full h-11 rounded-xl text-[14px] font-semibold transition-colors ${
+                  plan.highlight
+                    ? "bg-white text-gray-950 hover:bg-white/90"
+                    : "bg-gray-950 text-white hover:bg-gray-800"
+                }`}>
                   {plan.cta}
                 </button>
               </Link>
             </motion.div>
           ))}
         </div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={inView ? { opacity: 1 } : {}}
-          transition={{ delay: .5 }}
-          className="text-center text-sm text-gray-400 mt-8"
-        >
-          All prices include GST · Cancel anytime · 7-day money back guarantee
-        </motion.p>
       </div>
     </section>
   );
