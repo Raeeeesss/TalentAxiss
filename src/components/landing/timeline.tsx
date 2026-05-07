@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 
 const steps = [
@@ -15,6 +15,13 @@ export function TimelineSection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const [active, setActive] = useState(0);
+
+  // Auto-advance steps every 3 seconds once in view
+  useEffect(() => {
+    if (!inView) return;
+    const iv = setInterval(() => setActive(a => (a + 1) % steps.length), 3000);
+    return () => clearInterval(iv);
+  }, [inView]);
 
   return (
     <section ref={ref} className="bg-white py-24 overflow-hidden border-b border-slate-100">
@@ -100,7 +107,7 @@ export function TimelineSection() {
           <div className="flex-1 min-w-0">
             {steps.map((step, i) => (
               <motion.button key={step.n}
-                className={`w-full text-left mb-3 rounded-2xl border px-6 py-5 transition-all duration-300 ${
+                className={`relative w-full text-left mb-3 rounded-2xl border px-6 py-5 overflow-hidden transition-all duration-300 ${
                   active === i
                     ? "border-blue-200 bg-blue-50 shadow-sm"
                     : "border-slate-100 bg-white hover:border-blue-100"
@@ -110,6 +117,16 @@ export function TimelineSection() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={inView ? { opacity: 1, x: 0 } : {}}
                 transition={{ delay: 0.4 + i * 0.1 }}>
+                {/* Progress fill bar */}
+                {active === i && (
+                  <motion.span
+                    className="absolute bottom-0 left-0 h-[2px] bg-blue-500 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 3, ease: "linear" }}
+                    key={active}
+                  />
+                )}
                 <div className="flex items-center gap-4">
                   <span className={`text-[11px] font-black tabular-nums transition-colors ${active === i ? "text-blue-600" : "text-slate-300"}`}>
                     {String(step.n).padStart(2, "0")}
