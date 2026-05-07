@@ -19,8 +19,15 @@ export function TestimonialsSection() {
   const [active, setActive] = useState(0);
   const [angle,  setAngle]  = useState(0);
 
+  // Rotate the ring
   useEffect(() => {
     const iv = setInterval(() => setAngle(a => a + 0.3), 30);
+    return () => clearInterval(iv);
+  }, []);
+
+  // Auto-advance active quote every 4 seconds
+  useEffect(() => {
+    const iv = setInterval(() => setActive(a => (a + 1) % quotes.length), 4000);
     return () => clearInterval(iv);
   }, []);
 
@@ -122,9 +129,20 @@ export function TestimonialsSection() {
                 <div className="flex items-center gap-2">
                   {quotes.map((q, i) => (
                     <button key={i} onClick={() => setActive(i)}
-                      className="h-1.5 rounded-full transition-all duration-300"
-                      style={{ width: active === i ? 24 : 6, background: active === i ? q.color : "#cbd5e1" }}
-                    />
+                      className="h-1.5 rounded-full transition-all duration-300 overflow-hidden relative"
+                      style={{ width: active === i ? 64 : 6, background: active === i ? "#e2e8f0" : "#cbd5e1" }}
+                    >
+                      {active === i && (
+                        <motion.span
+                          className="absolute inset-y-0 left-0 rounded-full"
+                          style={{ background: q.color }}
+                          initial={{ width: "0%" }}
+                          animate={{ width: "100%" }}
+                          transition={{ duration: 4, ease: "linear" }}
+                          key={active}
+                        />
+                      )}
+                    </button>
                   ))}
                 </div>
               </motion.div>
