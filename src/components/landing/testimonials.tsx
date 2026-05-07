@@ -65,8 +65,8 @@ export function TestimonialsSection() {
             {quotes.map((q, i) => {
               const baseAngle = (i / quotes.length) * 360;
               const rad = ((baseAngle + angle) * Math.PI) / 180;
-              const x   = 240 + Math.cos(rad) * ORBIT_RADIUS - 24;
-              const y   = 240 + Math.sin(rad) * ORBIT_RADIUS - 24;
+              const x   = Math.round(240 + Math.cos(rad) * ORBIT_RADIUS - 24);
+              const y   = Math.round(240 + Math.sin(rad) * ORBIT_RADIUS - 24);
               const isActive = active === i;
 
               return (

@@ -83,8 +83,8 @@ export function TimelineSection() {
             {/* Step nodes */}
             {steps.map((step, i) => {
               const rad = (step.angle * Math.PI) / 180;
-              const x   = 190 + Math.cos(rad) * RADIUS - 28;
-              const y   = 190 + Math.sin(rad) * RADIUS - 28;
+              const x   = Math.round(190 + Math.cos(rad) * RADIUS - 28);
+              const y   = Math.round(190 + Math.sin(rad) * RADIUS - 28);
               const isActive = active === i;
 
               return (
