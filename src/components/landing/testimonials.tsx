@@ -82,13 +82,13 @@ export function TestimonialsSection() {
   }, []);
 
   return (
-    <section id="testimonials" ref={ref} className="bg-slate-50 py-24 overflow-hidden border-b border-slate-100">
+    <section id="testimonials" ref={ref} className="bg-slate-50 py-16 md:py-24 overflow-hidden border-b border-slate-100">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-[0.2em] mb-4">Customers</p>
           <h2 className="text-[38px] sm:text-[52px] font-black text-slate-900 leading-none tracking-tight">
@@ -96,13 +96,13 @@ export function TestimonialsSection() {
           </h2>
         </motion.div>
 
-        <div className="flex flex-col lg:flex-row items-center gap-16">
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-16">
 
-          {/* Orbital ring */}
+          {/* Orbital ring — hidden on mobile (480px would overflow) */}
           <motion.div
             initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative shrink-0"
+            className="relative shrink-0 hidden md:block"
             style={{ width: 480, height: 480 }}
           >
             <svg className="absolute inset-0" width="480" height="480">

@@ -27,7 +27,7 @@ export function ProblemSection() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <section ref={ref} className="bg-white py-24 border-b border-gray-100">
+    <section ref={ref} className="bg-white py-16 md:py-24 border-b border-gray-100">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
         <motion.div
@@ -35,7 +35,7 @@ export function ProblemSection() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="mb-16">
           <p className="text-[12px] font-semibold text-amber-500 uppercase tracking-widest mb-3">The problem</p>
-          <h2 className="text-[38px] sm:text-[48px] font-extrabold text-gray-950 tracking-[-0.025em] leading-[1.08] max-w-lg">
+          <h2 className="text-[38px] sm:text-[48px] font-extrabold text-gray-950 tracking-tight leading-[1.08] max-w-lg">
             Every agency hits the same wall.
           </h2>
         </motion.div>

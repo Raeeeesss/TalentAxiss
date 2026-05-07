@@ -21,7 +21,7 @@ export function PricingSection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
-    <section id="pricing" ref={ref} className="bg-white py-24 border-b border-slate-100">
+    <section id="pricing" ref={ref} className="bg-white py-16 md:py-24 border-b border-slate-100">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}

@@ -512,7 +512,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex h-screen overflow-hidden bg-white">
+    <div className="flex min-h-screen bg-white">
 
       {/* ── Left brand panel ─────────────────────────────── */}
       <BrandPanel step={step} />
@@ -520,7 +520,7 @@ export default function RegisterPage() {
       {/* ── Right form panel ─────────────────────────────── */}
       <div
         ref={panelRef}
-        className="relative flex-1 h-full flex flex-col items-center justify-center bg-[#fafbff] overflow-y-auto"
+        className="relative flex-1 flex flex-col items-center justify-center bg-[#fafbff] overflow-y-auto py-10 px-4"
       >
         {/* Mouse glow */}
         <motion.div
@@ -545,7 +545,7 @@ export default function RegisterPage() {
           initial={{ opacity: 0, y: 32, scale: .97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: .7, ease: [.22, 1, .36, 1] }}
-          className="relative z-10 w-full max-w-md px-6 py-10"
+          className="relative z-10 w-full max-w-md"
         >
           {/* Mobile logo */}
           <div className="flex lg:hidden justify-center mb-7">
@@ -563,22 +563,22 @@ export default function RegisterPage() {
               className="mb-6"
             >
               {step === 1 && <>
-                <h1 className="text-3xl font-extrabold text-gray-950 mb-1.5">Create your account</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-950 mb-1.5">Create your account</h1>
                 <p className="text-gray-500 text-sm">Start your 7-day free trial. No credit card required.</p>
               </>}
               {step === 2 && <>
-                <h1 className="text-3xl font-extrabold text-gray-950 mb-1.5">Verify your identity</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-950 mb-1.5">Verify your identity</h1>
                 <p className="text-gray-500 text-sm">We&apos;ve auto-generated OTPs for your email and mobile.</p>
               </>}
               {step === 3 && <>
-                <h1 className="text-3xl font-extrabold text-gray-950 mb-1.5">Set up your agency</h1>
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-950 mb-1.5">Set up your agency</h1>
                 <p className="text-gray-500 text-sm">Almost there — tell us about your consultancy.</p>
               </>}
             </motion.div>
           </AnimatePresence>
 
           {/* Form card */}
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-900/6 p-7">
+          <div className="bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-900/6 p-5 sm:p-7">
 
             {/* Step bar */}
             <StepBar step={step} />

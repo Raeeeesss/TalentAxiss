@@ -22,7 +22,7 @@ export function DashboardHeader() {
 
   return (
     <header className="sticky top-0 z-20 h-16 border-b border-gray-100 bg-white/90 backdrop-blur-xl shadow-sm shadow-gray-900/3">
-      <div className="flex items-center h-full gap-3 px-4 sm:px-6">
+      <div className="flex items-center h-full gap-3 pl-14 pr-4 sm:px-6 lg:pl-6">
 
         {/* Search */}
         <div className="flex-1 min-w-0">

@@ -225,13 +225,13 @@ export function TimelineSection() {
   const Preview = PREVIEWS[active];
 
   return (
-    <section ref={ref} className="bg-white py-24 overflow-hidden border-b border-slate-100">
+    <section ref={ref} className="bg-white py-16 md:py-24 overflow-hidden border-b border-slate-100">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
 
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="text-center mb-20"
+          className="text-center mb-12 md:mb-20"
         >
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-[0.2em] mb-4">Workflow</p>
           <h2 className="text-[38px] sm:text-[52px] font-black text-slate-900 leading-none tracking-tight">
@@ -239,7 +239,72 @@ export function TimelineSection() {
           </h2>
         </motion.div>
 
-        <div className="grid lg:grid-cols-3 gap-10 items-center">
+        {/* ── Mobile layout (< lg) ─────────────────────────── */}
+        <div className="lg:hidden space-y-5">
+
+          {/* Step number tabs */}
+          <div className="grid grid-cols-4 gap-2">
+            {steps.map((step, i) => (
+              <motion.button
+                key={step.n}
+                onClick={() => setActive(i)}
+                whileTap={{ scale: 0.95 }}
+                initial={{ opacity: 0, y: 16 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: 0.1 + i * 0.07 }}
+                className={`relative flex flex-col items-center gap-1.5 py-3.5 px-2 rounded-2xl border-2 overflow-hidden transition-all duration-300 ${
+                  active === i
+                    ? "border-blue-600 bg-blue-600 shadow-lg shadow-blue-600/25"
+                    : "border-slate-200 bg-white"
+                }`}
+              >
+                {active === i && (
+                  <motion.span
+                    className="absolute bottom-0 left-0 h-0.75 bg-blue-400 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 3.5, ease: "linear" }}
+                    key={active}
+                  />
+                )}
+                <span className={`text-xl font-black leading-none tabular-nums ${active === i ? "text-white" : "text-slate-800"}`}>
+                  {String(step.n).padStart(2, "0")}
+                </span>
+                <span className={`text-[10px] font-semibold leading-tight text-center ${active === i ? "text-blue-100" : "text-slate-400"}`}>
+                  {step.label}
+                </span>
+              </motion.button>
+            ))}
+          </div>
+
+          {/* Step description */}
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={active}
+              initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.25 }}
+              className="text-[14px] text-slate-500 text-center px-2 leading-relaxed"
+            >
+              {steps[active].desc}
+            </motion.p>
+          </AnimatePresence>
+
+          {/* Step mockup preview */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active}
+              initial={{ opacity: 0, y: 14, scale: 0.97 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.97 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+            >
+              <Preview />
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* ── Desktop layout (lg+) ─────────────────────────── */}
+        <div className="hidden lg:grid lg:grid-cols-3 gap-10 items-center">
 
           {/* Orbital diagram */}
           <motion.div
@@ -345,7 +410,7 @@ export function TimelineSection() {
                   />
                 )}
                 <div className="flex items-center gap-3">
-                  <span className={`text-[10px] font-black tabular-nums transition-colors ${active === i ? "text-blue-600" : "text-slate-300"}`}>
+                  <span className={`text-[13px] font-black tabular-nums transition-colors ${active === i ? "text-blue-600" : "text-slate-300"}`}>
                     {String(step.n).padStart(2, "0")}
                   </span>
                   <div>

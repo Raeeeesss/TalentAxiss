@@ -84,9 +84,9 @@ export function SpineSection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
   return (
-    <section ref={ref} className="bg-white py-20 overflow-hidden border-b border-slate-100">
+    <section ref={ref} className="bg-white py-14 md:py-20 overflow-hidden border-b border-slate-100">
       <div className="max-w-6xl mx-auto px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-16 items-center">
 
           <div>
             <motion.p
@@ -134,7 +134,7 @@ export function SpineSection() {
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }} animate={inView ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
-            className="relative h-[480px] rounded-3xl overflow-hidden border border-slate-200 shadow-2xl shadow-blue-100/50"
+            className="relative h-70 md:h-120 rounded-3xl overflow-hidden border border-slate-200 shadow-2xl shadow-blue-100/50"
             style={{ background: "radial-gradient(ellipse at center, rgba(37,99,235,0.04) 0%, white 70%)" }}
           >
             <HelixCanvas />

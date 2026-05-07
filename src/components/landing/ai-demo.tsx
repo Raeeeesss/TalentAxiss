@@ -9,7 +9,7 @@ export function AIDemo() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
-    <section ref={ref} className="bg-white py-28 relative overflow-hidden">
+    <section ref={ref} className="bg-white py-16 md:py-28 relative overflow-hidden">
       {/* Blue gradient background */}
       <div className="absolute inset-0 pointer-events-none"
         style={{ background: "radial-gradient(ellipse 70% 60% at 50% 50%,rgba(37,99,235,0.06) 0%,transparent 70%)" }}

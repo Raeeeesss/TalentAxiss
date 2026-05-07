@@ -46,7 +46,7 @@ export function FAQSection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <section id="faq" ref={ref} className="bg-slate-50 py-24 border-b border-slate-100">
+    <section id="faq" ref={ref} className="bg-slate-50 py-16 md:py-24 border-b border-slate-100">
       <div className="max-w-3xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}

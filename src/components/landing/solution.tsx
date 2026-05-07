@@ -31,7 +31,7 @@ export function SolutionSection() {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section id="solution" ref={ref} className="bg-white py-24 border-t border-gray-100">
+    <section id="solution" ref={ref} className="bg-white py-16 md:py-24 border-t border-gray-100">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
 
         <motion.div

@@ -16,12 +16,12 @@ export function FeaturesGrid() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   return (
-    <section id="features" ref={ref} className="bg-slate-50 py-24 border-y border-slate-100">
+    <section id="features" ref={ref} className="bg-slate-50 py-16 md:py-24 border-y border-slate-100">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }} animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
-          className="mb-16 text-center">
+          className="mb-10 md:mb-16 text-center">
           <p className="text-[11px] font-semibold text-blue-600 uppercase tracking-[0.2em] mb-4">Product</p>
           <h2 className="text-[38px] sm:text-[52px] font-black text-slate-900 leading-none tracking-tight">
             Everything your agency needs.
