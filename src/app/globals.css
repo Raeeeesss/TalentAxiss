@@ -91,6 +91,15 @@ input::placeholder, textarea::placeholder {
   color: hsl(var(--muted-foreground));
 }
 
+/* Dark inputs for auth pages — overrides the rule above */
+input.auth-input, select.auth-input, textarea.auth-input {
+  background-color: #0d1525 !important;
+  color: white !important;
+}
+input.auth-input::placeholder, textarea.auth-input::placeholder {
+  color: rgba(255, 255, 255, 0.22) !important;
+}
+
 /* ── Tables ────────────────────────────────────────────────── */
 table { border-color: hsl(var(--border)); }
 

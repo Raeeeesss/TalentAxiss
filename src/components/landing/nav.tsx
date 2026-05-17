@@ -41,9 +41,7 @@ export function LandingNav() {
             <div className="w-7 h-7 rounded-lg bg-blue-600 flex items-center justify-center shadow-md shadow-blue-600/30">
               <span className="text-[11px] font-black text-white tracking-tighter">TA</span>
             </div>
-            <span className={`font-semibold text-[15px] tracking-tight transition-colors duration-300 ${
-              scrolled ? "text-slate-900" : "text-white"
-            }`}>
+            <span className="font-semibold text-[15px] tracking-tight text-slate-900">
               TalentAxiss
             </span>
           </Link>
@@ -52,11 +50,7 @@ export function LandingNav() {
           <div className="hidden md:flex items-center gap-7">
             {links.map(l => (
               <a key={l.label} href={l.href}
-                className={`text-[13px] font-medium transition-colors duration-300 ${
-                  scrolled
-                    ? "text-slate-500 hover:text-slate-900"
-                    : "text-white/60 hover:text-white"
-                }`}>
+                className="text-[13px] font-medium text-slate-500 hover:text-slate-900 transition-colors">
                 {l.label}
               </a>
             ))}
@@ -65,9 +59,7 @@ export function LandingNav() {
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-2">
             <Link href="/auth/login"
-              className={`text-[13px] font-medium px-3 py-2 transition-colors duration-300 ${
-                scrolled ? "text-slate-500 hover:text-slate-800" : "text-white/55 hover:text-white"
-              }`}>
+              className="text-[13px] font-medium px-3 py-2 text-slate-500 hover:text-slate-800 transition-colors">
               Sign in
             </Link>
             <Link href="/auth/register"
@@ -79,9 +71,7 @@ export function LandingNav() {
 
           {/* Mobile hamburger */}
           <button
-            className={`md:hidden transition-colors duration-300 ${
-              scrolled ? "text-slate-500 hover:text-slate-900" : "text-white/70 hover:text-white"
-            }`}
+            className="md:hidden text-slate-500 hover:text-slate-900 transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -97,7 +87,7 @@ export function LandingNav() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.18 }}
-            className="fixed top-[60px] inset-x-0 z-40 bg-white border-b border-slate-200 shadow-xl shadow-slate-900/10"
+            className="fixed top-15 inset-x-0 z-40 bg-white border-b border-slate-200 shadow-xl shadow-slate-900/10"
           >
             <div className="px-6 py-5 flex flex-col">
               {links.map(l => (

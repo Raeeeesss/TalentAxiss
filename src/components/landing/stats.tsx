@@ -79,12 +79,11 @@ export function StatsSection() {
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
-    <section ref={ref} className="py-14 md:py-20 border-b border-slate-100"
-      style={{ background: "linear-gradient(to bottom,#04070e 0%,#0a0f1e 20%,#f8fafc 45%)" }}>
+    <section ref={ref} className="bg-slate-50 py-14 md:py-20 border-y border-slate-100">
       <div className="max-w-5xl mx-auto px-6 lg:px-8">
         <motion.p
           initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}}
-          className="text-center text-[11px] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-10 pt-8"
+          className="text-center text-[11px] font-semibold text-slate-400 uppercase tracking-[0.2em] mb-10"
         >
           Numbers that matter
         </motion.p>

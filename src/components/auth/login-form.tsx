@@ -1,341 +1,182 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import {
-  motion, AnimatePresence,
-  useMotionValue, useSpring, useTransform, animate,
-} from "framer-motion";
+import { useState, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import {
-  Eye, EyeOff, Mail, Lock, ArrowRight,
-  CheckCircle2, Shield, Users, TrendingUp, Star,
-  AlertTriangle, Brain,
-} from "lucide-react";
-import { Logo } from "@/components/ui/logo";
+import { Eye, EyeOff, ArrowRight, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
-
-function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
-  const [val, setVal] = useState(0);
-  const ref     = useRef<HTMLSpanElement>(null);
-  const started = useRef(false);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting && !started.current) {
-        started.current = true;
-        const ctrl = animate(0, to, { duration: 2, ease: [.22,1,.36,1], onUpdate: v => setVal(Math.round(v)) });
-        return () => ctrl.stop();
-      }
-    }, { threshold: 0.3 });
-    obs.observe(el);
-    return () => obs.disconnect();
-  }, [to]);
-  return <span ref={ref} className="tabular-nums">{val.toLocaleString("en-IN")}{suffix}</span>;
-}
-
-function DashboardMockup() {
-  return (
-    <div className="w-full rounded-2xl overflow-hidden" style={{ boxShadow:"0 24px 60px rgba(0,0,0,.35),0 0 0 1px rgba(255,255,255,.08)" }}>
-      <div className="flex items-center gap-1.5 px-3 py-2 bg-[#0f1629] border-b border-white/8">
-        <div className="w-2 h-2 rounded-full bg-red-400/70" />
-        <div className="w-2 h-2 rounded-full bg-amber-400/70" />
-        <div className="w-2 h-2 rounded-full bg-emerald-400/70" />
-        <div className="flex-1 mx-2 h-4 bg-white/8 rounded text-[8px] text-white/25 flex items-center px-2 font-mono">app.talentaxiss.in</div>
-      </div>
-      <div className="bg-[#0a1020] p-3">
-        <div className="flex items-center justify-between mb-2.5">
-          <div>
-            <div className="text-white text-[10px] font-semibold">Good morning, Arun 👋</div>
-            <div className="text-white/35 text-[8px]">Today&apos;s overview</div>
-          </div>
-          <span className="text-[8px] font-bold text-emerald-400 bg-emerald-400/10 border border-emerald-400/20 px-2 py-0.5 rounded-full">↑ 15% this month</span>
-        </div>
-        <div className="grid grid-cols-4 gap-1.5 mb-2.5">
-          {[
-            { v:"1,247",l:"Candidates",c:"from-indigo-500 to-purple-600"},
-            { v:"34",   l:"Active Jobs",c:"from-cyan-500 to-blue-500"  },
-            { v:"7",    l:"Placed",     c:"from-emerald-500 to-teal-500"},
-            { v:"12",   l:"Follow-ups", c:"from-amber-500 to-orange-500"},
-          ].map(s => (
-            <div key={s.l} className="bg-white/6 rounded-xl p-1.5 border border-white/6">
-              <div className={`text-[11px] font-bold bg-linear-to-r ${s.c} bg-clip-text text-transparent`}>{s.v}</div>
-              <div className="text-[7px] text-white/35 mt-0.5">{s.l}</div>
-            </div>
-          ))}
-        </div>
-        <div className="bg-white/4 rounded-xl p-2 border border-white/6">
-          <div className="text-[7px] text-white/25 mb-1.5 font-medium">Placements — 6 months</div>
-          <div className="flex items-end gap-0.5 h-8">
-            {[28,44,34,58,46,72,55,84,66,92,74,98].map((h,i) => (
-              <motion.div key={i} initial={{ height:0 }} animate={{ height:`${h}%` }}
-                transition={{ delay:.6+i*.035, duration:.45, ease:"easeOut" }}
-                className="flex-1 rounded-t-sm" style={{ background:"linear-gradient(to top,#6366f1,#a78bfa)" }}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function BrandPanel() {
-  return (
-    <div className="hidden lg:flex w-[52%] h-full flex-col justify-center overflow-hidden relative"
-      style={{ background:"linear-gradient(145deg,#060d1f 0%,#0d1535 45%,#1a1060 100%)" }}>
-      <div className="absolute top-1/3 right-1/4 w-72 h-72 bg-indigo-600/18 blur-[80px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-1/4 left-1/5 w-56 h-56 bg-violet-600/12 blur-[70px] rounded-full pointer-events-none" />
-      <div className="absolute inset-0 pointer-events-none opacity-15"
-        style={{ backgroundImage:`linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px)`, backgroundSize:"44px 44px" }}
-      />
-      <div className="relative z-10 w-full max-w-sm mx-auto px-8 xl:px-10 flex flex-col gap-5">
-        <motion.div initial={{ opacity:0,y:-16 }} animate={{ opacity:1,y:0 }} transition={{ duration:.55 }}>
-          <Logo size="md" onDark href="/" />
-        </motion.div>
-        <motion.div initial={{ opacity:0,y:20 }} animate={{ opacity:1,y:0 }} transition={{ duration:.6,delay:.1 }}>
-          <h2 className="text-2xl xl:text-3xl font-extrabold text-white leading-tight mb-2">
-            AI Recruitment CRM<br /><span className="text-blue-400">for Modern Agencies</span>
-          </h2>
-          <p className="text-white/45 text-sm leading-relaxed">Manage candidates, run AI matching, track your pipeline — all in one platform.</p>
-        </motion.div>
-        <motion.div initial={{ opacity:0,y:24,scale:.97 }} animate={{ opacity:1,y:0,scale:1 }} transition={{ duration:.75,delay:.2 }} className="relative">
-          <motion.div initial={{ opacity:0,scale:.8 }} animate={{ opacity:1,scale:1 }} transition={{ delay:.9 }}
-            className="absolute -top-4 -right-3 z-10 bg-white/12 border border-white/18 backdrop-blur-md rounded-xl px-2.5 py-2 shadow-xl animate-float">
-            <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-lg bg-indigo-500 flex items-center justify-center shrink-0"><Brain className="h-2.5 w-2.5 text-white" /></div>
-              <div><div className="text-[9px] font-bold text-white leading-none">AI Match 96%</div><div className="text-[8px] text-white/45 leading-none mt-0.5">Rajan K. — Best Fit</div></div>
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse ml-1 shrink-0" />
-            </div>
-          </motion.div>
-          <motion.div initial={{ opacity:0,scale:.8 }} animate={{ opacity:1,scale:1 }} transition={{ delay:1.05 }}
-            className="absolute -bottom-4 -left-3 z-10 bg-white/12 border border-white/18 backdrop-blur-md rounded-xl px-2.5 py-2 shadow-xl animate-float-delay">
-            <div className="flex items-center gap-1.5">
-              <div className="w-5 h-5 rounded-lg bg-emerald-500 flex items-center justify-center shrink-0"><TrendingUp className="h-2.5 w-2.5 text-white" /></div>
-              <div><div className="text-[9px] font-bold text-white leading-none">3 Placed Today</div><div className="text-[8px] text-emerald-400 font-semibold leading-none mt-0.5">+₹42,000 revenue</div></div>
-            </div>
-          </motion.div>
-          <DashboardMockup />
-        </motion.div>
-        <motion.div initial={{ opacity:0,y:12 }} animate={{ opacity:1,y:0 }} transition={{ delay:.35 }} className="grid grid-cols-3 gap-2">
-          {[
-            { icon:Users,value:156,suffix:"+",label:"Agencies"},
-            { icon:TrendingUp,value:12847,suffix:"+",label:"CVs Managed"},
-            { icon:Shield,value:99,suffix:".9%",label:"Uptime"},
-          ].map(({ icon:Icon,value,suffix,label }) => (
-            <div key={label} className="bg-white/6 border border-white/10 rounded-xl p-2.5 text-center">
-              <Icon className="h-3.5 w-3.5 text-indigo-400 mx-auto mb-1" />
-              <div className="text-sm font-extrabold text-white"><Counter to={value} suffix={suffix} /></div>
-              <div className="text-[8px] text-white/35 mt-0.5">{label}</div>
-            </div>
-          ))}
-        </motion.div>
-        <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:.5 }} className="bg-white/6 border border-white/10 rounded-xl p-3.5">
-          <div className="flex gap-0.5 mb-2">{Array.from({length:5}).map((_,i)=><Star key={i} className="h-2.5 w-2.5 text-amber-400 fill-current"/>)}</div>
-          <p className="text-white/55 text-xs leading-relaxed mb-2.5 italic">&ldquo;Placement rate up 40% in the first month. I find any candidate in 10 seconds now.&rdquo;</p>
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-[9px] font-bold shadow">AM</div>
-            <div><div className="text-[10px] font-semibold text-white">Arun Menon</div><div className="text-[8px] text-white/35">Owner, AM Consultants · Ernakulam</div></div>
-          </div>
-        </motion.div>
-      </div>
-    </div>
-  );
-}
-
-interface AuthInputProps {
-  id: string; label: string; type?: string; value: string;
-  onChange: (v: string) => void; icon: React.ReactNode;
-  rightElement?: React.ReactNode; error?: string;
-  autoComplete?: string; onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-}
-function AuthInput({ id,label,type="text",value,onChange,icon,rightElement,error,autoComplete,onKeyDown }: AuthInputProps) {
-  const [focused,setFocused] = useState(false);
-  const lifted = focused || value.length > 0;
-  return (
-    <div>
-      <div className={`relative flex items-center rounded-xl border transition-all duration-200 ${
-        error?"border-red-300 bg-red-50":focused?"border-blue-400 bg-white ring-4 ring-blue-100/60 shadow-sm":"border-gray-200 bg-gray-50 hover:border-gray-300"}`}>
-        <span className={`absolute left-3.5 transition-colors duration-200 ${error?"text-red-400":focused?"text-blue-500":"text-gray-400"}`}>{icon}</span>
-        <input id={id} type={type} value={value} autoComplete={autoComplete}
-          onFocus={()=>setFocused(true)} onBlur={()=>setFocused(false)}
-          onChange={e=>onChange(e.target.value)} onKeyDown={onKeyDown}
-          className="peer w-full h-14 pl-10 pr-10 bg-transparent text-gray-900 text-sm outline-none placeholder-transparent"
-          placeholder={label}
-        />
-        <label htmlFor={id} className={`absolute left-10 pointer-events-none font-medium transition-all duration-200 ${
-          lifted?"top-2 text-[10px] text-blue-600":"top-1/2 -translate-y-1/2 text-sm text-gray-400"}`}>
-          {label}
-        </label>
-        {rightElement && <span className="absolute right-3.5 text-gray-400 hover:text-gray-600 transition-colors">{rightElement}</span>}
-      </div>
-      <AnimatePresence>
-        {error && (
-          <motion.p initial={{ opacity:0,height:0 }} animate={{ opacity:1,height:"auto" }} exit={{ opacity:0,height:0 }}
-            className="text-xs text-red-500 mt-1.5 ml-1 flex items-center gap-1">
-            <AlertTriangle className="h-3 w-3 shrink-0" />{error}
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
 
 export function LoginForm() {
   const router  = useRouter();
   const params  = useSearchParams();
-  const [loading,setLoading]     = useState(false);
-  const [showPw,setShowPw]       = useState(false);
-  const [capsLock,setCapsLock]   = useState(false);
-  const [remember,setRemember]   = useState(false);
-  const [authError,setAuthError] = useState<string|null>(params.get("error")?"Authentication failed. Please check your credentials.":null);
-  const [email,setEmail]         = useState("");
-  const [password,setPassword]   = useState("");
-  const [errors,setErrors]       = useState<{email?:string;password?:string}>({});
+  const [loading, setLoading]   = useState(false);
+  const [showPw, setShowPw]     = useState(false);
+  const [email, setEmail]       = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors]     = useState<{ email?: string; password?: string }>({});
+  const [authError, setAuthError] = useState<string | null>(
+    params.get("error") ? "Authentication failed. Please check your credentials." : null
+  );
 
-  const panelRef = useRef<HTMLDivElement>(null);
-  const glowX = useMotionValue(0);
-  const glowY = useMotionValue(0);
-  const springX = useSpring(glowX,{stiffness:120,damping:30});
-  const springY = useSpring(glowY,{stiffness:120,damping:30});
-  useEffect(()=>{
-    const el=panelRef.current; if(!el) return;
-    const h=(e:MouseEvent)=>{ const r=el.getBoundingClientRect(); glowX.set(e.clientX-r.left); glowY.set(e.clientY-r.top); };
-    el.addEventListener("mousemove",h,{passive:true}); return ()=>el.removeEventListener("mousemove",h);
-  },[glowX,glowY]);
-
-  const handleCaps = useCallback((e:React.KeyboardEvent)=>{ setCapsLock(e.getModifierState?.("CapsLock")??false); },[]);
-  const validate = ()=>{
-    const errs:{email?:string;password?:string}={};
-    if(!email.trim()) errs.email="Email address is required";
-    else if(!/\S+@\S+\.\S+/.test(email)) errs.email="Enter a valid email address";
-    if(!password) errs.password="Password is required";
-    else if(password.length<8) errs.password="Minimum 8 characters";
-    setErrors(errs); return Object.keys(errs).length===0;
+  const validate = () => {
+    const e: typeof errors = {};
+    if (!email.trim()) e.email = "Email is required";
+    else if (!/\S+@\S+\.\S+/.test(email)) e.email = "Enter a valid email";
+    if (!password) e.password = "Password is required";
+    else if (password.length < 8) e.password = "Minimum 8 characters";
+    setErrors(e);
+    return !Object.keys(e).length;
   };
-  const handleSubmit=async(e?:React.FormEvent)=>{
-    e?.preventDefault(); if(!validate()) return;
+
+  const handleSubmit = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    if (!validate()) return;
     setLoading(true); setAuthError(null);
-    try{
-      const res=await signIn("credentials",{email,password,redirect:false});
-      if(res?.error){ setAuthError("Invalid email or password. Please try again."); toast.error("Invalid credentials"); }
-      else{ toast.success("Welcome back!"); router.push("/dashboard"); }
-    }catch{ setAuthError("Something went wrong. Please try again."); }
-    finally{ setLoading(false); }
+    try {
+      const res = await signIn("credentials", { email, password, redirect: false });
+      if (res?.error) { setAuthError("Invalid email or password."); toast.error("Invalid credentials"); }
+      else { toast.success("Welcome back!"); router.push("/dashboard"); }
+    } catch { setAuthError("Something went wrong. Try again."); }
+    finally { setLoading(false); }
   };
-  const handleKeyDown=useCallback((e:React.KeyboardEvent<HTMLInputElement>)=>{ handleCaps(e); if(e.key==="Enter") handleSubmit(); },[email,password]);
+
+  const onKey = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") handleSubmit();
+  }, [email, password]);
 
   return (
-    <div className="flex min-h-screen bg-white">
-      <BrandPanel />
+    <div className="h-screen overflow-hidden bg-[#050810] flex items-center justify-center">
+      {/* Blobs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+        <div className="absolute -top-40 -left-40 w-150 h-150 bg-blue-600/25 rounded-full blur-[140px]" />
+        <div className="absolute top-1/3 -right-48 w-125 h-125 bg-indigo-600/20 rounded-full blur-[130px]" />
+        <div className="absolute -bottom-40 left-1/4 w-112.5 h-112.5 bg-violet-600/15 rounded-full blur-[130px]" />
+      </div>
 
-      {/* Right form panel */}
-      <div ref={panelRef} className="relative flex-1 flex flex-col items-center justify-center bg-[#fafbff] overflow-y-auto py-10 px-4">
-        <motion.div className="absolute inset-0 pointer-events-none"
-          style={{ background: useTransform([springX,springY],([x,y])=>`radial-gradient(600px circle at ${x}px ${y}px,rgba(99,102,241,.06),transparent 80%)`) }}
-        />
-        <div className="absolute inset-0 pointer-events-none opacity-20"
-          style={{ backgroundImage:`linear-gradient(rgba(0,0,0,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,0,0,.025) 1px,transparent 1px)`, backgroundSize:"40px 40px" }}
-        />
+      {/* Scrollable inner — hidden scrollbar, never shows page-level scroll */}
+      <div className="relative z-10 w-full max-w-105 max-h-[calc(100vh-2rem)] overflow-y-auto [&::-webkit-scrollbar]:hidden flex flex-col gap-5 px-5 py-6">
 
+        {/* Logo + heading — above card */}
         <motion.div
-          initial={{ opacity:0,y:24,scale:.97 }} animate={{ opacity:1,y:0,scale:1 }}
-          transition={{ duration:.65,ease:[.22,1,.36,1] }}
-          className="relative z-10 w-full max-w-md"
+          initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="text-center"
         >
-          {/* Mobile logo */}
-          <div className="flex lg:hidden justify-center mb-8">
-            <Logo size="md" onDark={false} href="/" />
-          </div>
+          <Link href="/" className="inline-flex items-center gap-2.5 mb-4">
+            <div className="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center shadow-lg shadow-blue-600/40">
+              <span className="text-[12px] font-black text-white">TA</span>
+            </div>
+            <span className="font-bold text-white text-[16px] tracking-tight">TalentAxiss</span>
+          </Link>
+          <h1 className="text-[26px] font-black text-white tracking-tight leading-none">Welcome back</h1>
+          <p className="text-white/40 text-[13px] mt-1.5">Sign in to your TalentAxiss account.</p>
+        </motion.div>
 
-          <div className="mb-7">
-            <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-950 mb-1.5">Welcome back</h1>
-            <p className="text-gray-500 text-sm">Sign in to your TalentAxiss dashboard.</p>
-          </div>
-
+        {/* Glass card — form only */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.06, ease: [0.22, 1, 0.36, 1] }}
+          className="backdrop-blur-2xl bg-white/7 border border-white/10 rounded-2xl px-8 py-7 shadow-[0_8px_40px_rgba(0,0,0,0.4)]"
+        >
           <AnimatePresence>
             {authError && (
-              <motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}} exit={{opacity:0,height:0}}
-                className="flex items-start gap-2.5 bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl px-4 py-3 mb-5">
-                <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5 text-red-500" />{authError}
+              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                className="flex items-start gap-2 bg-red-500/15 border border-red-500/25 text-red-300 text-[12px] rounded-xl px-3.5 py-2.5 mb-5">
+                <AlertTriangle className="h-3.5 w-3.5 shrink-0 mt-0.5" />{authError}
               </motion.div>
             )}
           </AnimatePresence>
 
-          <div className="bg-white rounded-2xl border border-gray-100 shadow-xl shadow-gray-900/6 p-6 sm:p-7 mb-5">
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
-              <AuthInput id="email" label="Email address" type="email" value={email}
-                onChange={v=>{ setEmail(v); setErrors(e=>({...e,email:undefined})); }}
-                icon={<Mail className="h-4 w-4"/>} autoComplete="email" error={errors.email} onKeyDown={handleKeyDown}
+          <form onSubmit={handleSubmit} noValidate className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-[11px] font-bold text-white/40 mb-1.5 uppercase tracking-widest">Email address</label>
+              <input type="email" value={email} autoComplete="email" onKeyDown={onKey}
+                onChange={e => { setEmail(e.target.value); setErrors(er => ({ ...er, email: undefined })); }}
+                placeholder="you@company.com"
+                className={`auth-input w-full h-11 px-4 rounded-xl text-[14px] outline-none transition-all ${
+                  errors.email
+                    ? "border border-red-500/50 focus:border-red-400/60 focus:ring-2 focus:ring-red-500/15"
+                    : "border border-white/10 focus:border-blue-400/60 focus:ring-2 focus:ring-blue-500/15"
+                }`}
               />
-              <div>
-                <AuthInput id="password" label="Password" type={showPw?"text":"password"} value={password}
-                  onChange={v=>{ setPassword(v); setErrors(e=>({...e,password:undefined})); }}
-                  icon={<Lock className="h-4 w-4"/>} autoComplete="current-password" error={errors.password} onKeyDown={handleKeyDown}
-                  rightElement={<button type="button" onClick={()=>setShowPw(!showPw)} className="p-0.5">{showPw?<EyeOff className="h-4 w-4"/>:<Eye className="h-4 w-4"/>}</button>}
-                />
-                <AnimatePresence>
-                  {capsLock && (
-                    <motion.div initial={{opacity:0,height:0}} animate={{opacity:1,height:"auto"}} exit={{opacity:0,height:0}}
-                      className="flex items-center gap-1.5 text-[11px] text-amber-600 bg-amber-50 border border-amber-100 rounded-lg px-2.5 py-1.5 mt-1.5">
-                      <AlertTriangle className="h-3 w-3 shrink-0"/>Caps Lock is on
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-
-              <div className="flex items-center justify-between pt-0.5">
-                <label className="flex items-center gap-2 cursor-pointer group">
-                  <div onClick={()=>setRemember(!remember)} className={`w-4 h-4 rounded border flex items-center justify-center transition-all cursor-pointer ${remember?"bg-blue-600 border-blue-600":"border-gray-300 group-hover:border-blue-400"}`}>
-                    {remember&&<CheckCircle2 className="h-2.5 w-2.5 text-white"/>}
-                  </div>
-                  <span className="text-sm text-gray-600 select-none">Remember me</span>
-                </label>
-                <Link href="/auth/forgot-password" className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors">Forgot password?</Link>
-              </div>
-
-              <motion.button type="submit" disabled={loading}
-                whileHover={!loading?{scale:1.015,y:-1}:{}} whileTap={!loading?{scale:.97}:{}}
-                className="w-full h-12 rounded-xl text-white font-semibold text-sm disabled:opacity-60 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25"
-                style={{ background:"linear-gradient(135deg,#2563eb,#6366f1)" }}>
-                {loading
-                  ?<span className="flex items-center justify-center gap-2"><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"/><path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Signing in…</span>
-                  :<span className="flex items-center justify-center gap-2">Sign In <ArrowRight className="h-4 w-4"/></span>}
-              </motion.button>
-            </form>
-
-            <div className="relative my-5">
-              <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-gray-100"/></div>
-              <div className="relative flex justify-center"><span className="bg-white px-3 text-xs text-gray-400 font-medium">or continue with</span></div>
+              {errors.email && <p className="flex items-center gap-1 text-[11px] text-red-400 mt-1.5"><AlertTriangle className="h-3 w-3 shrink-0" />{errors.email}</p>}
             </div>
 
-            <button type="button" onClick={()=>signIn("google",{callbackUrl:"/dashboard"})}
-              className="w-full h-11 flex items-center justify-center gap-3 bg-white border border-gray-200 rounded-xl text-gray-700 text-sm font-semibold hover:border-gray-300 hover:shadow-md transition-all">
-              <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
-                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-              </svg>
-              Continue with Google
-            </button>
+            {/* Password */}
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-[11px] font-bold text-white/40 uppercase tracking-widest">Password</label>
+                <Link href="/auth/forgot-password" className="text-[12px] text-blue-400 hover:text-blue-300 font-medium transition-colors">Forgot password?</Link>
+              </div>
+              <div className="relative">
+                <input type={showPw ? "text" : "password"} value={password} autoComplete="current-password" onKeyDown={onKey}
+                  onChange={e => { setPassword(e.target.value); setErrors(er => ({ ...er, password: undefined })); }}
+                  placeholder="••••••••"
+                  className={`auth-input w-full h-11 pl-4 pr-11 rounded-xl text-[14px] outline-none transition-all ${
+                    errors.password
+                      ? "border border-red-500/50 focus:border-red-400/60 focus:ring-2 focus:ring-red-500/15"
+                      : "border border-white/10 focus:border-blue-400/60 focus:ring-2 focus:ring-blue-500/15"
+                  }`}
+                />
+                <button type="button" onClick={() => setShowPw(!showPw)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60 transition-colors">
+                  {showPw ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
+              {errors.password && <p className="flex items-center gap-1 text-[11px] text-red-400 mt-1.5"><AlertTriangle className="h-3 w-3 shrink-0" />{errors.password}</p>}
+            </div>
 
-            <p className="text-center text-sm text-gray-500 mt-5">
-              Don&apos;t have an account?{" "}
-              <Link href="/auth/register" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">Start free trial</Link>
-            </p>
+            {/* Submit */}
+            <motion.button type="submit" disabled={loading}
+              whileHover={!loading ? { scale: 1.012 } : {}} whileTap={!loading ? { scale: 0.985 } : {}}
+              className="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[14px] rounded-xl shadow-lg shadow-blue-600/30 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {loading
+                ? <><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"/><path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Signing in…</>
+                : <>Sign In <ArrowRight className="h-4 w-4" /></>
+              }
+            </motion.button>
+          </form>
+
+          <div className="flex items-center gap-3 my-5">
+            <div className="flex-1 h-px bg-white/8" />
+            <span className="text-[11px] text-white/25 font-medium">or</span>
+            <div className="flex-1 h-px bg-white/8" />
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            {[{icon:Shield,text:"SSL Encrypted"},{icon:CheckCircle2,text:"GDPR Safe"},{icon:Users,text:"156+ Agencies"}].map(({icon:Icon,text})=>(
-              <div key={text} className="flex items-center gap-1.5 text-[11px] text-gray-400 bg-white border border-gray-100 rounded-full px-3 py-1.5 shadow-sm">
-                <Icon className="h-3 w-3 text-emerald-500"/>{text}
-              </div>
+          <button type="button" onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
+            className="w-full h-11 flex items-center justify-center gap-3 bg-white/6 border border-white/10 rounded-xl text-white/70 text-[14px] font-medium hover:bg-white/10 hover:border-white/18 hover:text-white/90 transition-all">
+            <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
+              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+            </svg>
+            Continue with Google
+          </button>
+        </motion.div>
+
+        {/* Below card */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.12 }}
+          className="flex flex-col items-center gap-2"
+        >
+          <p className="text-[12px] text-white/30">
+            Don&apos;t have an account?{" "}
+            <Link href="/auth/register" className="text-blue-400 hover:text-blue-300 font-semibold transition-colors">Start free trial →</Link>
+          </p>
+          <div className="flex items-center gap-5">
+            {["SSL Encrypted", "GDPR Safe", "156+ Agencies"].map(t => (
+              <span key={t} className="text-[10px] text-white/20">{t}</span>
             ))}
           </div>
         </motion.div>
+
       </div>
     </div>
   );
