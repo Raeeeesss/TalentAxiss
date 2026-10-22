@@ -13,6 +13,7 @@ const loginSchema = z.object({
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "talentaxis_dev_secret_key_needs_to_be_at_least_32_characters_long",
   trustHost: true,           // lets NextAuth detect the correct URL on Vercel
   session: { strategy: "jwt" },
   pages: {

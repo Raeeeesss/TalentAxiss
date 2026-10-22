@@ -3,9 +3,11 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Mail, Phone } from "lucide-react";
+import { useContactModal } from "@/components/providers/contact-modal-provider";
 
 export function AIDemo() {
+  const { openContactModal } = useContactModal();
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
@@ -33,18 +35,26 @@ export function AIDemo() {
             with a proper CRM. First 7 days free — no card needed.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/auth/register">
-              <motion.button
-                whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
-                className="group inline-flex items-center gap-2.5 h-14 px-8 rounded-2xl font-bold text-[15px] bg-blue-600 text-white shadow-xl shadow-blue-600/25 hover:bg-blue-700 transition-colors">
-                Start free — 7 days
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </motion.button>
-            </Link>
-            <a href="mailto:hello@talentaxiss.in"
-              className="text-[15px] font-medium text-slate-400 hover:text-slate-700 transition-colors">
-              Talk to us first
-            </a>
+            <motion.button
+              onClick={() => openContactModal("CTA - Start free 7 days")}
+              whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
+              className="group inline-flex items-center gap-2.5 h-14 px-8 rounded-2xl font-bold text-[15px] bg-blue-600 text-white shadow-xl shadow-blue-600/25 hover:bg-blue-700 transition-colors cursor-pointer">
+              Start free — 7 days
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </motion.button>
+            <div className="flex flex-wrap items-center justify-center gap-3">
+              <a href="mailto:admin@rocduert.in"
+                className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 hover:text-blue-600 transition-colors">
+                <Mail className="h-4 w-4 text-blue-600" />
+                admin@rocduert.in
+              </a>
+              <span className="text-slate-300 hidden sm:inline">•</span>
+              <a href="tel:8113029782"
+                className="inline-flex items-center gap-1.5 text-[14px] font-semibold text-slate-600 hover:text-emerald-600 transition-colors">
+                <Phone className="h-4 w-4 text-emerald-600" />
+                8113029782
+              </a>
+            </div>
           </div>
           <div className="flex flex-wrap items-center justify-center gap-6 mt-10">
             {["No credit card","Cancel any time","156+ agencies trust TalentAxiss"].map(t => (

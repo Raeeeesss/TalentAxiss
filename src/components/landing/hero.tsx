@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, MapPin, Star, CheckCircle } from "lucide-react";
+import { ArrowRight, MapPin, Star, CheckCircle, Mail, Phone } from "lucide-react";
+import { useContactModal } from "@/components/providers/contact-modal-provider";
 
 /* ─── Candidate data ─────────────────────────────────────────── */
 const CARDS = [
@@ -156,6 +157,7 @@ function RevealLine({ children, delay, className }: {
 
 /* ─── Hero ───────────────────────────────────────────────────── */
 export function HeroSection() {
+  const { openContactModal } = useContactModal();
   const [active, setActive] = useState(0);
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -201,20 +203,60 @@ export function HeroSection() {
 
       {/* ── Left panel ───────────────────────────────────── */}
       <div className="relative z-10 w-full lg:w-[52%] flex flex-col justify-center
-        px-6 sm:px-10 lg:px-16 xl:px-20 pt-28 pb-10 lg:pt-0 lg:pb-0">
+        px-6 sm:px-10 lg:px-16 xl:px-20 pt-36 sm:pt-40 lg:pt-14 pb-10 lg:pb-0">
 
-        {/* Badge */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2 border border-blue-200 bg-blue-50
-            rounded-full px-4 py-2 mb-10 w-fit"
-        >
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          <span className="text-[12px] text-blue-700 font-semibold tracking-wide">
-            Kerala&apos;s #1 AI Recruitment CRM
-          </span>
-        </motion.div>
+        {/* Top Badges */}
+        <div className="flex flex-col gap-3 mb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 border border-blue-200 bg-blue-50
+              rounded-full px-4 py-1.5 w-fit shadow-2xs"
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="text-[12px] text-blue-700 font-semibold tracking-wide">
+              Kerala&apos;s #1 AI Recruitment CRM
+            </span>
+          </motion.div>
+
+          {/* Work in progress & early booking announcement card */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="p-3.5 sm:p-4 rounded-2xl border border-amber-200/90 bg-gradient-to-r from-amber-50/95 via-orange-50/80 to-amber-50/95 shadow-sm max-w-lg"
+          >
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
+              <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-amber-500 text-white text-[10px] font-bold tracking-wider uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                Work in Progress
+              </span>
+              <span className="text-[13px] font-bold text-amber-950">
+                Bookings are started! Contact admins:
+              </span>
+            </div>
+            <p className="text-[12px] sm:text-[13px] text-amber-900/80 leading-relaxed mb-2.5">
+              TalentAxiss is currently in active development. Reserve your consultancy slot today:
+            </p>
+            <div className="flex flex-wrap items-center gap-2 text-[12px] font-semibold">
+              <a
+                href="mailto:admin@rocduert.in"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-amber-200 text-slate-800 hover:text-blue-600 hover:border-blue-300 transition-colors shadow-2xs"
+              >
+                <Mail className="h-3.5 w-3.5 text-blue-600" />
+                <span>admin@rocduert.in</span>
+              </a>
+              <a
+                href="tel:8113029782"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-amber-200 text-slate-800 hover:text-emerald-600 hover:border-emerald-300 transition-colors shadow-2xs"
+              >
+                <Phone className="h-3.5 w-3.5 text-emerald-600" />
+                <span>8113029782</span>
+              </a>
+            </div>
+          </motion.div>
+        </div>
 
         {/* Headline */}
         <h1 className="text-[46px] sm:text-[58px] lg:text-[62px] xl:text-[72px]
@@ -250,17 +292,16 @@ export function HeroSection() {
           transition={{ delay: 1.0 }}
           className="flex flex-col sm:flex-row gap-3 mb-10"
         >
-          <Link href="/auth/register">
-            <motion.button
-              whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
-              className="group inline-flex items-center gap-2.5 h-12 px-7
-                bg-blue-600 hover:bg-blue-700 text-white text-[15px] font-bold
-                rounded-2xl shadow-xl shadow-blue-600/25 transition-colors"
-            >
-              Start free — 7 days
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-            </motion.button>
-          </Link>
+          <motion.button
+            onClick={() => openContactModal("Hero - Start free 7 days")}
+            whileHover={{ scale: 1.04, y: -2 }} whileTap={{ scale: 0.97 }}
+            className="group inline-flex items-center gap-2.5 h-12 px-7
+              bg-blue-600 hover:bg-blue-700 text-white text-[15px] font-bold
+              rounded-2xl shadow-xl shadow-blue-600/25 transition-colors cursor-pointer"
+          >
+            Start free — 7 days
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </motion.button>
           <a href="#features">
             <motion.button
               whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.97 }}

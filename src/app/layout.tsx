@@ -4,6 +4,7 @@ import "./globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { AuthProvider } from "@/components/providers/auth-provider";
+import { ContactModalProvider } from "@/components/providers/contact-modal-provider";
 
 /* ── Space Grotesk — distinctive geometric sans
    Feels premium, human, decidedly non-generic.
@@ -44,29 +45,31 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning className={spaceGrotesk.variable}>
       <body className="font-sg antialiased">
         <AuthProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="light"
-            enableSystem={false}
-            disableTransitionOnChange
-            forcedTheme="light"
-          >
-            {children}
-            <Toaster
-              position="top-right"
-              richColors
-              theme="light"
-              toastOptions={{
-                style: {
-                  background: "#ffffff",
-                  border: "1px solid #e2e8f0",
-                  color: "#0f172a",
-                  boxShadow: "0 8px 30px rgba(0,0,0,.08)",
-                  fontFamily: "var(--font-sg), system-ui, sans-serif",
-                },
-              }}
-            />
-          </ThemeProvider>
+          <ContactModalProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="light"
+              enableSystem={false}
+              disableTransitionOnChange
+              forcedTheme="light"
+            >
+              {children}
+              <Toaster
+                position="top-right"
+                richColors
+                theme="light"
+                toastOptions={{
+                  style: {
+                    background: "#ffffff",
+                    border: "1px solid #e2e8f0",
+                    color: "#0f172a",
+                    boxShadow: "0 8px 30px rgba(0,0,0,.08)",
+                    fontFamily: "var(--font-sg), system-ui, sans-serif",
+                  },
+                }}
+              />
+            </ThemeProvider>
+          </ContactModalProvider>
         </AuthProvider>
       </body>
     </html>

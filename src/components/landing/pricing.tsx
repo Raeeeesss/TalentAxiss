@@ -2,8 +2,9 @@
 
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Check, Zap } from "lucide-react";
+import { Check, Zap, Mail, Phone } from "lucide-react";
 import Link from "next/link";
+import { useContactModal } from "@/components/providers/contact-modal-provider";
 
 const proFeatures = [
   "Unlimited candidates & CVs",
@@ -18,6 +19,7 @@ const proFeatures = [
 ];
 
 export function PricingSection() {
+  const { openContactModal } = useContactModal();
   const ref    = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
   return (
@@ -50,11 +52,12 @@ export function PricingSection() {
                 <span className="text-[13px] text-slate-500">{f}</span>
               </div>
             ))}
-            <Link href="/auth/register">
-              <button className="w-full h-11 mt-5 rounded-xl border border-slate-200 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
-                Get started
-              </button>
-            </Link>
+            <button
+              onClick={() => openContactModal("Pricing - Free Plan")}
+              className="w-full h-11 mt-5 rounded-xl border border-slate-200 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer"
+            >
+              Get started
+            </button>
           </motion.div>
 
           {/* Pro — liquid glass on light */}
@@ -102,13 +105,12 @@ export function PricingSection() {
                     <span className="text-[13px] text-blue-100">{f}</span>
                   </div>
                 ))}
-                <Link href="/auth/register">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
-                    className="relative w-full h-12 mt-4 rounded-xl font-bold text-[14px] bg-white text-blue-700 overflow-hidden hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20">
-                    Start free trial
-                  </motion.button>
-                </Link>
+                <motion.button
+                  onClick={() => openContactModal("Pricing - Pro Plan (₹2,999/mo)")}
+                  whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
+                  className="relative w-full h-12 mt-4 rounded-xl font-bold text-[14px] bg-white text-blue-700 overflow-hidden hover:bg-blue-50 transition-colors shadow-lg shadow-blue-900/20 cursor-pointer">
+                  Start free trial
+                </motion.button>
               </div>
             </div>
           </motion.div>
@@ -127,11 +129,20 @@ export function PricingSection() {
                 <span className="text-[13px] text-slate-500">{f}</span>
               </div>
             ))}
-            <a href="mailto:hello@talentaxiss.in">
-              <button className="w-full h-11 mt-5 rounded-xl border border-slate-200 text-[13px] font-semibold text-slate-600 hover:bg-slate-50 hover:border-slate-300 transition-all">
-                Contact us
-              </button>
-            </a>
+            <div className="flex flex-col gap-2 mt-5">
+              <a href="mailto:admin@rocduert.in">
+                <button className="w-full h-11 rounded-xl border border-slate-200 text-[13px] font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all flex items-center justify-center gap-2">
+                  <Mail className="h-4 w-4 text-blue-600" />
+                  admin@rocduert.in
+                </button>
+              </a>
+              <a href="tel:8113029782">
+                <button className="w-full h-10 rounded-xl border border-slate-100 bg-slate-50 text-[12px] font-medium text-slate-600 hover:bg-slate-100 transition-all flex items-center justify-center gap-2">
+                  <Phone className="h-3.5 w-3.5 text-emerald-600" />
+                  Call: 8113029782
+                </button>
+              </a>
+            </div>
           </motion.div>
         </div>
       </div>

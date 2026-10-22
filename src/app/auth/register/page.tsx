@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { KERALA_DISTRICTS } from "@/lib/utils";
+import { useContactModal } from "@/components/providers/contact-modal-provider";
 
 const STEPS = ["Your Info", "Verify OTPs", "Agency Info"] as const;
 
@@ -76,6 +77,7 @@ function ErrorBanner({ errors }: { errors: Record<string, string> }) {
 }
 
 export default function RegisterPage() {
+  const { openContactModal } = useContactModal();
   const router = useRouter();
   const [step, setStep]                   = useState(1);
   const [loading, setLoading]             = useState(false);
@@ -128,14 +130,7 @@ export default function RegisterPage() {
 
   const handleStep1 = async (e?: React.SyntheticEvent) => {
     e?.preventDefault();
-    if (!validateStep1()) return;
-    setLoading(true); setRegError(null);
-    try {
-      const [ec, pc] = await Promise.all([sendOtp("email"), sendOtp("phone")]);
-      setEmailOtp(ec); setPhoneOtp(pc);
-      toast.success("OTPs auto-filled!"); setStep(2); startTimer();
-    } catch (err: unknown) { setRegError(err instanceof Error ? err.message : "Failed to send OTPs."); }
-    finally { setLoading(false); }
+    openContactModal("Register Form Attempt - " + (form.name || "Agency"));
   };
 
   const handleStep2 = async () => {
@@ -223,12 +218,31 @@ export default function RegisterPage() {
 
         <AnimatePresence mode="wait">
           <motion.div key={step} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.15 }} className="mb-4">
+            exit={{ opacity: 0, y: -4 }} transition={{ duration: 0.15 }} className="mb-3">
             {step === 1 && <><h1 className="text-[20px] font-black text-slate-900 tracking-tight">Create your account</h1><p className="text-slate-400 text-[12px] mt-0.5">7-day free trial · No credit card required.</p></>}
             {step === 2 && <><h1 className="text-[20px] font-black text-slate-900 tracking-tight">Verify your identity</h1><p className="text-slate-400 text-[12px] mt-0.5">OTPs sent — enter them below to continue.</p></>}
             {step === 3 && <><h1 className="text-[20px] font-black text-slate-900 tracking-tight">Set up your agency</h1><p className="text-slate-400 text-[12px] mt-0.5">Almost done — one final step.</p></>}
           </motion.div>
         </AnimatePresence>
+
+        {/* Work in progress notice */}
+        <div className="mb-4 p-3 rounded-xl bg-amber-50/90 border border-amber-200/90 text-amber-950 text-xs">
+          <div className="flex items-center gap-1.5 font-bold text-amber-900 mb-1">
+            <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            Work in Progress · Bookings Started
+          </div>
+          <p className="text-amber-800/90 leading-relaxed mb-2">
+            Online registration is invite-only during our rollout. Contact admins to book access for your agency:
+          </p>
+          <button
+            type="button"
+            onClick={() => openContactModal("Register Card Notice - Contact Admin")}
+            className="w-full py-1.5 px-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 shadow-2xs cursor-pointer"
+          >
+            <Mail className="w-3.5 h-3.5" />
+            Contact Admin to Book Slot
+          </button>
+        </div>
 
         {regError && (
           <div className="flex items-center gap-2 bg-red-50 border border-red-200 text-red-600 text-[12px] rounded-xl px-3.5 py-2.5 mb-3">
@@ -337,7 +351,13 @@ export default function RegisterPage() {
       <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
         className="relative z-10 text-[13px] text-slate-500">
         Already have an account?{" "}
-        <Link href="/auth/login" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">Sign in</Link>
+        <button
+          type="button"
+          onClick={() => openContactModal("Sign In from Register Page")}
+          className="text-blue-600 hover:text-blue-700 font-semibold transition-colors cursor-pointer"
+        >
+          Sign in
+        </button>
       </motion.p>
     </div>
   );

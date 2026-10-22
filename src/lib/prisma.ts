@@ -8,7 +8,11 @@ declare global {
 
 function createClient(): PrismaClient {
   const raw = process.env.DATABASE_URL;
-  if (!raw) throw new Error("DATABASE_URL is not set");
+  if (!raw) {
+    throw new Error(
+      "DATABASE_URL is not set. Please add DATABASE_URL to your .env.local file."
+    );
+  }
 
   // Strip channel_binding — HTTP connections don't use TLS channel binding
   const url = raw
@@ -21,5 +25,21 @@ function createClient(): PrismaClient {
   return new PrismaClient({ adapter: new PrismaNeonHttp(url, {} as any) });
 }
 
-export const prisma: PrismaClient =
-  globalThis.__prisma ?? (globalThis.__prisma = createClient());
+function getPrisma(): PrismaClient {
+  if (!globalThis.__prisma) {
+    globalThis.__prisma = createClient();
+  }
+  return globalThis.__prisma;
+}
+
+export const prisma: PrismaClient = new Proxy({} as PrismaClient, {
+  get(_target, prop, receiver) {
+    const client = getPrisma();
+    const value = Reflect.get(client, prop, receiver);
+    if (typeof value === "function") {
+      return value.bind(client);
+    }
+    return value;
+  },
+});
+

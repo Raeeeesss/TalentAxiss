@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { Eye, EyeOff, ArrowRight, AlertTriangle } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, AlertTriangle, Mail, Phone, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { useContactModal } from "@/components/providers/contact-modal-provider";
 
 export function LoginForm() {
+  const { openContactModal } = useContactModal();
   const router  = useRouter();
   const params  = useSearchParams();
   const [loading, setLoading]   = useState(false);
@@ -32,14 +34,7 @@ export function LoginForm() {
 
   const handleSubmit = async (e?: React.FormEvent) => {
     e?.preventDefault();
-    if (!validate()) return;
-    setLoading(true); setAuthError(null);
-    try {
-      const res = await signIn("credentials", { email, password, redirect: false });
-      if (res?.error) { setAuthError("Invalid email or password."); toast.error("Invalid credentials"); }
-      else { toast.success("Welcome back!"); router.push("/dashboard"); }
-    } catch { setAuthError("Something went wrong. Try again."); }
-    finally { setLoading(false); }
+    openContactModal("Sign In Attempt");
   };
 
   const onKey = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -74,6 +69,25 @@ export function LoginForm() {
           transition={{ duration: 0.45, delay: 0.06 }}
           className="bg-white border border-slate-100 rounded-2xl px-8 py-7 shadow-sm">
 
+          {/* Work in progress notice */}
+          <div className="mb-5 p-3.5 rounded-xl bg-amber-50/90 border border-amber-200/90 text-amber-950 text-xs">
+            <div className="flex items-center gap-1.5 font-bold text-amber-900 mb-1">
+              <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+              Work in Progress · Bookings Started
+            </div>
+            <p className="text-amber-800/90 leading-relaxed mb-2.5">
+              Direct sign-ins are currently invite-only for early consultancies. Contact admins to book your slot:
+            </p>
+            <button
+              type="button"
+              onClick={() => openContactModal("Login Banner - Contact Admins")}
+              className="w-full py-2 px-3 bg-amber-500 hover:bg-amber-600 text-white font-semibold rounded-lg text-xs transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <Mail className="w-3.5 h-3.5" />
+              Contact Admin (Email & Phone)
+            </button>
+          </div>
+
           <AnimatePresence>
             {authError && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
@@ -102,7 +116,13 @@ export function LoginForm() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="text-[12px] font-semibold text-slate-600">Password</label>
-                <Link href="/auth/forgot-password" className="text-[12px] text-blue-600 hover:text-blue-700 font-medium transition-colors">Forgot password?</Link>
+                <button
+                  type="button"
+                  onClick={() => openContactModal("Forgot Password")}
+                  className="text-[12px] text-blue-600 hover:text-blue-700 font-medium transition-colors"
+                >
+                  Forgot password?
+                </button>
               </div>
               <div className="relative">
                 <input type={showPw ? "text" : "password"} value={password} autoComplete="current-password" onKeyDown={onKey}
@@ -111,7 +131,7 @@ export function LoginForm() {
                   className={`w-full h-11 pl-4 pr-11 rounded-xl border text-slate-900 text-[14px] outline-none transition-all placeholder:text-slate-300 ${
                     errors.password
                       ? "border-red-300 bg-red-50/40 focus:border-red-400 focus:ring-4 focus:ring-red-50"
-                      : "border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-50"
+                    : "border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-50"
                   }`}
                 />
                 <button type="button" onClick={() => setShowPw(!showPw)}
@@ -124,7 +144,7 @@ export function LoginForm() {
 
             <motion.button type="submit" disabled={loading}
               whileHover={!loading ? { scale: 1.012 } : {}} whileTap={!loading ? { scale: 0.985 } : {}}
-              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[14px] rounded-xl shadow-md shadow-blue-600/20 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+              className="w-full h-11 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-[14px] rounded-xl shadow-md shadow-blue-600/20 transition-colors disabled:opacity-60 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer">
               {loading
                 ? <><svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="white" strokeWidth="4"/><path className="opacity-75" fill="white" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>Signing in…</>
                 : <>Sign In <ArrowRight className="h-4 w-4" /></>
@@ -138,8 +158,8 @@ export function LoginForm() {
             <div className="flex-1 h-px bg-slate-100" />
           </div>
 
-          <button type="button" onClick={() => signIn("google", { callbackUrl: "/dashboard" })}
-            className="w-full h-11 flex items-center justify-center gap-3 border border-slate-200 rounded-xl text-slate-700 text-[14px] font-medium hover:bg-slate-50 hover:border-slate-300 transition-all">
+          <button type="button" onClick={() => openContactModal("Google Login Attempt")}
+            className="w-full h-11 flex items-center justify-center gap-3 border border-slate-200 rounded-xl text-slate-700 text-[14px] font-medium hover:bg-slate-50 hover:border-slate-300 transition-all cursor-pointer">
             <svg viewBox="0 0 24 24" className="h-4 w-4 shrink-0">
               <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
               <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -155,7 +175,13 @@ export function LoginForm() {
           className="flex flex-col items-center gap-3">
           <p className="text-[13px] text-slate-500">
             Don&apos;t have an account?{" "}
-            <Link href="/auth/register" className="text-blue-600 hover:text-blue-700 font-semibold transition-colors">Start free trial →</Link>
+            <button
+              type="button"
+              onClick={() => openContactModal("Start free trial from login")}
+              className="text-blue-600 hover:text-blue-700 font-semibold transition-colors cursor-pointer"
+            >
+              Start free trial →
+            </button>
           </p>
           <div className="flex items-center gap-5">
             {["SSL Encrypted", "GDPR Safe", "156+ Agencies"].map(t => (
